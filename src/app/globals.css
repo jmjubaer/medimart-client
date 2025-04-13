@@ -23,3 +23,12 @@ body {
 .secondary_font {
     font-family: "Oxanium", serif;
 }
+.add-medicine-modal {
+    width: 90% !important;
+}
+.label_primary{
+    @apply mb-3 inline-block  
+}
+.input_field{
+   @apply w-full text-xl text-black outline-none  border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black
+}
