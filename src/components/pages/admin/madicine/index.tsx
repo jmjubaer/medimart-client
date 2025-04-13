@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { IMedicine } from "@/types";
+import { IMedicine, IMeta } from "@/types";
 import { Pagination, Table, TableColumnsType } from "antd";
 import { LucideCirclePlus, SearchIcon, Trash2 } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { getAllMedicines } from "@/services/Medicines";
 type TTableDataType = Pick<
     IMedicine,
     | "image"
@@ -17,15 +18,31 @@ type TTableDataType = Pick<
     | "expiryDate"
     | "quantity"
     | "requiredPrescription"
+    | "symptoms"
 >;
-type IProps = {
-    medicines: IMedicine[];
+type IData = {
+    result: IMedicine[];
+    meta: IMeta;
 };
-const ManageMedicines = ({ medicines }: IProps) => {
-    const router = useRouter();
+const ManageMedicines = () => {
+    const [data, setData] = useState<IData | null>(null);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const tableData = medicines?.map(
+    console.log(data);
+    useEffect(() => {
+        (async () => {
+            const { data } = await getAllMedicines([
+                { name: "page", value: page },
+                { name: "limit", value: 10 },
+                { name: "sort", value: "_id" },
+                { name: "searchTerm", value: searchTerm },
+            ]);
+            if (data) {
+                setData(data);
+            }
+        })();
+    }, [searchTerm, page]);
+    const tableData = data?.result?.map(
         ({
             _id,
             image,
@@ -34,13 +51,14 @@ const ManageMedicines = ({ medicines }: IProps) => {
             quantity,
             requiredPrescription,
             expiryDate,
+            symptoms,
         }: IMedicine) => ({
             key: _id,
             image,
             name,
             price,
             quantity,
-
+            symptoms,
             requiredPrescription,
             expiryDate,
         })
@@ -95,6 +113,10 @@ const ManageMedicines = ({ medicines }: IProps) => {
             ),
         },
         {
+            title: "Symptoms",
+            dataIndex: "symptoms",
+        },
+        {
             title: "In Stock",
             render: (item) => <p>{item.quantity || 0} Pcs</p>,
         },
@@ -129,12 +151,12 @@ const ManageMedicines = ({ medicines }: IProps) => {
             showCancelButton: true,
             confirmButtonText: "Confirm",
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                const result = await deleteProduct(id);
-                if (result?.data?.success) {
+            // if (result.isConfirmed) {
+            //     const result = await deleteProduct(id);
+                // if (result?.data?.success) {
                     Swal.fire("Deleted!", "", "success");
-                }
-            }
+                // }
+            // }
         });
     };
     return (
@@ -167,12 +189,12 @@ const ManageMedicines = ({ medicines }: IProps) => {
                     className='border border-gray-300 min-w-[800px] rounded-lg mb-3'
                 />
             </div>
-            {/* <Pagination
+            <Pagination
                 onChange={(value) => setPage(value)}
-                total={productsData?.meta?.total}
+                total={data?.meta?.total}
                 pageSize={10}
                 current={page}
-            /> */}
+            />
         </div>
     );
 };
