@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
 import { getAllMedicines } from "@/services/Medicines";
+import AddMedicineModal from "./AddMedicineModal";
 type TTableDataType = Pick<
     IMedicine,
     | "image"
@@ -26,10 +27,12 @@ type IData = {
 };
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     console.log(data);
     useEffect(() => {
+        setLoading(true);
         (async () => {
             const { data } = await getAllMedicines([
                 { name: "page", value: page },
@@ -39,7 +42,9 @@ const ManageMedicines = () => {
             ]);
             if (data) {
                 setData(data);
+                setLoading(false);
             }
+            setLoading(false);
         })();
     }, [searchTerm, page]);
     const tableData = data?.result?.map(
@@ -153,9 +158,9 @@ const ManageMedicines = () => {
         }).then(async (result) => {
             // if (result.isConfirmed) {
             //     const result = await deleteProduct(id);
-                // if (result?.data?.success) {
-                    Swal.fire("Deleted!", "", "success");
-                // }
+            // if (result?.data?.success) {
+            Swal.fire("Deleted!", "", "success");
+            // }
             // }
         });
     };
@@ -164,7 +169,6 @@ const ManageMedicines = () => {
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
                 Manage Medicine
             </h2>
-            {/* Todo: add search field */}
             <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
                 <div className='relative w-80 h-fit '>
                     <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
@@ -175,14 +179,12 @@ const ManageMedicines = () => {
                         placeholder='Search bicycle . . . .'
                     />
                 </div>
-                <button className='bg-primary px-3 rounded-md flex  items-center gap-2 text-base'>
-                    <LucideCirclePlus className='text-lg' />
-                    Add Product
-                </button>
+                <AddMedicineModal/>
+              
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>
-                    // loading={isFetching}
+                    loading={loading}
                     columns={columns}
                     dataSource={tableData}
                     pagination={false}
