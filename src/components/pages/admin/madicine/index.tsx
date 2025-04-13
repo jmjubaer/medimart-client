@@ -1,10 +1,14 @@
 "use client";
 import { IMedicine } from "@/types";
 import { Pagination, Table, TableColumnsType } from "antd";
-import { Trash, Trash2 } from "lucide-react";
+import { LucideCirclePlus, SearchIcon, Trash2 } from "lucide-react";
+import moment from "moment";
 import Link from "next/link";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import defaultImage from "@/assets/defaoult-medicine.avif";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 type TTableDataType = Pick<
     IMedicine,
     | "image"
@@ -18,6 +22,7 @@ type IProps = {
     medicines: IMedicine[];
 };
 const ManageMedicines = ({ medicines }: IProps) => {
+    const router = useRouter();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const tableData = medicines?.map(
@@ -35,7 +40,7 @@ const ManageMedicines = ({ medicines }: IProps) => {
             name,
             price,
             quantity,
-            
+
             requiredPrescription,
             expiryDate,
         })
@@ -48,11 +53,13 @@ const ManageMedicines = ({ medicines }: IProps) => {
             render: (item) => {
                 return (
                     <div className='flex items-center gap-3'>
-                        {/* <img
-                            className='w-20 h-20 rounded-md border border-gray-300'
-                            src={item.image}
+                        <Image
+                            width={80}
+                            height={80}
+                            className='w-16 h-16 rounded-md border border-gray-300'
+                            src={item.image || defaultImage}
                             alt=''
-                        /> */}
+                        />
                         <div className=''>
                             <Link
                                 href={`/medicine/${item.key}`}
@@ -66,11 +73,26 @@ const ManageMedicines = ({ medicines }: IProps) => {
         },
         {
             title: "Expiry Date",
-            dataIndex: "expiryDate",
+            render: (item) => (
+                <p>{moment(item.expiryDate).format("DD-MM-YYYY")}</p>
+            ),
         },
         {
-            title: "Category",
-            dataIndex: "type",
+            title: "Prescription Required",
+            // width: "1%",
+            render: (item) => (
+                <div className=''>
+                    {item?.requiredPrescription ? (
+                        <p className='px-3 py-1 bg-green-200 text-gray-500 w-fit rounded-md font-semibold'>
+                            True
+                        </p>
+                    ) : (
+                        <p className='px-3 py-1 bg-red-200  w-fit rounded-md font-semibold'>
+                            False
+                        </p>
+                    )}
+                </div>
+            ),
         },
         {
             title: "In Stock",
@@ -90,7 +112,7 @@ const ManageMedicines = ({ medicines }: IProps) => {
                         <button
                             onClick={() => handleDeleteProduct(item.key)}
                             className='whitespace-nowrap cursor-pointer text-red-500 '>
-                            <Trash2/>
+                            <Trash2 />
                         </button>
                         {/* <UpdateProduct item={item} /> */}
                     </div>
@@ -121,9 +143,9 @@ const ManageMedicines = ({ medicines }: IProps) => {
                 Manage Medicine
             </h2>
             {/* Todo: add search field */}
-            {/* <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
-                <div className='relative w-full xs:w-80 h-fit '>
-                    <IoSearchSharp className='absolute top-1/2 right-2 text-xl text-gray-500 -translate-y-1/2' />
+            <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
+                <div className='relative w-80 h-fit '>
+                    <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
                     <input
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type='text'
@@ -131,13 +153,11 @@ const ManageMedicines = ({ medicines }: IProps) => {
                         placeholder='Search bicycle . . . .'
                     />
                 </div>
-                <Link
-                    to={"/dashboard/create-product"}
-                    className='button_primary flex items-center gap-2'>
-                    <LuCirclePlus className='text-lg' />
+                <button className='bg-primary px-3 rounded-md flex  items-center gap-2 text-base'>
+                    <LucideCirclePlus className='text-lg' />
                     Add Product
-                </Link>
-            </div> */}
+                </button>
+            </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>
                     // loading={isFetching}
