@@ -27,10 +27,13 @@ type IData = {
 };
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
+    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(data);
+    const reFetch  = () => {
+        setIsFetch(!isFetch)
+    }
     useEffect(() => {
         setLoading(true);
         (async () => {
@@ -46,7 +49,7 @@ const ManageMedicines = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page]);
+    }, [searchTerm, page,isFetch]);
     const tableData = data?.result?.map(
         ({
             _id,
@@ -179,7 +182,7 @@ const ManageMedicines = () => {
                         placeholder='Search bicycle . . . .'
                     />
                 </div>
-                <AddMedicineModal/>
+                <AddMedicineModal reFetch={reFetch}/>
               
             </div>
             <div className='overflow-auto'>
