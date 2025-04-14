@@ -2,19 +2,24 @@
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal, Spin, Switch } from "antd";
-import { CloudUpload, LucideCirclePlus } from "lucide-react";
+import { CloudUpload, Edit } from "lucide-react";
 import { IMedicine } from "@/types";
 import Image from "next/image";
 import uploadImageIntoCloudinary from "../../../../utils/UploadImageIntoCloudinary";
-import { createMedicine } from "@/services/Medicines";
+import { getSingleMedicine, updateMedicine } from "@/services/Medicines";
 import Swal from "sweetalert2";
-const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
+type IProps = {
+    reFetch: () => void;
+    medicineId: string;
+};
+
+const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [medicineData, setMedicineData] = useState<IMedicine | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [requiredPrescription, setRequiredPrescription] =
         useState<boolean>(false);
-    console.log(requiredPrescription);
     const {
         reset,
         watch,
@@ -22,32 +27,57 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
         handleSubmit,
         formState: { errors },
     } = useForm<IMedicine>();
-    const handleAddMedicine: SubmitHandler<IMedicine> = async (data) => {
+    const handleUpdateMedicine: SubmitHandler<IMedicine> = async (data) => {
         setLoading(true);
+
         try {
-            const image = await uploadImageIntoCloudinary(data.image[0]);
-            if (image?.error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Failed to upload image!",
-                });
-                setLoading(false);
-                return;
-            }
-            if (image?.imageUrl) {
-                const medicineData = {
+            if (data?.image?.length > 0) {
+                const image = await uploadImageIntoCloudinary(data.image[0]);
+                if (image?.error) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Failed to upload image!",
+                    });
+                    setLoading(false);
+                    return;
+                }
+                if (image?.imageUrl) {
+                    const updateMedicineData = {
+                        ...data,
+                        requiredPrescription,
+                        image: image?.imageUrl,
+                        price: Number(data.price),
+                        quantity: Number(data.quantity),
+                    };
+                    console.log(updateMedicineData);
+
+                    const result = await updateMedicine(
+                        medicineId,
+                        updateMedicineData
+                    );
+                    if (result?.success) {
+                        setLoading(false);
+                        reFetch();
+                        setOpen(false);
+                    }
+                    setLoading(false);
+                }
+            } else {
+                const updateMedicineData = {
                     ...data,
                     requiredPrescription,
-                    image: image?.imageUrl,
+                    image: medicineData?.image,
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
-                const result = await createMedicine(medicineData);
+                console.log(updateMedicineData);
+                const result = await updateMedicine(
+                    medicineId,
+                    updateMedicineData
+                );
                 if (result?.success) {
-                    setImagePreview(null);
                     setLoading(false);
-                    reset();
                     reFetch();
                     setOpen(false);
                 }
@@ -66,13 +96,25 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
             setImagePreview(URL.createObjectURL(file as any));
         }
     }, [watch("image")]);
+    useEffect(() => {
+        setLoading(true);
+        (async () => {
+            const { data } = await getSingleMedicine(medicineId);
+            if (data) {
+                setMedicineData(data);
+                setLoading(false);
+                setImagePreview(data?.image);
+                setRequiredPrescription(data?.requiredPrescription);
+            }
+            setLoading(false);
+        })();
+    }, [medicineId]);
     return (
         <div className=''>
             <button
                 onClick={() => setOpen(true)}
-                className='bg-primary px-3 py-2 rounded-md flex items-center gap-2 text-base'>
-                <LucideCirclePlus className='text-lg' />
-                Add Product
+                className='mt-2 cursor-pointer text-primary'>
+                <Edit />
             </button>
             {/* Update product modal */}
             <Modal
@@ -85,7 +127,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                 </h2>
                 <Spin spinning={loading} tip='Loading' size='large'>
                     <form
-                        onSubmit={handleSubmit(handleAddMedicine)}
+                        onSubmit={handleSubmit(handleUpdateMedicine)}
                         className=' mt-5'>
                         <div className='grid sm:grid-cols-3 sm:gap-5 '>
                             {/* Image */}
@@ -101,9 +143,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                         className='hidden'
                                         id='image'
                                         type='file'
-                                        {...register("image", {
-                                            required: true,
-                                        })}
+                                        {...register("image")}
                                     />
                                     {imagePreview ? (
                                         <Image
@@ -143,6 +183,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                     <input
                                         className='input_field'
                                         id='name'
+                                        defaultValue={medicineData?.name}
                                         placeholder='Medicine Name...'
                                         {...register("name", {
                                             required: true,
@@ -164,6 +205,15 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                     <input
                                         className='input_field'
                                         id='expiryDate'
+                                        defaultValue={
+                                            medicineData?.expiryDate
+                                                ? new Date(
+                                                      medicineData.expiryDate
+                                                  )
+                                                      .toISOString()
+                                                      .split("T")[0]
+                                                : ""
+                                        }
                                         type='date'
                                         {...register("expiryDate", {
                                             required: true,
@@ -188,6 +238,9 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 <input
                                     className='input_field'
                                     id='manufacturerName'
+                                    defaultValue={
+                                        medicineData?.manufacturerDetails.name
+                                    }
                                     placeholder=' Manufacturer Name...'
                                     {...register("manufacturerDetails.name", {
                                         required: true,
@@ -212,6 +265,10 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 </label>
                                 <input
                                     className='input_field'
+                                    defaultValue={
+                                        medicineData?.manufacturerDetails
+                                            .contact
+                                    }
                                     id='manufacturerContact'
                                     placeholder=' Manufacturer Contact...'
                                     {...register(
@@ -238,6 +295,10 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                     className='input_field'
                                     id='manufacturerLocation'
                                     placeholder=' Manufacturer Location...'
+                                    defaultValue={
+                                        medicineData?.manufacturerDetails
+                                            .location
+                                    }
                                     {...register(
                                         "manufacturerDetails.location",
                                         {
@@ -263,6 +324,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 <input
                                     className='input_field'
                                     id='price'
+                                    defaultValue={medicineData?.price}
                                     type='number'
                                     placeholder='Medicine Price...'
                                     {...register("price", {
@@ -285,6 +347,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                     className='input_field'
                                     id='quantity'
                                     type='number'
+                                    defaultValue={medicineData?.quantity}
                                     placeholder='Medicine quantity...'
                                     {...register("quantity", {
                                         required: true,
@@ -307,6 +370,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                             <input
                                 className='input_field'
                                 id='symptoms'
+                                defaultValue={medicineData?.symptoms}
                                 placeholder='Enter Symptoms...'
                                 {...register("symptoms", {
                                     required: true,
@@ -328,6 +392,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 className='input_field min-h-[150px]'
                                 placeholder='Enter Description ...'
                                 id='description'
+                                defaultValue={medicineData?.description}
                                 {...register("description", {
                                     required: true,
                                 })}
@@ -348,6 +413,9 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 }
                                 checkedChildren='Yes'
                                 unCheckedChildren='NO'
+                                defaultValue={
+                                    medicineData?.requiredPrescription
+                                }
                             />
                         </div>
                         <input
@@ -361,4 +429,4 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
     );
 };
 
-export default AddMedicineModal;
+export default UpdateMedicineModal;

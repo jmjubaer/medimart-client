@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { deleteMedicine, getAllMedicines } from "@/services/Medicines";
+import { getSingleMedicine, getAllMedicines } from "@/services/Medicines";
 import AddMedicineModal from "./AddMedicineModal";
+import UpdateMedicineModal from "./UpdateMedicineModal";
 type TTableDataType = Pick<
     IMedicine,
     | "image"
@@ -27,8 +28,8 @@ type IData = {
 };
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
-    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const reFetch = () => {
@@ -138,13 +139,13 @@ const ManageMedicines = () => {
             key: "role",
             render: (item) => {
                 return (
-                    <div className='grid gap-1'>
+                    <div className='flex items-center gap-3'>
                         <button
                             onClick={() => handleDeleteMedicine(item.key)}
-                            className='whitespace-nowrap cursor-pointer text-red-500 '>
+                            className=' cursor-pointer text-red-500 '>
                             <Trash2 />
                         </button>
-                        {/* <UpdateProduct item={item} /> */}
+                        <UpdateMedicineModal reFetch={reFetch} medicineId={item.key} />
                     </div>
                 );
             },
@@ -160,7 +161,7 @@ const ManageMedicines = () => {
             confirmButtonText: "Confirm",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const result = await deleteMedicine(id);
+                const result = await getSingleMedicine(id);
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Deleted!", "", "success");
