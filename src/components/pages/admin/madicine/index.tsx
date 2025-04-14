@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { getAllMedicines } from "@/services/Medicines";
+import { getSingleMedicine, getAllMedicines } from "@/services/Medicines";
 import AddMedicineModal from "./AddMedicineModal";
+import UpdateMedicineModal from "./UpdateMedicineModal";
 type TTableDataType = Pick<
     IMedicine,
     | "image"
@@ -28,9 +29,12 @@ type IData = {
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    console.log(data);
+    const reFetch = () => {
+        setIsFetch(!isFetch);
+    };
     useEffect(() => {
         setLoading(true);
         (async () => {
@@ -46,7 +50,7 @@ const ManageMedicines = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page]);
+    }, [searchTerm, page, isFetch]);
     const tableData = data?.result?.map(
         ({
             _id,
@@ -135,13 +139,13 @@ const ManageMedicines = () => {
             key: "role",
             render: (item) => {
                 return (
-                    <div className='grid gap-1'>
+                    <div className='flex items-center gap-3'>
                         <button
-                            onClick={() => handleDeleteProduct(item.key)}
-                            className='whitespace-nowrap cursor-pointer text-red-500 '>
+                            onClick={() => handleDeleteMedicine(item.key)}
+                            className=' cursor-pointer text-red-500 '>
                             <Trash2 />
                         </button>
-                        {/* <UpdateProduct item={item} /> */}
+                        <UpdateMedicineModal reFetch={reFetch} medicineId={item.key} />
                     </div>
                 );
             },
@@ -149,19 +153,20 @@ const ManageMedicines = () => {
         },
     ];
     // // delete product functionality
-    const handleDeleteProduct = async (id: string) => {
+    const handleDeleteMedicine = async (id: string) => {
         Swal.fire({
-            title: "Are you sure delete product?",
+            title: "Are you sure delete medicine?",
             // text: "Not can ",
             showCancelButton: true,
             confirmButtonText: "Confirm",
         }).then(async (result) => {
-            // if (result.isConfirmed) {
-            //     const result = await deleteProduct(id);
-            // if (result?.data?.success) {
-            Swal.fire("Deleted!", "", "success");
-            // }
-            // }
+            if (result.isConfirmed) {
+                const result = await getSingleMedicine(id);
+                if (result?.success) {
+                    reFetch();
+                    Swal.fire("Deleted!", "", "success");
+                }
+            }
         });
     };
     return (
@@ -179,8 +184,7 @@ const ManageMedicines = () => {
                         placeholder='Search bicycle . . . .'
                     />
                 </div>
-                <AddMedicineModal/>
-              
+                <AddMedicineModal reFetch={reFetch} />
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>
