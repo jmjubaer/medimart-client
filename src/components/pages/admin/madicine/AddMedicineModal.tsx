@@ -14,7 +14,6 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [requiredPrescription, setRequiredPrescription] =
         useState<boolean>(false);
-    console.log(requiredPrescription);
     const {
         reset,
         watch,
