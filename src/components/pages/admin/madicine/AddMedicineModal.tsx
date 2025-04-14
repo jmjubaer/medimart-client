@@ -7,7 +7,7 @@ import { CloudUpload, LucideCirclePlus } from "lucide-react";
 import { IMedicine } from "@/types";
 import Image from "next/image";
 import uploadImageIntoCloudinary from "../../../../utils/UploadImageIntoCloudinary";
-import { createMedicine } from "@/services/Medicines";
+import { deleteMedicine } from "@/services/Medicines";
 const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -40,7 +40,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
-                const result = await createMedicine(medicineData);
+                const result = await deleteMedicine(medicineData);
                 if (result?.success) {
                     setImagePreview(null);
                     setLoading(false);

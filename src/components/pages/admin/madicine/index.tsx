@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { getAllMedicines } from "@/services/Medicines";
+import { deleteMedicine, getAllMedicines } from "@/services/Medicines";
 import AddMedicineModal from "./AddMedicineModal";
 type TTableDataType = Pick<
     IMedicine,
@@ -31,9 +31,9 @@ const ManageMedicines = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
-    const reFetch  = () => {
-        setIsFetch(!isFetch)
-    }
+    const reFetch = () => {
+        setIsFetch(!isFetch);
+    };
     useEffect(() => {
         setLoading(true);
         (async () => {
@@ -49,7 +49,7 @@ const ManageMedicines = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page,isFetch]);
+    }, [searchTerm, page, isFetch]);
     const tableData = data?.result?.map(
         ({
             _id,
@@ -140,7 +140,7 @@ const ManageMedicines = () => {
                 return (
                     <div className='grid gap-1'>
                         <button
-                            onClick={() => handleDeleteProduct(item.key)}
+                            onClick={() => handleDeleteMedicine(item.key)}
                             className='whitespace-nowrap cursor-pointer text-red-500 '>
                             <Trash2 />
                         </button>
@@ -152,19 +152,20 @@ const ManageMedicines = () => {
         },
     ];
     // // delete product functionality
-    const handleDeleteProduct = async (id: string) => {
+    const handleDeleteMedicine = async (id: string) => {
         Swal.fire({
-            title: "Are you sure delete product?",
+            title: "Are you sure delete medicine?",
             // text: "Not can ",
             showCancelButton: true,
             confirmButtonText: "Confirm",
         }).then(async (result) => {
-            // if (result.isConfirmed) {
-            //     const result = await deleteProduct(id);
-            // if (result?.data?.success) {
-            Swal.fire("Deleted!", "", "success");
-            // }
-            // }
+            if (result.isConfirmed) {
+                const result = await deleteMedicine(id);
+                if (result?.success) {
+                    reFetch();
+                    Swal.fire("Deleted!", "", "success");
+                }
+            }
         });
     };
     return (
@@ -182,8 +183,7 @@ const ManageMedicines = () => {
                         placeholder='Search bicycle . . . .'
                     />
                 </div>
-                <AddMedicineModal reFetch={reFetch}/>
-              
+                <AddMedicineModal reFetch={reFetch} />
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>

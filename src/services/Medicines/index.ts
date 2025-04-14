@@ -37,7 +37,7 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         return Error(error.message);
     }
 };
-export const createMedicine = async (payload?: IMedicine) => {
+export const createMedicine = async (payload: IMedicine) => {
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/medicine`,
@@ -48,6 +48,21 @@ export const createMedicine = async (payload?: IMedicine) => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
+            }
+        );
+        revalidateTag("MEDICINE");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+export const deleteMedicine = async (medicineId: string) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            {
+                method: "DELETE",
             }
         );
         revalidateTag("MEDICINE");
