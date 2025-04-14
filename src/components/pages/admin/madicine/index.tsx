@@ -181,7 +181,7 @@ const ManageMedicines = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         type='text'
                         className='outline-0 bg-gray-200 w-full px-5 p-2 rounded-md'
-                        placeholder='Search bicycle . . . .'
+                        placeholder='Search medicine . . . .'
                     />
                 </div>
                 <AddMedicineModal reFetch={reFetch} />

@@ -1,13 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { IMedicine } from "@/types";
+import { IMedicine, TQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
-
-type TQueryParam = {
-    name: string;
-    value: string | number;
-};
 
 // Fetch all medicines with optional query parameters
 export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
