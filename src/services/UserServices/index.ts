@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-
-import { IMedicine, TQueryParam } from "@/types";
+import { TQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 
-// Fetch all medicines with optional query parameters
-export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
+export const getAllUsers = async (queryParams?: TQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 
@@ -16,12 +13,12 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         }
 
         const queryString = params.toString();
-        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/medicines`;
+        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/user`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
         console.log(fullUrl);
         const res = await fetch(fullUrl, {
             next: {
-                tags: ["MEDICINES"],
+                tags: ["USERS"],
             },
             cache: "no-cache",
         });
@@ -32,75 +29,54 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         return Error(error.message);
     }
 };
-export const createMedicine = async (payload: IMedicine) => {
+export const changeUserStatus = async (userId: string, status: string) => {
     try {
+        console.log(status);
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine`,
-            {
-                method: "POST",
-                headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }
-        );
-        revalidateTag("MEDICINES");
-        const data = await res.json();
-        return data;
-    } catch (error: any) {
-        return Error(error.message);
-    }
-};
-export const getSingleMedicine = async (medicineId: string) => {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
-            {
-                next: {
-                    tags: ["MEDICINE"],
-                },
-            }
-        );
-        const data = await res.json();
-        return data;
-    } catch (error: any) {
-        return Error(error.message);
-    }
-};
-export const updateMedicine = async (
-    medicineId: string,
-    payload: Partial<IMedicine>
-) => {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/user/change-status/${userId}`,
             {
                 method: "PUT",
                 headers: {
                     //   Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({status}),
             }
         );
-        revalidateTag("MEDICINE");
-        revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
     } catch (error: any) {
         return Error(error.message);
     }
 };
-export const deleteMedicine = async (medicineId: string) => {
+export const changeUserRole = async (userId: string, role: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/user/change-role/${userId}`,
+            {
+                method: "PUT",
+                headers: {
+                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({role}),
+            }
+        );
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+export const deleteUser = async (userId: string) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`,
             {
                 method: "DELETE",
             }
         );
-        revalidateTag("MEDICINE");
+        revalidateTag("USERS");
         const data = await res.json();
         return data;
     } catch (error: any) {

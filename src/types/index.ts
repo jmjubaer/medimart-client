@@ -7,3 +7,7 @@ export type IMeta = {
     total: number;
     totalPage: number;
 };
+export type TQueryParam = {
+    name: string;
+    value: string | number;
+};

@@ -21,7 +21,6 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
     const [requiredPrescription, setRequiredPrescription] =
         useState<boolean>(false);
     const {
-        reset,
         watch,
         register,
         handleSubmit,
@@ -134,7 +133,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                             <div className=''>
                                 <label
                                     className={`sm:w-4/5 mx-auto w-64
-                                     h-52 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 transition ${
+                                        h-52 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 transition ${
                                          errors.image
                                              ? "border-red-400"
                                              : "border-gray-400}"
