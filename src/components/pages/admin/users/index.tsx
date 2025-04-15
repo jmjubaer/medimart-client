@@ -1,20 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { IMedicine, IMeta, IUser } from "@/types";
+import { IMeta, IUser } from "@/types";
 import { Pagination, Table, TableColumnsType } from "antd";
 import { ClipboardList, SearchIcon, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { getSingleMedicine } from "@/services/Medicines";
-import UpdateMedicineModal from "../madicine/UpdateMedicineModal";
-import AddMedicineModal from "../madicine/AddMedicineModal";
 import {
+    changeUserRole,
     changeUserStatus,
     deleteUser,
     getAllUsers,
 } from "@/services/UserServices";
-import { MdBlock } from "react-icons/md";
+import { MdBlock, MdManageAccounts } from "react-icons/md";
 import { CgUnblock } from "react-icons/cg";
 type TTableDataType = Pick<
     IUser,
@@ -76,7 +73,6 @@ const ManageUsers = () => {
         },
         {
             title: "Status",
-            // width: "1%",
             render: (item) => (
                 <p
                     className={`px-3 capitalize py-1 text-gray-500 w-fit rounded-md font-semibold ${
@@ -90,7 +86,6 @@ const ManageUsers = () => {
         },
         {
             title: "Role",
-            // width: "1%",
             render: (item) => <p className={` capitalize `}>{item?.role}</p>,
         },
         {
@@ -124,6 +119,14 @@ const ManageUsers = () => {
                         </Link>
 
                         <button
+                            title='Change the user role'
+                            onClick={() =>
+                                handleChangeRole(item.key, item.role)
+                            }
+                            className=' cursor-pointer text-green-500 '>
+                            <MdManageAccounts className='text-3xl' />
+                        </button>
+                        <button
                             title='Delete the user'
                             onClick={() => handleDeleteUser(item.key)}
                             className=' cursor-pointer text-red-500 '>
@@ -148,6 +151,28 @@ const ManageUsers = () => {
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Deleted!", "", "success");
+                }
+            }
+        });
+    };
+    const handleChangeRole = async (id: string, role: string) => {
+        Swal.fire({
+            title: `${
+                role === "admin"
+                    ? "Are you sure make role customer!"
+                    : "Are you sure make role admin!"
+            }`,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const updatedRole = role == "admin" ? "customer" : "admin";
+                const result = await changeUserRole(id, updatedRole);
+
+                if (result?.success) {
+                    reFetch();
+                    Swal.fire("Updated!", "", "success");
                 }
             }
         });
@@ -191,7 +216,6 @@ const ManageUsers = () => {
                         placeholder='Search by name or email . . . .'
                     />
                 </div>
-                <AddMedicineModal reFetch={reFetch} />
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>
