@@ -8,7 +8,7 @@ import { useState } from "react";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import ViewOrderDetails from "@/components/shered/ViewOrderDetails";
-import { LuRepeat } from "react-icons/lu";
+import ChangeStatusModal from "./ChangeStatusModal";
 type IProps = {
     data: {
         result: IOrder[];
@@ -122,12 +122,11 @@ const ManageCustomerOrder = ({ data }: IProps) => {
             render: (item) => {
                 return (
                     <div className='flex items-center gap-3'>
-                        <button
-                            // onClick={() => setOpen(true)}
-                            title='Change Status'
-                            className='cursor-pointer text-2xl text-green-600'>
-                            <LuRepeat />
-                        </button>
+                        <ChangeStatusModal
+                            status={item?.status}
+                            id={item?.key}
+                        />
+                       
                         <ViewOrderDetails item={item} />
                     </div>
                 );

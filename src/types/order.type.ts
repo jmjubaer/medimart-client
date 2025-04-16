@@ -21,7 +21,7 @@ export interface IProduct {
     user: IUser;
     products: IProduct[];
     totalPrice: number;
-    status: "Pending" | "Reject" | "Processing" | "Shipped" | "Completed";
+    status: "Pending" | "Reject" | "Processing" | "Shipped" | "Delivered";
     rejectNotes?: string;
     deliveryInfo?: IDeliveryInfo;
     deliveryOptions?: "Standard" | "Express" | "Pickup from Store";
