@@ -9,9 +9,8 @@ type TNameForm = {
     rejectNotes: string;
 };
 
-const RejectOrderModal = ({ id }: { id: string }) => {
+const RejectOrderModal = ({ id,status }: { id: string; status: string }) => {
     const [open, setOpen] = useState(false);
-    console.log(id);
     const {
         register,
         handleSubmit,
@@ -41,9 +40,11 @@ const RejectOrderModal = ({ id }: { id: string }) => {
             console.log(error);
         }
     };
+    console.log(status);
     return (
         <div className=''>
             <button
+                disabled={status === "Reject"}
                 onClick={() => setOpen(true)}
                 className='bg-red-400 mt-5 py-2 px-2 rounded-lg text-base text-white w-full'>
                 Reject Order

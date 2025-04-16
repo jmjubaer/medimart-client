@@ -20,6 +20,10 @@
 body {
     font-family: "Poppins", serif;
 }
+button:disabled {
+    cursor: not-allowed;
+    opacity: 50%;
+}
 .secondary_font {
     font-family: "Oxanium", serif;
 }
@@ -35,6 +39,8 @@ body {
 .input_field {
     @apply w-full text-xl text-black outline-none  border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
 }
-div:where(.swal2-container).swal2-top, div:where(.swal2-container).swal2-center, div:where(.swal2-container).swal2-bottom {
+div:where(.swal2-container).swal2-top,
+div:where(.swal2-container).swal2-center,
+div:where(.swal2-container).swal2-bottom {
     z-index: 99999999999999999999 !important;
 }

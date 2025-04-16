@@ -12,7 +12,7 @@ type TProps = {
 const ViewOrderDetails = ({ item }: TProps) => {
     const [open, setOpen] = useState(false);
     // Scroll to top
-    
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [item]);
@@ -218,6 +218,16 @@ const ViewOrderDetails = ({ item }: TProps) => {
                                         {item.status}
                                     </p>
                                 </div>
+                                {item.rejectNotes && (
+                                    <div className='grid grid-cols-2 my-3 justify-between gap-5 items-center '>
+                                        <p className='text-lg'>
+                                            Reject Notes:{" "}
+                                        </p>
+                                        <p className=' font-medium capitalize'>
+                                            {item.rejectNotes}
+                                        </p>
+                                    </div>
+                                )}
                                 <div className='grid grid-cols-2 my-3 justify-between gap-5 items-center '>
                                     <p className='text-lg'>Delivery Method: </p>
                                     <p className='text-lg font-medium capitalize'>
@@ -234,7 +244,10 @@ const ViewOrderDetails = ({ item }: TProps) => {
                                 </div>
                             </div>
 
-                        <RejectOrderModal id={item?.key as string}/>
+                            <RejectOrderModal
+                                status={item?.status}
+                                id={item?.key as string}
+                            />
                         </div>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ type TTableDataType = Pick<
     | "paymentStatus"
     | "totalPrice"
     | "deliveryInfo"
+    | "rejectNotes"
 >;
 const ManageCustomerOrder = ({ data }: IProps) => {
     const [page, setPage] = useState(1);
@@ -35,6 +36,7 @@ const ManageCustomerOrder = ({ data }: IProps) => {
             status,
             products,
             totalPrice,
+            rejectNotes,
             deliveryInfo,
             paymentStatus,
             paymentMethod,
@@ -45,6 +47,7 @@ const ManageCustomerOrder = ({ data }: IProps) => {
             status,
             products,
             totalPrice,
+            rejectNotes,
             deliveryInfo,
             paymentMethod,
             deliveryOptions,
