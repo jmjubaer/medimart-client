@@ -61,7 +61,7 @@ const ManageUsers = () => {
     const columns: TableColumnsType<TTableDataType> = [
         {
             title: "Name",
-            dataIndex: "name",
+            render: (item) => <p className={`capitalize `}>{item?.name}</p>,
         },
         {
             title: "Email",
@@ -192,8 +192,7 @@ const ManageUsers = () => {
                 const updatedStatus =
                     status == "active" ? "deactivated" : "active";
                 const result = await changeUserStatus(id, updatedStatus);
-                console.log(updatedStatus);
-                console.log(result);
+               
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Updated!", "", "success");
