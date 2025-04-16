@@ -1,9 +1,11 @@
 import ManageCustomerOrder from "@/components/pages/admin/order";
+import { getAllOrders } from "@/services/OrderServices";
 
-const ManageOrderPage = () => {
+const ManageOrderPage = async () => {
+    const { data } = await getAllOrders();
     return (
         <div>
-            <ManageCustomerOrder />
+            <ManageCustomerOrder data={data} />
         </div>
     );
 };

@@ -49,7 +49,6 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                         price: Number(data.price),
                         quantity: Number(data.quantity),
                     };
-                    console.log(updateMedicineData);
 
                     const result = await updateMedicine(
                         medicineId,
@@ -70,7 +69,6 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
-                console.log(updateMedicineData);
                 const result = await updateMedicine(
                     medicineId,
                     updateMedicineData
