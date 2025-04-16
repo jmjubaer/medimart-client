@@ -7,10 +7,10 @@ import Swal from "sweetalert2";
 import { LuRepeat } from "react-icons/lu";
 
 type TNameForm = {
-    status: "Pending" | "Reject" | "Processing" | "Shipped" | "Completed";
+    status: "Pending" | "Reject" | "Processing" | "Shipped" | "Delivered";
     rejectNotes: string;
 };
-const orderStatus = ["Pending", "Reject", "Processing", "Shipped", "Completed"];
+const orderStatus = ["Pending", "Reject", "Processing", "Shipped", "Delivered"];
 const ChangeStatusModal = ({ id, status }: { id: string; status: string }) => {
     const [open, setOpen] = useState(false);
     const {
@@ -35,7 +35,7 @@ const ChangeStatusModal = ({ id, status }: { id: string; status: string }) => {
                         rejectNotes: data?.rejectNotes,
                     });
                     if (result?.success) {
-                        Swal.fire("Order Rejected!", "", "success");
+                        Swal.fire("Change Status!", "", "success");
                         setOpen(false);
                     }
                 }
@@ -106,6 +106,7 @@ const ChangeStatusModal = ({ id, status }: { id: string; status: string }) => {
                             )}
                         </div>
                     )}
+
                     <input
                         type='submit'
                         className='bg-primary  w-fit mx-auto block px-5 py-1 mt-4 font-semibold rounded cursor-pointer'
