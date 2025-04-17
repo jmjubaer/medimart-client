@@ -21,7 +21,6 @@ const ShopComponent = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    console.log("im here");
     setLoading(true);
     (async () => {
       const { data } = await getAllMedicines([
