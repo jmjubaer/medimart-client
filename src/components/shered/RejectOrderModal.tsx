@@ -4,12 +4,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal } from "antd";
 import { changeOrderStatus } from "@/services/OrderServices";
 import Swal from "sweetalert2";
-
+type IProps = {
+    id: string;
+    status: string;
+    reFetch: () => void;
+};
 type TNameForm = {
     rejectNotes: string;
 };
 
-const RejectOrderModal = ({ id,status }: { id: string; status: string }) => {
+const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
     const [open, setOpen] = useState(false);
     const {
         register,
@@ -31,6 +35,7 @@ const RejectOrderModal = ({ id,status }: { id: string; status: string }) => {
                         rejectNotes: data?.rejectNotes,
                     });
                     if (result?.success) {
+                        reFetch();
                         Swal.fire("Order Rejected!", "", "success");
                         setOpen(false);
                     }

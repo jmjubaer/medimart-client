@@ -24,9 +24,11 @@ type IData = {
 const ManageUsers = () => {
     const [users, setUsers] = useState<IData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
+    const [userRole, setUserRole] = useState("");
+    const [userStatus, setUserStatus] = useState("");
+    const [isFetch, setIsFetch] = useState<boolean>(false);
     const reFetch = () => {
         setIsFetch(!isFetch);
     };
@@ -39,6 +41,8 @@ const ManageUsers = () => {
                 { name: "limit", value: 10 },
                 { name: "sort", value: "_id" },
                 { name: "searchTerm", value: searchTerm },
+                ...(userRole ? [{ name: "role", value: userRole }] : []),
+                ...(userStatus ? [{ name: "status", value: userStatus }] : []),
             ]);
             if (data) {
                 setUsers(data);
@@ -46,7 +50,7 @@ const ManageUsers = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page, isFetch]);
+    }, [searchTerm, page, isFetch,userRole,userStatus]);
     const tableData = users?.result?.map(
         ({ _id, name, email, phone, role, status }: IUser) => ({
             key: _id,
@@ -192,7 +196,7 @@ const ManageUsers = () => {
                 const updatedStatus =
                     status == "active" ? "deactivated" : "active";
                 const result = await changeUserStatus(id, updatedStatus);
-               
+
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Updated!", "", "success");
@@ -205,7 +209,7 @@ const ManageUsers = () => {
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
                 Manage Users
             </h2>
-            <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
+            <div className='flex flex-wrap-reverse gap-5 my-5'>
                 <div className='relative w-80 h-fit '>
                     <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
                     <input
@@ -214,6 +218,36 @@ const ManageUsers = () => {
                         className='outline-0 bg-gray-200 w-full px-5 p-2 rounded-md'
                         placeholder='Search by name or email . . . .'
                     />
+                </div>
+                <div className='relative'>
+                    <select
+                        className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
+                        onChange={(e) => setUserStatus(e.target.value)}>
+                        <option value='' className='capitalize'>
+                            All User
+                        </option>{" "}
+                        <option value='active' className=' capitalize'>
+                            Active
+                        </option>
+                        <option value='deactivated' className=' capitalize'>
+                        Deactivate
+                        </option>
+                    </select>
+                </div>
+                <div className='relative'>
+                    <select
+                        className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
+                        onChange={(e) => setUserRole(e.target.value)}>
+                        <option value='' className='capitalize'>
+                            All User
+                        </option>{" "}
+                        <option value='admin' className=' capitalize'>
+                            Admin
+                        </option>
+                        <option value='customer' className=' capitalize'>
+                            Customer
+                        </option>
+                    </select>
                 </div>
             </div>
             <div className='overflow-auto'>

@@ -8,8 +8,9 @@ import ShowPrescriptionModal from "./ShowPrescriptionModal";
 import RejectOrderModal from "./RejectOrderModal";
 type TProps = {
     item: IOrder;
+    reFetch: () => void;
 };
-const ViewOrderDetails = ({ item }: TProps) => {
+const ViewOrderDetails = ({ item, reFetch }: TProps) => {
     const [open, setOpen] = useState(false);
     // Scroll to top
 
@@ -245,6 +246,7 @@ const ViewOrderDetails = ({ item }: TProps) => {
                             </div>
 
                             <RejectOrderModal
+                                reFetch={reFetch}
                                 status={item?.status}
                                 id={item?.key as string}
                             />
