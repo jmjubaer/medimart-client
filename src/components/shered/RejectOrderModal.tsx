@@ -76,9 +76,6 @@ const RejectOrderModal = ({ id,status }: { id: string; status: string }) => {
                             </span>
                         )}
                     </div>
-                    <ol>
-                        <li></li>
-                    </ol>
                     <input
                         type='submit'
                         className='bg-primary  w-fit mx-auto block px-5 py-1 mt-4 font-semibold rounded cursor-pointer'

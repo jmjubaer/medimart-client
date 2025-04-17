@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { FieldValues } from "react-hook-form";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

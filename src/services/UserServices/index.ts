@@ -40,9 +40,11 @@ export const changeUserStatus = async (userId: string, status: string) => {
                     //   Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({status}),
+                body: JSON.stringify({ status }),
             }
         );
+        revalidateTag("USERS");
+        revalidateTag("OVERVIEW");
         const data = await res.json();
         return data;
     } catch (error: any) {
@@ -59,9 +61,10 @@ export const changeUserRole = async (userId: string, role: string) => {
                     //   Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({role}),
+                body: JSON.stringify({ role }),
             }
         );
+        revalidateTag("USER");
         const data = await res.json();
         return data;
     } catch (error: any) {
@@ -77,6 +80,7 @@ export const deleteUser = async (userId: string) => {
             }
         );
         revalidateTag("USERS");
+        revalidateTag("OVERVIEW");
         const data = await res.json();
         return data;
     } catch (error: any) {

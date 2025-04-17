@@ -45,6 +45,7 @@ export const createMedicine = async (payload: IMedicine) => {
                 body: JSON.stringify(payload),
             }
         );
+        revalidateTag("OVERVIEW")
         revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
@@ -85,6 +86,7 @@ export const updateMedicine = async (
             }
         );
         revalidateTag("MEDICINE");
+        revalidateTag("OVERVIEW")
         revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
@@ -100,6 +102,7 @@ export const deleteMedicine = async (medicineId: string) => {
                 method: "DELETE",
             }
         );
+        revalidateTag("OVERVIEW")
         revalidateTag("MEDICINE");
         const data = await res.json();
         return data;
