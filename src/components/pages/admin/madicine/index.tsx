@@ -31,6 +31,7 @@ const ManageMedicines = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [isFetch, setIsFetch] = useState<boolean>(false);
     const [page, setPage] = useState(1);
+    const [filterText, setFilterText] = useState('');
     const [searchTerm, setSearchTerm] = useState("");
     const reFetch = () => {
         setIsFetch(!isFetch);
@@ -43,6 +44,7 @@ const ManageMedicines = () => {
                 { name: "limit", value: 10 },
                 { name: "sort", value: "_id" },
                 { name: "searchTerm", value: searchTerm },
+                ...(filterText === "true" ? [{ name: "lowStock", value: "true" }] : []),
             ]);
             if (data) {
                 setData(data);
@@ -50,7 +52,8 @@ const ManageMedicines = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page, isFetch]);
+    }, [searchTerm, page, isFetch, filterText]);
+
     const tableData = data?.result?.map(
         ({
             _id,
@@ -145,7 +148,10 @@ const ManageMedicines = () => {
                             className=' cursor-pointer text-red-500 '>
                             <Trash2 />
                         </button>
-                        <UpdateMedicineModal reFetch={reFetch} medicineId={item.key} />
+                        <UpdateMedicineModal
+                            reFetch={reFetch}
+                            medicineId={item.key}
+                        />
                     </div>
                 );
             },
@@ -175,14 +181,30 @@ const ManageMedicines = () => {
                 Manage Medicine
             </h2>
             <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
-                <div className='relative w-80 h-fit '>
-                    <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
-                    <input
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        type='text'
-                        className='outline-0 bg-gray-200 w-full px-5 p-2 rounded-md'
-                        placeholder='Search medicine . . . .'
-                    />
+                <div className='flex items-center gap-5'>
+                    <div className='relative w-80 h-fit '>
+                        <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
+                        <input
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            type='text'
+                            className='outline-0 bg-gray-200 w-full px-5 p-2 rounded-md'
+                            placeholder='Search medicine . . . .'
+                        />
+                    </div>{" "}
+                    <div className='relative'>
+                        <select
+                            className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
+                            onChange={(e) => setFilterText(e.target.value)}>
+                            <option value='false' className='capitalize'>
+                                All Medicine
+                            </option>{" "}
+                            <option
+                                value='true'
+                                className=' capitalize'>
+                                Low Stock Medicine
+                            </option>
+                        </select>
+                    </div>
                 </div>
                 <AddMedicineModal reFetch={reFetch} />
             </div>

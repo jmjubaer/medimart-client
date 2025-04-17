@@ -5,13 +5,17 @@ import { Modal } from "antd";
 import { changeOrderStatus } from "@/services/OrderServices";
 import Swal from "sweetalert2";
 import { LuRepeat } from "react-icons/lu";
-
+type IProps = {
+    id: string;
+    status: string;
+    reFetch: () => void;
+};
 type TNameForm = {
     status: "Pending" | "Reject" | "Processing" | "Shipped" | "Delivered";
     rejectNotes: string;
 };
 const orderStatus = ["Pending", "Reject", "Processing", "Shipped", "Delivered"];
-const ChangeStatusModal = ({ id, status }: { id: string; status: string }) => {
+const ChangeStatusModal = ({ id, status, reFetch }: IProps) => {
     const [open, setOpen] = useState(false);
     const {
         watch,
@@ -37,6 +41,7 @@ const ChangeStatusModal = ({ id, status }: { id: string; status: string }) => {
                     if (result?.success) {
                         Swal.fire("Change Status!", "", "success");
                         setOpen(false);
+                        reFetch()
                     }
                 }
             });
