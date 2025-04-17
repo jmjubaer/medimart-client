@@ -33,7 +33,6 @@ export const changeOrderStatus = async (
     orderId: string,
     payload: Partial<IOrder>
 ) => {
-    console.log(orderId,payload);
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/order/${orderId}`,
@@ -47,6 +46,26 @@ export const changeOrderStatus = async (
             }
         );
         revalidateTag("ORDERS");
+        revalidateTag("OVERVIEW");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+
+export const getOverview = async () => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/overview`,
+            {
+                next: {
+                    tags: ["OVERVIEW"],
+                },
+                cache: "no-cache",
+            }
+        );
+
         const data = await res.json();
         return data;
     } catch (error: any) {

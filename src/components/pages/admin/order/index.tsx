@@ -27,6 +27,7 @@ type TTableDataType = Pick<
     | "deliveryInfo"
     | "rejectNotes"
 >;
+// TODO: Show user order history
 const ManageCustomerOrder = ({ data }: IProps) => {
     const [page, setPage] = useState(1);
     const tableData = data?.result?.map(
@@ -126,7 +127,7 @@ const ManageCustomerOrder = ({ data }: IProps) => {
                             status={item?.status}
                             id={item?.key}
                         />
-                       
+
                         <ViewOrderDetails item={item} />
                     </div>
                 );
@@ -138,7 +139,7 @@ const ManageCustomerOrder = ({ data }: IProps) => {
     return (
         <div>
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
-                Manage Users
+                Manage Orders
             </h2>
 
             <div className='overflow-auto'>
