@@ -23,8 +23,6 @@ export const registerUser = async (userData: FieldValues) => {
         return Error(error);
     }
 };
-<<<<<<< HEAD
-=======
 
 export const loginUser = async (userData: FieldValues) => {
     try {
@@ -60,4 +58,3 @@ export const getCurrentUser =async()=>{
 export const logOutUser= async() => {
 (await cookies()).delete("accessToken")
 }
->>>>>>> b99506274cc155207bcd180ea50b40114bda75d9
