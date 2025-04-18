@@ -1,8 +1,13 @@
+import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
 import { Oxanium, Poppins } from "next/font/google";
 import "./globals.css";
-import "@ant-design/v5-patch-for-react-19";
+import Providers from "@/lib/providers";
+import { Toaster } from "sonner";
+
+
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "600"] });
+
 const oxanium = Oxanium({
     subsets: ["latin"],
     weight: ["400", "600", "700"],
@@ -21,10 +26,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body
-                className={`${oxanium.variable} ${poppins.className} antialiased`}>
-                <div className='min-h-screen'>{children}</div>
-            </body>
+            <Providers>
+                <body
+                    className={`${oxanium.variable} ${poppins.className} antialiased`}>
+                    <Toaster richColors />
+                    <div className='min-h-screen'>{children}</div>
+                </body>
+            </Providers>
         </html>
     );
 }

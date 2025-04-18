@@ -24,6 +24,12 @@ button:disabled {
     cursor: not-allowed;
     opacity: 50%;
 }
+.container{
+    width: 96%;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+}
 .secondary_font {
     font-family: "Oxanium", serif;
 }
@@ -33,11 +39,14 @@ button:disabled {
 .order-modal {
     width: 90% !important;
 }
+.button_primary {
+    @apply cursor-pointer text-base sm:text-base font-medium hover:text-black text-black bg-primary px-5 py-2 rounded;
+}
 .label_primary {
     @apply mb-3 inline-block;
 }
 .input_field {
-    @apply w-full text-xl text-black outline-none  border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
+    @apply w-full text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
 }
 div:where(.swal2-container).swal2-top,
 div:where(.swal2-container).swal2-center,
