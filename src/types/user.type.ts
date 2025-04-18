@@ -11,3 +11,11 @@ export type IUser = {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+export interface IAuthUser{
+email:string;
+exp:number;
+iat:number;
+id:string;
+role:"customer"|"admin"
+}

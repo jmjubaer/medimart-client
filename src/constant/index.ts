@@ -1,0 +1,1 @@
+export const protectedRoutes=['/cart','/admin','/admin/:page','/checkout','/orders','/profile',]

@@ -1,8 +1,25 @@
+"use client"
 import React from "react";
 import { Pill, ShoppingCart, Menu } from "lucide-react";
 import Link from "next/link";
+import { useUser } from "@/context/UserContext";
+import { logOutUser } from "@/services/AuthService";
+import { usePathname, useRouter } from "next/navigation";
+import { protectedRoutes } from "@/constant";
+
 
 const Navbar = () => {
+  const {user,setIsLoading} =useUser();
+  const pathname = usePathname();
+  const router = useRouter();
+  console.log(user);
+  const handleLogout =()=>{
+    logOutUser();
+    setIsLoading(true);
+    if(protectedRoutes.some(route=>pathname.match(route))){
+      router.push('/login')
+    }
+  }
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b">
       <nav className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,8 +65,17 @@ const Navbar = () => {
                   0
                 </span>
               </Link>
-              
-              <div className="flex space-x-4 ">
+
+              {
+                user?
+              <button
+               onClick={handleLogout}
+                className="text-gray-700 hover:text-primary transition-colors font-medium pt-[5px] text-sm"
+              >
+                Logout
+              </button>
+                :
+                <div className="flex space-x-4 ">
                 <Link
                   href="/login"
                   className="text-gray-700 hover:text-primary transition-colors font-medium pt-[5px] text-sm"
@@ -63,6 +89,8 @@ const Navbar = () => {
                   Get Started
                 </Link>
               </div>
+              }
+            
             </div>
           </div>
 
