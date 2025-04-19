@@ -5,8 +5,8 @@ export interface IProduct {
     medicine: IMedicine;
     quantity: number;
     prescription: string;
-  }
-  export interface IDeliveryInfo {
+}
+export interface IDeliveryInfo {
     name: string;
     phoneNumber: string;
     localAddress: string;
@@ -14,8 +14,9 @@ export interface IProduct {
     district: string;
     thana: string;
     postalCode: number;
-  }
-  export interface IOrder {
+    prescription?: string;
+}
+export interface IOrder {
     key?: string;
     _id: string;
     user: IUser;
@@ -28,13 +29,26 @@ export interface IProduct {
     paymentMethod: "COD" | "surjopay";
     paymentStatus: "unpaid" | "paid";
     transaction: {
-      id: string;
-      transactionStatus: string;
-      bank_status: string;
-      sp_code: string;
-      sp_message: string;
-      method: string;
-      date_time: string;
+        id: string;
+        transactionStatus: string;
+        bank_status: string;
+        sp_code: string;
+        sp_message: string;
+        method: string;
+        date_time: string;
     };
-    createdAt: Date
-  }
+    createdAt: Date;
+}
+
+export interface ICartItem {
+    medicine: string;
+    quantity: number;
+    prescription?: string;
+}
+export interface ICreateOrder {
+  user: string;
+  products: ICartItem[];
+  deliveryInfo?: IDeliveryInfo;
+  deliveryOptions?: "Standard" | "Express" | "Pickup from Store";
+  paymentMethod: "COD" | "surjopay";
+}

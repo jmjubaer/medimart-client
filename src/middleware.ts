@@ -1,46 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getCurrentUser } from "./services/AuthService"
+import { getCurrentUser } from "./services/AuthService";
 // import { protectedRoutes } from "./constant";
 
 type Role = keyof typeof roleBasedPrivateRoutes;
 
-const authRoutes =['/login','/register']
+const authRoutes = ["/login", "/register"];
 
-const roleBasedPrivateRoutes={
-  customer:[
-    /^\/cart/,
-    /^\/checkout/,
-    /^\/orders/,
-    /^\/profile/,
+const roleBasedPrivateRoutes = {
+    customer: [/^\/cart/, /^\/checkout/, /^\/orders/, /^\/profile/],
+    admin: [/^\/admin/, /^\/profile/, /^\/checkout/],
+};
 
-  ],
-  admin:[/^\/admin/,/^\/profile/],
-}
-
-export const middleware=async(req:NextRequest)=>{
-  console.log('hello world!')
-  const {pathname}=req.nextUrl;
-  const userInfo = await getCurrentUser();
-  if(!userInfo){
-    if(authRoutes.includes(pathname)){
-      return NextResponse.next();
-    }else{
-      return NextResponse.redirect(
-        new URL(`${process.env.NEXT_PUBLIC_CLIENT_API}/login?redirectPath=${pathname}`,req.url)
-      )
+export const middleware = async (req: NextRequest) => {
+    console.log("hello world!");
+    const { pathname } = req.nextUrl;
+    const userInfo = await getCurrentUser();
+    if (!userInfo) {
+        if (authRoutes.includes(pathname)) {
+            return NextResponse.next();
+        } else {
+            return NextResponse.redirect(
+                new URL(
+                    `${process.env.NEXT_PUBLIC_CLIENT_API}/login?redirectPath=${pathname}`,
+                    req.url
+                )
+            );
+        }
     }
-  }
 
-  if(userInfo?.role&&roleBasedPrivateRoutes[userInfo?.role as Role]){
-const routes = roleBasedPrivateRoutes[userInfo?.role as Role];
-if(routes.some(route=>pathname.match(route))){
-  return NextResponse.next();
-}
-  }
+    if (userInfo?.role && roleBasedPrivateRoutes[userInfo?.role as Role]) {
+        const routes = roleBasedPrivateRoutes[userInfo?.role as Role];
+        if (routes.some((route) => pathname.match(route))) {
+            return NextResponse.next();
+        }
+    }
 
-  return NextResponse.redirect(new URL('/',req.url))
-}
+    return NextResponse.redirect(new URL("/", req.url));
+};
 
-export const config ={
-  matcher:['/cart','/admin','/admin/:page','/checkout','/orders','/profile',]
-}
+export const config = {
+    matcher: [
+        "/cart",
+        "/admin",
+        "/admin/:page",
+        "/checkout",
+        "/orders",
+        "/profile",
+    ],
+};

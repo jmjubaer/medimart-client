@@ -1,8 +1,28 @@
 "use server";
 import { TQueryParam } from "@/types";
-import { IOrder } from "@/types/order.type";
+import { ICreateOrder, IOrder } from "@/types/order.type";
 import { revalidateTag } from "next/cache";
-
+export const createOrder = async (payload: ICreateOrder) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/create-order`,
+            {
+                method: "POST",
+                headers: {
+                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+        revalidateTag("OVERVIEW");
+        revalidateTag("ORDERS");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
 export const getAllOrders = async (queryParams?: TQueryParam[]) => {
     try {
         const params = new URLSearchParams();
