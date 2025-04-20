@@ -1,4 +1,4 @@
-export * from "./user.type";
+    export * from "./user.type";
 export * from "./medicines.type";
 
 export type IMeta = {

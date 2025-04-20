@@ -5,6 +5,28 @@ import { IMedicine, TQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 
 // Fetch all medicines with optional query parameters
+export const createMedicine = async (payload: IMedicine) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/medicine`,
+            {
+                method: "POST",
+                headers: {
+                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+        revalidateTag("OVERVIEW");
+        revalidateTag("MEDICINES");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+
 export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
     try {
         const params = new URLSearchParams();
@@ -32,10 +54,11 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         return Error(error.message);
     }
 };
-export const createMedicine = async (payload: IMedicine) => {
+
+export const getCartMedicine = async (payload: string[]) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/get-cart-medicines`,
             {
                 method: "POST",
                 headers: {
@@ -45,14 +68,13 @@ export const createMedicine = async (payload: IMedicine) => {
                 body: JSON.stringify(payload),
             }
         );
-        revalidateTag("OVERVIEW")
-        revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
     } catch (error: any) {
         return Error(error.message);
     }
 };
+
 export const getSingleMedicine = async (medicineId: string) => {
     try {
         const res = await fetch(
@@ -86,7 +108,7 @@ export const updateMedicine = async (
             }
         );
         revalidateTag("MEDICINE");
-        revalidateTag("OVERVIEW")
+        revalidateTag("OVERVIEW");
         revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
@@ -102,7 +124,7 @@ export const deleteMedicine = async (medicineId: string) => {
                 method: "DELETE",
             }
         );
-        revalidateTag("OVERVIEW")
+        revalidateTag("OVERVIEW");
         revalidateTag("MEDICINE");
         const data = await res.json();
         return data;
