@@ -43,7 +43,6 @@ const Checkout = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<IDeliveryInfo>();
-    console.log(products);
     const onSubmit: SubmitHandler<IDeliveryInfo> = async (data) => {
         // setLoading(true);
         try {

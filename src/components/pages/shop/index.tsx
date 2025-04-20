@@ -7,6 +7,9 @@ import { Card, Empty } from "antd";
 import { IMedicine, IMeta } from "@/types";
 import { getAllMedicines } from "@/services/Medicines";
 import { SearchIcon, ShoppingCart } from "lucide-react";
+import Link from "next/link";
+import { useAppDispatch } from "@/redux/hook";
+import { addToCart } from "@/redux/features/cart/cartSlice";
 
 type IData = {
   result: IMedicine[];
@@ -21,6 +24,7 @@ const ShopComponent = () => {
   const [maxPrice, setMaxPrice] = useState<number>(0);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch=useAppDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -168,10 +172,20 @@ const ShopComponent = () => {
                   <button
                     className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full transition-all font-medium text-sm mt-5 w-full cursor-pointer hover:gap-3"
                     disabled={medicine.quantity <= 0}
+                    onClick={()=>dispatch(addToCart({product:medicine!,quantity:1}))} 
+              
                   >
                     <ShoppingCart size={18} />
                     Add to Cart
                   </button>
+                <Link href={`/medicine/${medicine?._id}`}>
+                <button
+                    className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full transition-all font-medium text-sm mt-5 w-full cursor-pointer hover:gap-3"
+                    disabled={medicine.quantity <= 0}
+                  >
+                    View Details
+                  </button>
+                </Link>
                 </Card>
               ))}
             </div>

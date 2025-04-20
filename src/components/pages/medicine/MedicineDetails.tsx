@@ -11,10 +11,14 @@ import { CircleArrowRight, ShoppingCart } from "lucide-react";
 import { IMedicine } from "@/types";
 import { getSingleMedicine } from "@/services/Medicines";
 import { useEffect, useState } from "react";
+import { useAppDispatch } from "@/redux/hook";
+import { addToCart } from "@/redux/features/cart/cartSlice";
+import Link from "next/link";
 
 const MedicineDetails = ({ medicineId }: { medicineId: string }) => {
   const [medicine, setMedicine] = useState<IMedicine | null>(null);
   const [loading, setLoading] = useState(false);
+  const dispatch=useAppDispatch();
 
   useEffect(() => {
     const getMedicine = async () => {
@@ -86,13 +90,16 @@ const MedicineDetails = ({ medicineId }: { medicineId: string }) => {
                   <span className="text-3xl font-bold text-primary">
                     ${medicine?.price.toFixed(2)}
                   </span>
-                  <button
+                 <Link href={"/cart"}>
+                 <button
+                  onClick={()=>dispatch(addToCart({product:medicine!,quantity:1}))} 
                     disabled={!medicine?.stockAvailability}
                     className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full transition-all font-medium text-sm cursor-pointer"
                   >
                     <ShoppingCart size={18} />
                     Add to Cart
                   </button>
+                 </Link>
                 </div>
 
                 <Divider />
