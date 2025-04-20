@@ -1,33 +1,19 @@
 "use client";
-import { ICartItem, IDeliveryInfo } from "@/types/order.type";
+import { IDeliveryInfo } from "@/types/order.type";
 import { Spin } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import { FaCheckCircle } from "react-icons/fa";
-import { getCartMedicine } from "@/services/Medicines";
-import { IMedicine } from "@/types";
-import AddPrescriptionModal from "./AddPresctiptionModal";
-import { createOrder } from "@/services/OrderServices";
-import { useUser } from "@/context/UserContext";
-import { useRouter } from "next/navigation";
 
 const Checkout = () => {
-    const router = useRouter()
-    const { user } = useUser();
     const [loading, setLoading] = useState(false);
-    const [products, setProducts] = useState([]);
-    const [paymentMethod, setPaymentMethod] = useState<"COD" | "surjopay">(
-        "surjopay"
-    );
-    const [deliveryOptions, setDeliveryOptions] = useState<
-        "Standard" | "Express" | "Pickup from Store"
-    >("Standard");
-
-    const [cartItems, setCartItems] = useState<ICartItem[]>([
+    const [paymentMethod, setPaymentMethod] = useState("surjopay");
+    const [deliveryOptions, setDeliveryOptions] = useState("Standard");
+    const products = [
         {
             medicine: "67fc7515be160cf50dc7613a",
             quantity: 5,
@@ -36,7 +22,8 @@ const Checkout = () => {
             medicine: "67fc7893ec4c894e6a230092",
             quantity: 1,
         },
-    ]);
+    ];
+    const totalPrice = 112;
     const {
         reset,
         register,
@@ -45,82 +32,54 @@ const Checkout = () => {
     } = useForm<IDeliveryInfo>();
     const onSubmit: SubmitHandler<IDeliveryInfo> = async (data) => {
         const toastId = toast.loading("Order placing....");
-        // setLoading(true);
-        try {
-            const missingPrescriptions = products?.filter(
-                (product: IMedicine) => {
-                    if (product.requiredPrescription) {
-                        const cartItem = cartItems.find(
-                            (item) => item.medicine === product._id
-                        );
-                        return !cartItem?.prescription;
-                    }
-                    return false;
-                }
-            );
-
-            if (missingPrescriptions.length > 0) {
-                setLoading(false);
-                return toast.error(
-                    "Please upload prescriptions for all required medicines.",
-                    {
-                        id: toastId,
-                    }
-                );
-            }
-            const orderData = {
-                user: user?.id as string,
-                products: cartItems,
-                deliveryInfo: {
-                    name: data.name,
-                    phoneNumber: data.phoneNumber,
-                    localAddress: data.localAddress,
-                    city: data.city,
-                    district: data.district,
-                    thana: data.thana,
-                    postalCode: Number(data.postalCode),
-                },
-                deliveryOptions,
-                paymentMethod,
-            };
-            const result = await createOrder(orderData);
-            console.log(result);
-            if (result?.success) {
-                toast.success("Order placed successfully!", { id: toastId });
-                reset();
-                if (result?.data?.paymentUrl) {
-                    window.open(result?.data?.paymentUrl, "_self");
-                    setLoading(false);
-                } else {
-                    setLoading(false);
-                    router.push("/orders")
-                }
-            } else if (result?.error) {
-                toast.error(
-                    result?.error?.data?.message || "Failed to place order",
-                    { id: toastId }
-                );
-                setLoading(false);
-            }
-        } catch (error: any) {
-            setLoading(false);
-            toast.error(error.message, { id: toastId });
-        }
+        setLoading(true);
+        // try {
+        //     if (!paymentMethod) {
+        //         return toast.error("Please select a payment method", {
+        //             id: toastId,
+        //         });
+        //     }
+        //     const orderData = {
+        //         user: currentUser?.data?._id,
+        //         product: productId,
+        //         quantity,
+        //         totalPrice: product?.data?.price * quantity + 5,
+        //         paymentMethod,
+        //         deliveryInfo: {
+        //             name: data.name,
+        //             phoneNumber: data.phoneNumber,
+        //             localAddress: data.localAddress,
+        //             city: data.city,
+        //             district: data.district,
+        //             thana: data.thana,
+        //             postalCode: Number(data.postalCode),
+        //         },
+        //     };
+        //     const result = (await createOrder(
+        //         orderData
+        //     ));
+        //     if (result?.data?.success) {
+        //         toast.success("Order placed successfully!", { id: toastId });
+        //         reset();
+        //         if (result?.data?.data?.paymentUrl) {
+        //             window.open(result?.data?.data?.paymentUrl, "_self");
+        //             setLoading(false);
+        //         } else {
+        //             setLoading(false);
+        //             navigate("/bicycles");
+        //         }
+        //     } else if (result?.error) {
+        //         toast.error(
+        //             result?.error?.data?.message || "Failed to place order",
+        //             { id: toastId }
+        //         );
+        //         setLoading(false);
+        //     }
+        // } catch (error: any) {
+        //     setLoading(false);
+        //     toast.error(error.message, { id: toastId });
+        // }
     };
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            const ids = cartItems?.map((m: { medicine: string }) => m.medicine);
-            const { data } = await getCartMedicine(ids);
-            console.log(data);
-            if (data) {
-                setProducts(data);
-                setLoading(false);
-            }
-            setLoading(false);
-        })();
-    }, []);
-
     return (
         <Spin
             spinning={loading}
@@ -262,38 +221,56 @@ const Checkout = () => {
                         Product Details
                     </h2>
                     {/* Product Info */}
-                    {products?.map((product: IMedicine) => (
-                        <div
-                            key={product?._id}
-                            className='mt-4 flex items-center gap-3 xs:gap-5'>
-                            <Image
-                                width={100}
-                                height={100}
-                                src={product?.image}
-                                alt=''
-                                className='w-28 h-28 border border-gray-300 object-cover rounded-md'
-                            />
-                            <div className=''>
-                                <h3 className='text-xl font-semibold secondary_font'>
-                                    {product?.name}
-                                </h3>
-                                <p className='my-1 text-xl font-semibold '>
-                                    <span className='font-medium text-lg mr-2'>
-                                        {" "}
-                                        Price:
-                                    </span>
-                                    ${product?.price}
-                                </p>
-                                {product?.requiredPrescription && (
-                                    <AddPrescriptionModal
-                                        medicineId={product?._id}
-                                        cartItems={cartItems}
-                                        setCartItems={setCartItems}
-                                    />
-                                )}
+                    {/* <div
+                        className='mt-4 flex items-center gap-3 xs:gap-5'>
+                        <img
+                            src={product?.data?.image}
+                            alt=''
+                            className='w-28 h-28 border border-gray-300 object-cover rounded-md'
+                        />
+                        <div className=''>
+                            <h3 className='text-xl font-medium secondary_font'>
+                                {product?.data?.name}
+                            </h3>
+                            <p className='my-1 text-xl font-semibold '>
+                                <span className='font-medium text-lg mr-2'>
+                                    {" "}
+                                    Price:
+                                </span>
+                                ${product?.data?.price}
+                            </p>
+                            <div className='flex items-center gap-2'>
+                                <button
+                                    onClick={() =>
+                                        setQuantity(
+                                            quantity > 1
+                                                ? quantity - 1
+                                                : quantity
+                                        )
+                                    }
+                                    type='button'
+                                    className='bg-black/10 cursor-pointer p-3 rounded'>
+                                    <FaMinus />
+                                </button>
+                                <input
+                                    type='number'
+                                    min='1'
+                                    onChange={(e) =>
+                                        setQuantity(Number(e.target.value))
+                                    }
+                                    // defaultValue={quantity}
+                                    value={quantity || 1}
+                                    className='input_field w-40'
+                                />
+                                <button
+                                    onClick={() => setQuantity(quantity + 1)}
+                                    type='button'
+                                    className='bg-black/10 cursor-pointer p-3 rounded'>
+                                    <FaPlus />
+                                </button>
                             </div>
                         </div>
-                    ))}
+                    </div> */}
 
                     {/* Order Summery */}
                     {/* <div className='overflow-hidden rounded-lg border mt-5 border-black/10 '>
@@ -382,14 +359,7 @@ const Checkout = () => {
                     <select
                         defaultValue={"Standard"}
                         className='outline-0 mt-3 text-base bg-gray-200 w-full px-5 p-2 rounded-md input_field'
-                        onChange={(e) =>
-                            setDeliveryOptions(
-                                e.target.value as
-                                    | "Standard"
-                                    | "Express"
-                                    | "Pickup from Store"
-                            )
-                        }>
+                        onChange={(e) => setDeliveryOptions(e.target.value)}>
                         <option value='Standard' className=' capitalize'>
                             Standard Delivery ($20)
                         </option>
