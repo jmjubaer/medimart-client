@@ -1,20 +1,41 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { IDeliveryInfo } from "@/types/order.type";
+import { ICartItem, IDeliveryInfo } from "@/types/order.type";
 import { Spin } from "antd";
 import Image from "next/image";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import { FaCheckCircle } from "react-icons/fa";
+import { IMedicine } from "@/types";
+import AddPrescriptionModal from "./AddPresctiptionModal";
+import { createOrder } from "@/services/OrderServices";
+import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { useAppSelector } from "@/redux/hook";
+import { useCartItems, useTotalPrice } from "@/redux/features/cart/cartSlice";
 
 const Checkout = () => {
+    const totalPrice = useAppSelector(useTotalPrice);
+
+    const products = useAppSelector(useCartItems);
+    const router = useRouter();
+    const { user } = useUser();
     const [loading, setLoading] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState("surjopay");
-    const [deliveryOptions, setDeliveryOptions] = useState("Standard");
-    const products = [
+    const [paymentMethod, setPaymentMethod] = useState<"COD" | "surjopay">(
+        "surjopay"
+    );
+    const [deliveryOptions, setDeliveryOptions] = useState<
+        "Standard" | "Express" | "Pickup from Store"
+    >("Standard");
+    const deliveryCost =
+        deliveryOptions === "Express"
+            ? 30
+            : deliveryOptions === "Standard"
+            ? 20
+            : 0;
+    const [cartItems, setCartItems] = useState<ICartItem[]>([
         {
             medicine: "67fc7515be160cf50dc7613a",
             quantity: 5,
@@ -23,8 +44,7 @@ const Checkout = () => {
             medicine: "67fc7893ec4c894e6a230092",
             quantity: 1,
         },
-    ];
-    const totalPrice = 112;
+    ]);
     const {
         reset,
         register,
@@ -32,54 +52,114 @@ const Checkout = () => {
         formState: { errors },
     } = useForm<IDeliveryInfo>();
     const onSubmit: SubmitHandler<IDeliveryInfo> = async (data) => {
-        const toastId = toast.loading("Order placing....");
-        setLoading(true);
-        // try {
-        //     if (!paymentMethod) {
-        //         return toast.error("Please select a payment method", {
-        //             id: toastId,
-        //         });
-        //     }
-        //     const orderData = {
-        //         user: currentUser?.data?._id,
-        //         product: productId,
-        //         quantity,
-        //         totalPrice: product?.data?.price * quantity + 5,
-        //         paymentMethod,
-        //         deliveryInfo: {
-        //             name: data.name,
-        //             phoneNumber: data.phoneNumber,
-        //             localAddress: data.localAddress,
-        //             city: data.city,
-        //             district: data.district,
-        //             thana: data.thana,
-        //             postalCode: Number(data.postalCode),
-        //         },
-        //     };
-        //     const result = (await createOrder(
-        //         orderData
-        //     ));
-        //     if (result?.data?.success) {
-        //         toast.success("Order placed successfully!", { id: toastId });
-        //         reset();
-        //         if (result?.data?.data?.paymentUrl) {
-        //             window.open(result?.data?.data?.paymentUrl, "_self");
-        //             setLoading(false);
-        //         } else {
-        //             setLoading(false);
-        //             navigate("/bicycles");
-        //         }
-        //     } else if (result?.error) {
-        //         toast.error(
-        //             result?.error?.data?.message || "Failed to place order",
-        //             { id: toastId }
-        //         );
-        //         setLoading(false);
-        //     }
-        // } catch (error: any) {
-        //     setLoading(false);
-        //     toast.error(error.message, { id: toastId });
-        // }
+        // setLoading(true);
+        try {
+            const missingPrescriptions = products?.filter(
+                (product: IMedicine) => {
+                    if (product.requiredPrescription) {
+                        const cartItem = cartItems.find(
+                            (item) => item.medicine === product._id
+                        );
+                        return !cartItem?.prescription;
+                    }
+                    return false;
+                }
+            );
+
+            if (missingPrescriptions.length > 0) {
+                setLoading(false);
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please upload prescriptions for all required medicines.",
+                });
+                return;
+            }
+            const orderData = {
+                user: user?.id as string,
+                products: cartItems,
+                deliveryInfo: {
+                    name: data.name,
+                    phoneNumber: data.phoneNumber,
+                    localAddress: data.localAddress,
+                    city: data.city,
+                    district: data.district,
+                    thana: data.thana,
+                    postalCode: Number(data.postalCode),
+                },
+                deliveryOptions,
+                paymentMethod,
+            };
+            Swal.fire({
+                title: "Please confirm the order.",
+                html: `
+      <table style="width: 100%; border: 1px solid rgba(0,0,0,0.1); border-collapse: collapse; font-family: sans-serif;">
+      <tbody>
+        <tr style="background-color: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.1);">
+          <th colspan="2" style="font-size: 18px; text-align: center; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Order Summary
+          </th>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Quantity
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            ${products?.length}
+          </td>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Shipping
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            $${deliveryCost}
+          </td>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            Total
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            $${totalPrice + deliveryCost}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+              `,
+                showCancelButton: true,
+                confirmButtonText: "Confirm",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const result = await createOrder(orderData);
+                    if (result?.success) {
+                        Swal.fire("Order Placed!", "", "success");
+                        reset();
+                        if (result?.data?.paymentUrl) {
+                            window.open(result?.data?.paymentUrl, "_self");
+                            setLoading(false);
+                        } else {
+                            setLoading(false);
+                            router.push("/orders");
+                        }
+                    } else if (result?.error) {
+                        Swal.fire(
+                            `${
+                                result?.error?.data?.message ||
+                                "Failed to place order"
+                            }`,
+                            "",
+                            "error"
+                        );
+
+                        setLoading(false);
+                    }
+                }
+            });
+        } catch (error: any) {
+            setLoading(false);
+            Swal.fire(`${error.message}`, "", "error");
+        }
     };
     return (
         <Spin
@@ -222,56 +302,38 @@ const Checkout = () => {
                         Product Details
                     </h2>
                     {/* Product Info */}
-                    {/* <div
-                        className='mt-4 flex items-center gap-3 xs:gap-5'>
-                        <img
-                            src={product?.data?.image}
-                            alt=''
-                            className='w-28 h-28 border border-gray-300 object-cover rounded-md'
-                        />
-                        <div className=''>
-                            <h3 className='text-xl font-medium secondary_font'>
-                                {product?.data?.name}
-                            </h3>
-                            <p className='my-1 text-xl font-semibold '>
-                                <span className='font-medium text-lg mr-2'>
-                                    {" "}
-                                    Price:
-                                </span>
-                                ${product?.data?.price}
-                            </p>
-                            <div className='flex items-center gap-2'>
-                                <button
-                                    onClick={() =>
-                                        setQuantity(
-                                            quantity > 1
-                                                ? quantity - 1
-                                                : quantity
-                                        )
-                                    }
-                                    type='button'
-                                    className='bg-black/10 cursor-pointer p-3 rounded'>
-                                    <FaMinus />
-                                </button>
-                                <input
-                                    type='number'
-                                    min='1'
-                                    onChange={(e) =>
-                                        setQuantity(Number(e.target.value))
-                                    }
-                                    // defaultValue={quantity}
-                                    value={quantity || 1}
-                                    className='input_field w-40'
-                                />
-                                <button
-                                    onClick={() => setQuantity(quantity + 1)}
-                                    type='button'
-                                    className='bg-black/10 cursor-pointer p-3 rounded'>
-                                    <FaPlus />
-                                </button>
+                    {products?.map((product: IMedicine) => (
+                        <div
+                            key={product?._id}
+                            className='mt-4 flex items-center gap-3 xs:gap-5'>
+                            <Image
+                                width={100}
+                                height={100}
+                                src={product?.image}
+                                alt=''
+                                className='w-28 h-28 border border-gray-300 object-cover rounded-md'
+                            />
+                            <div className=''>
+                                <h3 className='text-xl font-semibold secondary_font'>
+                                    {product?.name}
+                                </h3>
+                                <p className='my-1 text-xl font-semibold '>
+                                    <span className='font-medium text-lg mr-2'>
+                                        {" "}
+                                        Price:
+                                    </span>
+                                    ${product?.price}
+                                </p>
+                                {product?.requiredPrescription && (
+                                    <AddPrescriptionModal
+                                        medicineId={product?._id}
+                                        cartItems={cartItems}
+                                        setCartItems={setCartItems}
+                                    />
+                                )}
                             </div>
                         </div>
-                    </div> */}
+                    ))}
 
                     {/* Order Summery */}
                     {/* <div className='overflow-hidden rounded-lg border mt-5 border-black/10 '>
@@ -360,7 +422,14 @@ const Checkout = () => {
                     <select
                         defaultValue={"Standard"}
                         className='outline-0 mt-3 text-base bg-gray-200 w-full px-5 p-2 rounded-md input_field'
-                        onChange={(e) => setDeliveryOptions(e.target.value)}>
+                        onChange={(e) =>
+                            setDeliveryOptions(
+                                e.target.value as
+                                    | "Standard"
+                                    | "Express"
+                                    | "Pickup from Store"
+                            )
+                        }>
                         <option value='Standard' className=' capitalize'>
                             Standard Delivery ($20)
                         </option>
@@ -373,6 +442,7 @@ const Checkout = () => {
                             Pickup from Store ($0)
                         </option>
                     </select>
+
                     <button
                         type='submit'
                         className='button_primary w-full mt-5'>
