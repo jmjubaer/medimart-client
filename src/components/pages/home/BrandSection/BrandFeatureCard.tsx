@@ -47,12 +47,12 @@ const BrandFeatureCard = ({
       <div className="relative z-10">
         <div
           className={
-            "h-14 w-14 rounded-2xl flex items-center justify-center mb-6 border-gray-300" +
+            "h-14 w-14 rounded-2xl flex items-center  mx-auto  justify-center mb-6 border-gray-300" +
             "bg-primary/10 text-primary transition-all duration-300 " +
             "group-hover:bg-primary/15 group-hover:scale-105"
           }
         >
-          <Icon className="w-7 h-7" />
+          <Icon className="w-7 h-7 " />
         </div>
 
         <h3 className="text-xl font-semibold mb-3">{title}</h3>
