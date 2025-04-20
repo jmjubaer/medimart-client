@@ -6,15 +6,19 @@ import { useUser } from "@/context/UserContext";
 import { logOutUser } from "@/services/AuthService";
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/constant";
+import { useAppSelector } from "@/redux/hook";
+import { useTotalQuantity } from "@/redux/features/cart/cartSlice";
 
 
 const Navbar = () => {
-  const {user,setIsLoading} =useUser();
+  const {user,setIsLoading,setUser} =useUser();
   const pathname = usePathname();
   const router = useRouter();
-  // console.log(user);
+  const totalCartItem= useAppSelector(useTotalQuantity);
+
   const handleLogout =()=>{
     logOutUser();
+    setUser(null);
     setIsLoading(true);
     if(protectedRoutes.some(route=>pathname.match(route))){
       router.push('/login')
@@ -62,7 +66,7 @@ const Navbar = () => {
               >
                 <ShoppingCart className="w-5 h-5" />
                 <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  0
+                  {totalCartItem}
                 </span>
               </Link>
 

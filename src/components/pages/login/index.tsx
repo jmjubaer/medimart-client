@@ -8,6 +8,8 @@ import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { loginSchema } from './loginValidation';
 import {  useRouter, useSearchParams } from 'next/navigation';
+import { useUser } from '@/context/UserContext';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -17,6 +19,7 @@ interface IFormInput{
 }
 
 const LoginForm = () => {
+  const { setUser } = useUser();
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirectPath')
   const router = useRouter();
@@ -41,10 +44,11 @@ const LoginForm = () => {
       }
   
       const res = await loginUser(payload);
-   
+     console.log(res.data)
       if (res?.success) {
         toast.success(res.message);
         reset();
+        setUser(jwtDecode(res.data.accessToken))
         if(redirect){
           router.push(redirect)
         }else{

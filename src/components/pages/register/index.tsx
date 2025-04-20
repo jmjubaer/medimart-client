@@ -8,6 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "./registerValidation";
 import { registerUser } from "@/services/AuthService";
 import { toast } from "sonner";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@/context/UserContext";
+import { jwtDecode } from "jwt-decode";
 
 
 interface IFormInput{
@@ -16,7 +19,12 @@ interface IFormInput{
   email:string;
   password:string;
 }
+
 const RegisterForm = () => {
+  const{setUser} =useUser();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get('redirectPath')
+  const router = useRouter();
 const {register,handleSubmit,formState:{errors,isSubmitting},reset}=useForm<IFormInput>({resolver:zodResolver(registerSchema)});
 
 const onSubmit:SubmitHandler<FieldValues>=async(data)=>{
@@ -26,6 +34,12 @@ if(res?.success){
   toast.success(res?.message)
   console.log(res?.message)
   reset();
+  setUser(jwtDecode(res.data.accessToken))
+  if(redirect){
+    router.push(redirect)
+  }else{
+    router.push('/')
+  }
 }else{
   toast.error(res?.message);
   console.log(res?.message)
