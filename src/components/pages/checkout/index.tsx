@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { IDeliveryInfo } from "@/types/order.type";
 import { Spin } from "antd";
