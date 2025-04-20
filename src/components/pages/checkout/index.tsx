@@ -2,31 +2,39 @@
 import { ICartItem, IDeliveryInfo } from "@/types/order.type";
 import { Spin } from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import { FaCheckCircle } from "react-icons/fa";
-import { getCartMedicine } from "@/services/Medicines";
 import { IMedicine } from "@/types";
 import AddPrescriptionModal from "./AddPresctiptionModal";
 import { createOrder } from "@/services/OrderServices";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { useAppSelector } from "@/redux/hook";
+import { useCartItems, useTotalPrice } from "@/redux/features/cart/cartSlice";
 
 const Checkout = () => {
+    const totalPrice = useAppSelector(useTotalPrice);
+
+    const products = useAppSelector(useCartItems);
     const router = useRouter();
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
-    const [products, setProducts] = useState([]);
     const [paymentMethod, setPaymentMethod] = useState<"COD" | "surjopay">(
         "surjopay"
     );
     const [deliveryOptions, setDeliveryOptions] = useState<
         "Standard" | "Express" | "Pickup from Store"
     >("Standard");
-
+    const deliveryCost =
+        deliveryOptions === "Express"
+            ? 30
+            : deliveryOptions === "Standard"
+            ? 20
+            : 0;
     const [cartItems, setCartItems] = useState<ICartItem[]>([
         {
             medicine: "67fc7515be160cf50dc7613a",
@@ -105,7 +113,7 @@ const Checkout = () => {
             Shipping
           </td>
           <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
-            $5
+            $${deliveryCost}
           </td>
         </tr>
         <tr style="border: 1px solid rgba(0,0,0,0.1);">
@@ -113,7 +121,7 @@ const Checkout = () => {
             Total
           </td>
           <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
-            $128
+            $${totalPrice + deliveryCost}
           </td>
         </tr>
       </tbody>
@@ -153,20 +161,6 @@ const Checkout = () => {
             Swal.fire(`${error.message}`, "", "error");
         }
     };
-    useEffect(() => {
-        (async () => {
-            setLoading(true);
-            const ids = cartItems?.map((m: { medicine: string }) => m.medicine);
-            const { data } = await getCartMedicine(ids);
-            console.log(data);
-            if (data) {
-                setProducts(data);
-                setLoading(false);
-            }
-            setLoading(false);
-        })();
-    }, [cartItems]);
-
     return (
         <Spin
             spinning={loading}
