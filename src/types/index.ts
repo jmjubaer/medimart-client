@@ -9,5 +9,5 @@ export type IMeta = {
 };
 export type TQueryParam = {
     name: string;
-    value: string | number;
+    value: string | number | boolean;
 };
