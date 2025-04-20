@@ -1,7 +1,7 @@
     
 const ManageOrder = () => {
     return (
-        <div>
+        <div className="container">
             Manage order
         </div>
     );
