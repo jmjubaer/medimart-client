@@ -4,7 +4,6 @@ import { Spin } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "sonner";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import { FaCheckCircle } from "react-icons/fa";
@@ -14,9 +13,10 @@ import AddPrescriptionModal from "./AddPresctiptionModal";
 import { createOrder } from "@/services/OrderServices";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const Checkout = () => {
-    const router = useRouter()
+    const router = useRouter();
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
     const [products, setProducts] = useState([]);
@@ -43,8 +43,8 @@ const Checkout = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<IDeliveryInfo>();
+    console.log(products);
     const onSubmit: SubmitHandler<IDeliveryInfo> = async (data) => {
-        const toastId = toast.loading("Order placing....");
         // setLoading(true);
         try {
             const missingPrescriptions = products?.filter(
@@ -61,12 +61,12 @@ const Checkout = () => {
 
             if (missingPrescriptions.length > 0) {
                 setLoading(false);
-                return toast.error(
-                    "Please upload prescriptions for all required medicines.",
-                    {
-                        id: toastId,
-                    }
-                );
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please upload prescriptions for all required medicines.",
+                });
+                return;
             }
             const orderData = {
                 user: user?.id as string,
@@ -83,28 +83,75 @@ const Checkout = () => {
                 deliveryOptions,
                 paymentMethod,
             };
-            const result = await createOrder(orderData);
-            console.log(result);
-            if (result?.success) {
-                toast.success("Order placed successfully!", { id: toastId });
-                reset();
-                if (result?.data?.paymentUrl) {
-                    window.open(result?.data?.paymentUrl, "_self");
-                    setLoading(false);
-                } else {
-                    setLoading(false);
-                    router.push("/orders")
+            Swal.fire({
+                title: "Please confirm the order.",
+                html: `
+      <table style="width: 100%; border: 1px solid rgba(0,0,0,0.1); border-collapse: collapse; font-family: sans-serif;">
+      <tbody>
+        <tr style="background-color: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.1);">
+          <th colspan="2" style="font-size: 18px; text-align: center; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Order Summary
+          </th>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Quantity
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            ${products?.length}
+          </td>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1);">
+            Shipping
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            $5
+          </td>
+        </tr>
+        <tr style="border: 1px solid rgba(0,0,0,0.1);">
+          <td style="width: 50%;text-align: left; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            Total
+          </td>
+          <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
+            $128
+          </td>
+        </tr>
+      </tbody>
+    </table>
+              `,
+                showCancelButton: true,
+                confirmButtonText: "Confirm",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const result = await createOrder(orderData);
+                    if (result?.success) {
+                        Swal.fire("Order Placed!", "", "success");
+                        reset();
+                        if (result?.data?.paymentUrl) {
+                            window.open(result?.data?.paymentUrl, "_self");
+                            setLoading(false);
+                        } else {
+                            setLoading(false);
+                            router.push("/orders");
+                        }
+                    } else if (result?.error) {
+                        Swal.fire(
+                            `${
+                                result?.error?.data?.message ||
+                                "Failed to place order"
+                            }`,
+                            "",
+                            "error"
+                        );
+
+                        setLoading(false);
+                    }
                 }
-            } else if (result?.error) {
-                toast.error(
-                    result?.error?.data?.message || "Failed to place order",
-                    { id: toastId }
-                );
-                setLoading(false);
-            }
+            });
         } catch (error: any) {
             setLoading(false);
-            toast.error(error.message, { id: toastId });
+            Swal.fire(`${error.message}`, "", "error");
         }
     };
     useEffect(() => {
@@ -119,7 +166,7 @@ const Checkout = () => {
             }
             setLoading(false);
         })();
-    }, []);
+    }, [cartItems]);
 
     return (
         <Spin
@@ -402,6 +449,7 @@ const Checkout = () => {
                             Pickup from Store ($0)
                         </option>
                     </select>
+
                     <button
                         type='submit'
                         className='button_primary w-full mt-5'>

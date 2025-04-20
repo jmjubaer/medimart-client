@@ -6,11 +6,16 @@ import success from "@/assets/animation/success.json";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { verifiedPayment } from "@/services/OrderServices";
+type IRes = {
+    data: any;
+    success: boolean;
+    message: string;
+};
 const VerifyPaymentPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(true);
-    const [data, setData] = useState({});
+    const [data, setData] = useState<IRes | null>(null);
 
     const order_id = searchParams.get("order_id");
 
@@ -38,7 +43,7 @@ const VerifyPaymentPage = () => {
             <div className='md:w-1/2'>
                 {loading ? (
                     <Lottie animationData={pending} loop={true} />
-                ) : data?.success ? (
+                ) : data && data?.success ? (
                     <Lottie animationData={success} loop={false} />
                 ) : (
                     <Lottie animationData={failed} loop={false} />
