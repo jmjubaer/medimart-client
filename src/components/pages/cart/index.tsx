@@ -130,7 +130,7 @@ const Cart = () => {
                 <h3 className='font-bold text-2xl mb-10'>Order Details</h3>
                 <div className='max-w-[400px] border-2 rounded-2xl p-6 bg-slate-50'>
                     <div className='flex justify-between text-xl text-gray-500 '>
-                        <span>Subtotal</span>${total}
+                        <span>Subtotal</span>${total.toFixed(2)}
                     </div>
                     <div className='flex justify-between text-xl text-gray-500 mt-1'>
                         <span>Quantity </span>

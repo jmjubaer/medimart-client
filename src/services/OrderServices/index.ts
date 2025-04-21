@@ -49,6 +49,24 @@ export const getAllOrders = async (queryParams?: TQueryParam[]) => {
         return Error(error.message);
     }
 };
+export const getUserOrders = async (userId: string) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/orders/${userId}`,
+            {
+                next: {
+                    tags: ["ORDERS"],
+                },
+                cache: "no-cache",
+            }
+        );
+
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
 export const changeOrderStatus = async (
     orderId: string,
     payload: Partial<IOrder>

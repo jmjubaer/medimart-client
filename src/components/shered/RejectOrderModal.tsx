@@ -6,14 +6,16 @@ import { changeOrderStatus } from "@/services/OrderServices";
 import Swal from "sweetalert2";
 type IProps = {
     id: string;
+    isAdmin: boolean;
     status: string;
     reFetch: () => void;
 };
+
 type TNameForm = {
     rejectNotes: string;
 };
 
-const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
+const RejectOrderModal = ({ id, status, reFetch, isAdmin }: IProps) => {
     const [open, setOpen] = useState(false);
     const {
         register,
@@ -48,12 +50,14 @@ const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
     console.log(status);
     return (
         <div className=''>
-            <button
-                disabled={status === "Reject"}
-                onClick={() => setOpen(true)}
-                className='bg-red-400 mt-5 py-2 px-2 rounded-lg text-base text-white w-full'>
-                Reject Order
-            </button>
+            {isAdmin && (
+                <button
+                    disabled={status === "Reject"}
+                    onClick={() => setOpen(true)}
+                    className='bg-red-400 mt-5 py-2 px-2 rounded-lg text-base text-white w-full'>
+                    Reject Order
+                </button>
+            )}
             {/* Status change modal */}
             <Modal
                 title='Change Status'
@@ -65,7 +69,7 @@ const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
                         <label
                             className='label_primary  md:text-xl text-lg mt-5'
                             htmlFor='rejectNotes'>
-                            Medicine Description:
+                            Reject Notes:
                         </label>
                         <textarea
                             className='input_field min-h-[150px]'

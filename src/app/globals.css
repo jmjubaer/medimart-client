@@ -24,7 +24,7 @@ button:disabled {
     cursor: not-allowed;
     opacity: 50%;
 }
-.container{
+.container {
     width: 96%;
     max-width: 1240px;
     margin-left: auto;
@@ -52,4 +52,8 @@ div:where(.swal2-container).swal2-top,
 div:where(.swal2-container).swal2-center,
 div:where(.swal2-container).swal2-bottom {
     z-index: 99999999999999999999 !important;
+}
+
+.jm_nav {
+    @apply flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between justify-end lg:col-span-3 gap-5 absolute lg:static lg:w-auto top-0 left-0 overflow-hidden h-screen lg:h-auto duration-500 bg-[#fff] lg:bg-[transparent] lg:p-0 z-50;
 }

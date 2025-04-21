@@ -6,12 +6,14 @@ import success from "@/assets/animation/success.json";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { verifiedPayment } from "@/services/OrderServices";
+import { useUser } from "@/context/UserContext";
 type IRes = {
     data: any;
     success: boolean;
     message: string;
 };
 const VerifyPaymentPage = () => {
+    const { user } = useUser();
     const router = useRouter();
     const searchParams = useSearchParams();
     const [loading, setLoading] = useState(true);
@@ -35,7 +37,7 @@ const VerifyPaymentPage = () => {
     // Navigate after verify payment
     if (!loading) {
         setTimeout(() => {
-            router.push("/orders");
+            router.push(`/orders?userId=${user?.id}`);
         }, 1000);
     }
     return (

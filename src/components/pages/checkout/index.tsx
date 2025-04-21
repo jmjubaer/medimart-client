@@ -2,7 +2,7 @@
 import { ICartItem, IDeliveryInfo } from "@/types/order.type";
 import { Spin } from "antd";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
@@ -13,12 +13,12 @@ import { createOrder } from "@/services/OrderServices";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { useAppSelector } from "@/redux/hook";
-import { useCartItems, useTotalPrice } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { clearCart, useCartItems, useTotalPrice } from "@/redux/features/cart/cartSlice";
 
 const Checkout = () => {
     const totalPrice = useAppSelector(useTotalPrice);
-
+    const dispatch = useAppDispatch();
     const products = useAppSelector(useCartItems);
     const router = useRouter();
     const { user } = useUser();
@@ -35,16 +35,8 @@ const Checkout = () => {
             : deliveryOptions === "Standard"
             ? 20
             : 0;
-    const [cartItems, setCartItems] = useState<ICartItem[]>([
-        {
-            medicine: "67fc7515be160cf50dc7613a",
-            quantity: 5,
-        },
-        {
-            medicine: "67fc7893ec4c894e6a230092",
-            quantity: 1,
-        },
-    ]);
+    const [cartItems, setCartItems] = useState<ICartItem[] | []>([]);
+    console.log(cartItems);
     const {
         reset,
         register,
@@ -57,7 +49,7 @@ const Checkout = () => {
             const missingPrescriptions = products?.filter(
                 (product: IMedicine) => {
                     if (product.requiredPrescription) {
-                        const cartItem = cartItems.find(
+                        const cartItem = cartItems?.find(
                             (item) => item.medicine === product._id
                         );
                         return !cartItem?.prescription;
@@ -77,7 +69,7 @@ const Checkout = () => {
             }
             const orderData = {
                 user: user?.id as string,
-                products: cartItems,
+                products: cartItems as ICartItem[],
                 deliveryInfo: {
                     name: data.name,
                     phoneNumber: data.phoneNumber,
@@ -135,6 +127,7 @@ const Checkout = () => {
                     if (result?.success) {
                         Swal.fire("Order Placed!", "", "success");
                         reset();
+                        dispatch(clearCart())
                         if (result?.data?.paymentUrl) {
                             window.open(result?.data?.paymentUrl, "_self");
                             setLoading(false);
@@ -161,6 +154,12 @@ const Checkout = () => {
             Swal.fire(`${error.message}`, "", "error");
         }
     };
+    console.log(products);
+    useEffect(() => {
+        setCartItems(
+            products?.map((p) => ({ medicine: p._id, quantity: p.quantity }))
+        );
+    }, [products]);
     return (
         <Spin
             spinning={loading}
@@ -327,60 +326,13 @@ const Checkout = () => {
                                 {product?.requiredPrescription && (
                                     <AddPrescriptionModal
                                         medicineId={product?._id}
-                                        cartItems={cartItems}
+                                        cartItems={cartItems!}
                                         setCartItems={setCartItems}
                                     />
                                 )}
                             </div>
                         </div>
                     ))}
-
-                    {/* Order Summery */}
-                    {/* <div className='overflow-hidden rounded-lg border mt-5 border-black/10 '>
-                        <table className='w-full border border-black/10'>
-                            <tbody>
-                                <tr className='border border-black/10 bg-black/10'>
-                                    <th
-                                        colSpan={2}
-                                        className='border text-lg border-black/10 secondary_font p-2 px-3'>
-                                        Order Summary
-                                    </th>
-                                </tr>
-                                <tr className='border border-black/10'>
-                                    <td className='border w-1/2 border-black/10 p-2 px-3'>
-                                        Price
-                                    </td>
-                                    <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        ${totalPrice}
-                                    </td>
-                                </tr>
-                                <tr className='border border-black/10'>
-                                    <td className='border w-1/2 border-black/10 p-2 px-3'>
-                                        Quantity
-                                    </td>
-                                    <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        {products?.length}
-                                    </td>
-                                </tr>
-                                <tr className='border border-black/10'>
-                                    <td className='border w-1/2 border-black/10 p-2 px-3'>
-                                        Shipping
-                                    </td>
-                                    <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        ${"5"}
-                                    </td>
-                                </tr>
-                                <tr className='border border-black/10'>
-                                    <td className='border font-bold w-1/2 border-black/10 p-2 px-3'>
-                                        Total
-                                    </td>
-                                    <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        ${product?.data?.price * quantity + 5}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> */}
 
                     <h2 className='secondary_font font-medium text-2xl mt-4'>
                         Payment Method

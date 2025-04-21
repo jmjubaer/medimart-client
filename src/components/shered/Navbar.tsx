@@ -1,6 +1,6 @@
-"use client"
-import React from "react";
-import { Pill, ShoppingCart, Menu } from "lucide-react";
+"use client";
+import React, { useState } from "react";
+import { Pill, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
 import { logOutUser } from "@/services/AuthService";
@@ -8,114 +8,128 @@ import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/constant";
 import { useAppSelector } from "@/redux/hook";
 import { useTotalQuantity } from "@/redux/features/cart/cartSlice";
-
+import { FaBars, FaRegUserCircle, FaTimes } from "react-icons/fa";
+import NavLink from "./NavLink";
+import { Dropdown, MenuProps } from "antd";
 
 const Navbar = () => {
-  const {user,setIsLoading,setUser} =useUser();
-  const pathname = usePathname();
-  const router = useRouter();
-  const totalCartItem= useAppSelector(useTotalQuantity);
+    const { user, setIsLoading, setUser } = useUser();
+    const [control, setControl] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
+    const totalCartItem = useAppSelector(useTotalQuantity);
 
-  const handleLogout =()=>{
-    logOutUser();
-    setUser(null);
-    setIsLoading(true);
-    if(protectedRoutes.some(route=>pathname.match(route))){
-      router.push('/login')
-    }
-  }
-  return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b">
-      <nav className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <Pill className="w-7 h-7 text-primary group-hover:rotate-12 transition-transform" />
-              <span className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors">
-                MediMart
-              </span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/shop"
-              className="text-gray-700 hover:text-primary transition-colors font-medium text-sm"
-            >
-              Shop
-            </Link>
-            <Link
-              href="/about"
-              className="text-gray-700 hover:text-primary transition-colors font-medium text-sm"
-            >
-              About
-            </Link>
-            <Link
-              href="/contact"
-              className="text-gray-700 hover:text-primary transition-colors font-medium text-sm"
-            >
-              Contact
-            </Link>
-            
-            <div className="flex items-center space-x-6 ml-4">
-              <Link
-                href="/cart"
-                className="relative text-gray-700 hover:text-primary transition-colors"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalCartItem}
-                </span>
-              </Link>
-
-              {
-                user?
-              <button
-               onClick={handleLogout}
-                className="text-gray-700 hover:text-primary transition-colors font-medium pt-[5px] text-sm"
-              >
-                Logout
-              </button>
-                :
-                <div className="flex space-x-4 ">
-                <Link
-                  href="/login"
-                  className="text-gray-700 hover:text-primary transition-colors font-medium pt-[5px] text-sm"
-                >
-                  Sign In
+    const handleLogout = () => {
+        logOutUser();
+        setUser(null);
+        setIsLoading(true);
+        if (protectedRoutes.some((route) => pathname.match(route))) {
+            router.push("/login");
+        }
+    };
+    const items: MenuProps["items"] = [
+        {
+            label: (
+                <Link className='' href={`/dashboard/manage-profile`}>
+                    My Profile
                 </Link>
-                <Link
-                  href="/register"
-                  className="bg-primary hover:bg-primary/90 text-white px-4 py-1.5 rounded-full transition-colors font-medium text-sm pt-[5px]"
-                >
-                  Get Started
-                </Link>
-              </div>
-              }
-            
+            ),
+            key: "profile",
+        },
+        {
+            label: (
+                <div className='' onClick={() => handleLogout()}>
+                    Log out
+                </div>
+            ),
+            key: "logout",
+        },
+    ];
+
+    const menuProps = {
+        items,
+    };
+    return (
+        <header className=' z-30 bg-white sticky top-0 left-0 py-4'>
+            <div className='container'>
+                <nav className='flex z-50 lg:grid lg:grid-cols-5 justify-between items-center'>
+                    {/* Logo */}
+                    <div className='lg:col-span-2 flex-shrink-0 flex items-center'>
+                        <Link
+                            href='/'
+                            className='flex items-center space-x-2 group'>
+                            <Pill className='w-7 h-7 text-primary group-hover:rotate-12 transition-transform' />
+                            <span className='text-xl font-bold text-gray-900 group-hover:text-primary transition-colors'>
+                                MediMart
+                            </span>
+                        </Link>
+                    </div>
+                    <div
+                        className={`jm_nav ${
+                            control ? "w-4/5 md:w-1/2 p-5" : "w-0"
+                        }`}>
+                        {/* Menu item */}
+                        <ul className='flex flex-col lg:flex-row gap-3 lg:gap-x-7'>
+                            <li>
+                                <NavLink href='/'>Home</NavLink>
+                            </li>{" "}
+                            <li>
+                                <NavLink href='/shop'>Shop</NavLink>
+                            </li>
+                            <li>
+                                <NavLink href='/about'>About</NavLink>
+                            </li>
+                            {/* {user?.role === "customer" && ( */}
+                                <li>
+                                    <NavLink
+                                        href={`/orders?userId=${user?.id}`}>
+                                        orders
+                                    </NavLink>
+                                </li>
+                            {/* )} */}
+                            {user?.role === "admin" && (
+                                <li>
+                                    <NavLink
+                                        href={`/admin`}>
+                                        Dashboard
+                                    </NavLink>
+                                </li>
+                            )}
+                        </ul>
+                        <div className='flex-row-reverse flex lg:flex-row justify-end lg:mt-0 mt-5 items-center gap-5'>
+                            <Link
+                                href='/cart'
+                                className='relative mt-2 text-gray-700 hover:text-primary transition-colors'>
+                                <ShoppingCart className='w-6 h-6' />
+                                <span className='absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>
+                                    {totalCartItem}
+                                </span>
+                            </Link>
+                            {user ? (
+                                <Dropdown trigger={["click"]} menu={menuProps}>
+                                    <button className='cursor-pointer'>
+                                        <FaRegUserCircle className='text-3xl text-primary' />
+                                    </button>
+                                </Dropdown>
+                            ) : (
+                                <Link
+                                    href={"/login"}
+                                    className='button_primary'>
+                                    Login
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                    {/* small screen toggle button */}
+                    <button
+                        onClick={() => setControl(!control)}
+                        className='block lg:hidden'>
+                        {control ? <FaTimes /> : <FaBars />}
+                    </button>
+                </nav>
             </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-primary focus:outline-none"
-              aria-controls="mobile-menu"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Open main menu</span>
-              <Menu className="block h-6 w-6" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      
-    </header>
-  );
+        </header>
+    );
 };
 
 export default Navbar;
