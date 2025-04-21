@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ICartItem } from "@/types/order.type";
 import uploadImageIntoCloudinary from "@/utils/UploadImageIntoCloudinary";
 import { Modal, Spin } from "antd";
-import { CloudUpload } from "lucide-react";
-import Image from "next/image";
+// import { CloudUpload } from "lucide-react";
+// import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -108,7 +109,7 @@ const OrderSummeryModal = ({ medicineId, cartItems, setCartItems }: IProps) => {
                                         Quantity
                                     </td>
                                     <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        {quantity}
+                                        {/* {quantity} */}
                                     </td>
                                 </tr>
                                 <tr className='border border-black/10'>
@@ -124,7 +125,7 @@ const OrderSummeryModal = ({ medicineId, cartItems, setCartItems }: IProps) => {
                                         Total
                                     </td>
                                     <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                        ${product?.data?.price * quantity + 5}
+                                        {/* ${product?.data?.price * quantity + 5} */}
                                     </td>
                                 </tr>
                             </tbody>
