@@ -2,6 +2,7 @@
 import { TQueryParam } from "@/types";
 import { ICreateOrder, IOrder } from "@/types/order.type";
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 export const createOrder = async (payload: ICreateOrder) => {
     try {
         const res = await fetch(
@@ -9,7 +10,7 @@ export const createOrder = async (payload: ICreateOrder) => {
             {
                 method: "POST",
                 headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -41,6 +42,9 @@ export const getAllOrders = async (queryParams?: TQueryParam[]) => {
                 tags: ["ORDERS"],
             },
             cache: "no-cache",
+            headers: {
+                Authorization: (await cookies()).get("accessToken")!.value,
+            },
         });
 
         const data = await res.json();
@@ -58,6 +62,9 @@ export const getUserOrders = async (userId: string) => {
                     tags: ["ORDERS"],
                 },
                 cache: "no-cache",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                },
             }
         );
 
@@ -77,7 +84,7 @@ export const changeOrderStatus = async (
             {
                 method: "PUT",
                 headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -99,6 +106,9 @@ export const verifiedPayment = async (order_id: string) => {
             `${process.env.NEXT_PUBLIC_BASE_API}/order/verify-payment?order_id=${order_id}`,
             {
                 cache: "no-cache",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                },
             }
         );
 
@@ -117,6 +127,9 @@ export const getOverview = async () => {
                     tags: ["OVERVIEW"],
                 },
                 cache: "no-cache",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                },
             }
         );
 

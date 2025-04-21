@@ -1,5 +1,6 @@
 import Navbar from "@/components/shered/Navbar";
 import Footer from "@/components/shered/Footer";
+import { Suspense } from "react";
 
 export default function CommonLayout({
     children,
@@ -7,10 +8,12 @@ export default function CommonLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
-            <Navbar />
-            <div className='min-h-screen'>{children}</div>
-            <Footer />
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+            <div>
+                <Navbar />
+                <div className='min-h-screen'>{children}</div>
+                <Footer />
+            </div>
+        </Suspense>
     );
 }

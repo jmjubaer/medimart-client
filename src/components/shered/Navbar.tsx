@@ -30,7 +30,7 @@ const Navbar = () => {
     const items: MenuProps["items"] = [
         {
             label: (
-                <Link className='' href={`/dashboard/manage-profile`}>
+                <Link className='' href={`/profile`}>
                     My Profile
                 </Link>
             ),

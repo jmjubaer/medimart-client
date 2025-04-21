@@ -29,10 +29,10 @@ type IData = {
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const [isFetch, setIsFetch] = useState<boolean>(false);
     const [page, setPage] = useState(1);
     const [filterText, setFilterText] = useState('');
     const [searchTerm, setSearchTerm] = useState("");
+    const [isFetch, setIsFetch] = useState<boolean>(false);
     const reFetch = () => {
         setIsFetch(!isFetch);
     };
