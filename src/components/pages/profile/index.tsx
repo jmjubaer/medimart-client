@@ -14,7 +14,6 @@ const ManageProfiles = () => {
     const pathname = usePathname();
     const router = useRouter();
     const { user, setUser, setIsLoading } = useUser();
-
     const [userData, setUserData] = useState<IUser | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [isFetch, setIsFetch] = useState<boolean>(false);
@@ -33,7 +32,7 @@ const ManageProfiles = () => {
             }
             setLoading(false);
         })();
-    }, [user]);
+    }, [user,isFetch]);
     const handleLogout = () => {
         logOutUser();
         setUser(null);
@@ -85,7 +84,7 @@ const ManageProfiles = () => {
                         </div>
                         <button
                             onClick={() => handleLogout()}
-                            className='border-b-2 py-4 cursor-pointer flex gap-2 items-center border-gray-300'>
+                            className='border-b-2 py-4 w-full cursor-pointer flex gap-2 items-center border-gray-300'>
                             <FiLogOut className='text-3xl rotate-180' />
                             <span className='text-xl font-semibold'>
                                 Log Out

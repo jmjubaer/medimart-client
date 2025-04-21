@@ -24,6 +24,7 @@ const UpdateProfileModal = ({ reFetch, userData }: IProps) => {
 
         try {
             const res = await updateUser(userData?._id as string, data);
+            console.log(res);
             if (res?.success) {
                 Swal.fire({
                     icon: "success",
@@ -34,6 +35,7 @@ const UpdateProfileModal = ({ reFetch, userData }: IProps) => {
                 setOpen(false);
                 setLoading(false);
             }
+            setLoading(false);
         } catch (error: any) {
             console.log(error);
             setLoading(false);
