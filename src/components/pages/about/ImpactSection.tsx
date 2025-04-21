@@ -48,6 +48,8 @@ export default function ImpactSection() {
         <Image
           src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop"
           alt="Pharmacy background"
+          width={100}
+          height={100}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-900/95 to-cyan-700/95"></div>

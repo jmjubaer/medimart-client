@@ -133,6 +133,8 @@ export default function JourneySection() {
                       <Image
                         src={item.image}
                         alt={item.title}
+                        width={500}
+                        height={300}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
                     </div>
