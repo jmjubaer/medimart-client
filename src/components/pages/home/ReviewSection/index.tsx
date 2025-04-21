@@ -6,7 +6,7 @@ import Marquee from "react-fast-marquee";
 
 const ReviewSection = () => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-16 bg-gray-50 ">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8 text-center">
           What Our Customers Say
@@ -14,6 +14,7 @@ const ReviewSection = () => {
       </div>
 
       {/* Full width marquee outside the container */}
+      <div className="container mx-auto">
       <Marquee pauseOnHover gradient={false} speed={50}>
         {reviews.map((review) => (
           <div
@@ -43,6 +44,8 @@ const ReviewSection = () => {
           </div>
         ))}
       </Marquee>
+      </div>
+    
     </section>
   );
 };
