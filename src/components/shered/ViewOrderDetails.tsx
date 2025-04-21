@@ -6,11 +6,14 @@ import Image from "next/image";
 import { CgMaximizeAlt } from "react-icons/cg";
 import ShowPrescriptionModal from "./ShowPrescriptionModal";
 import RejectOrderModal from "./RejectOrderModal";
+import { useUser } from "@/context/UserContext";
 type TProps = {
     item: IOrder;
     reFetch: () => void;
 };
 const ViewOrderDetails = ({ item, reFetch }: TProps) => {
+    const { user } = useUser();
+
     const [open, setOpen] = useState(false);
     // Scroll to top
 
@@ -22,8 +25,16 @@ const ViewOrderDetails = ({ item, reFetch }: TProps) => {
             <button
                 onClick={() => setOpen(true)}
                 title='See Details'
-                className='cursor-pointer text-2xl text-primary'>
-                <CgMaximizeAlt />
+                className={`${
+                    user?.role === "admin"
+                        ? "cursor-pointer text-primary"
+                        : "w-full bg-primary hover:bg-primary  font-medium cursor-pointer py-2 px-4 rounded whitespace-nowrap"
+                }`}>
+                {user?.role === "admin" ? (
+                    <CgMaximizeAlt className='text-2xl ' />
+                ) : (
+                    "View Details"
+                )}
             </button>
             {/* order details modal */}
             <Modal
@@ -246,6 +257,7 @@ const ViewOrderDetails = ({ item, reFetch }: TProps) => {
                             </div>
 
                             <RejectOrderModal
+                                isAdmin={user?.role === "admin"}
                                 reFetch={reFetch}
                                 status={item?.status}
                                 id={item?.key as string}

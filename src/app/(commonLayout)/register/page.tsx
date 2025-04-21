@@ -1,10 +1,13 @@
 import RegisterForm from '@/components/pages/register';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 const RegisterPage = () => {
     return (
         <div>
-            <RegisterForm/>
+             <Suspense fallback={<div>Loading login...</div>}>
+             <RegisterForm/>
+                </Suspense>
+           
         </div>
     );
 };
