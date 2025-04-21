@@ -53,3 +53,41 @@ div:where(.swal2-container).swal2-center,
 div:where(.swal2-container).swal2-bottom {
     z-index: 99999999999999999999 !important;
 }
+
+
+
+.heroSection {
+  position: relative;
+}
+
+.missionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.teamCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 60px 0 !important;
+  }
+
+  .heroSection h1 {
+    font-size: 36px !important;
+  }
+
+  .heroSection p {
+    font-size: 16px !important;
+  }
+}
