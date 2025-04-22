@@ -1,33 +1,59 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #ffffff;
+    --foreground: #171717;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+    /* --font-display: "Satoshi", "sans-serif"; */
+    --breakpoint-xs: 540px;
+    --color-primary: #42b3e5;
+    --color-secondary: "#F8F8F8";
+    --color-dark: "#1d1d1d";
+    --color-accent: "#D72638";
+    --color-muted: "#B0B0B0";
+    /* ... */
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+    scroll-behavior: smooth;
 }
-/* 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+    font-family: "Poppins", serif;
+}
+button:disabled {
+    cursor: not-allowed;
+    opacity: 50%;
+}
+.container {
+    width: 96%;
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.secondary_font {
+    font-family: "Oxanium", serif;
+}
+.add-medicine-modal {
+    width: 90% !important;
+}
+.order-modal {
+    width: 90% !important;
+}
+.button_primary {
+    @apply cursor-pointer text-base sm:text-base font-medium hover:text-black text-black bg-primary px-5 py-2 rounded;
+}
+.label_primary {
+    @apply mb-3 inline-block;
+}
+.input_field {
+    @apply w-full text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
+}
+div:where(.swal2-container).swal2-top,
+div:where(.swal2-container).swal2-center,
+div:where(.swal2-container).swal2-bottom {
+    z-index: 99999999999999999999 !important;
+}
 
-.container{
-  width: 96%;
-  max-width: 1240px;
-  margin-left: auto;
-  margin-right: auto;
+.jm_nav {
+    @apply flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between justify-end lg:col-span-3 gap-5 absolute lg:static lg:w-auto top-0 left-0 overflow-hidden h-screen lg:h-auto duration-500 bg-[#fff] lg:bg-[transparent] lg:p-0 z-50;
 }

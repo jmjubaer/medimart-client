@@ -1,6 +1,6 @@
 import ManageCustomerOrder from "@/components/pages/admin/order";
 
-const ManageOrderPage = () => {
+const ManageOrderPage = async () => {
     return (
         <div>
             <ManageCustomerOrder />

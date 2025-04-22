@@ -1,17 +1,17 @@
+import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Oxanium, Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/shered/Navbar";
-import Footer from "@/components/shered/Footer";
+import Providers from "@/lib/providers";
+import { Toaster } from "sonner";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
+const poppins = Poppins({ subsets: ["latin"], weight: ["400", "600"] });
+
+const oxanium = Oxanium({
     subsets: ["latin"],
+    weight: ["400", "600", "700"],
+    variable: "--font-secondary",
 });
 
 export const metadata: Metadata = {
@@ -26,12 +26,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                <Navbar />
-                <div className='min-h-screen'>{children}</div>
-                <Footer />
-            </body>
+            <Providers>
+                <body
+                    className={`${oxanium.variable} ${poppins.className} antialiased`}>
+                    <Toaster position="top-center" richColors />
+                    <div className='min-h-screen'>{children}</div>
+                </body>
+            </Providers>
         </html>
     );
 }

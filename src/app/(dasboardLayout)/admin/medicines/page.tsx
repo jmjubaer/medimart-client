@@ -1,10 +1,10 @@
-import ManageMedicine from '@/components/pages/admin/madicine';
-import React from 'react';
+import ManageMedicine from "@/components/pages/admin/madicine";
 
-const MedicinePage = () => {
+const MedicinePage = async () => {
+
     return (
         <div>
-            <ManageMedicine/>
+            <ManageMedicine />
         </div>
     );
 };

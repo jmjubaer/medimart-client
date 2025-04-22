@@ -1,8 +1,11 @@
+import OverviewPage from "@/components/pages/admin";
+import { getOverview } from "@/services/OrderServices";
 
-const AdminDashboardPage = () => {
+const AdminDashboardPage = async () => {
+    const { data } = await getOverview();
     return (
         <div>
-            Admin Dashboard page
+            <OverviewPage data={data} />
         </div>
     );
 };
