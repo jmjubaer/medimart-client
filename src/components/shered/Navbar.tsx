@@ -30,7 +30,7 @@ const Navbar = () => {
     const items: MenuProps["items"] = [
         {
             label: (
-                <Link className='' href={`/dashboard/manage-profile`}>
+                <Link className='' href={`/profile`}>
                     My Profile
                 </Link>
             ),
@@ -80,19 +80,15 @@ const Navbar = () => {
                                 <NavLink href='/about'>About</NavLink>
                             </li>
                             {/* {user?.role === "customer" && ( */}
-                                <li>
-                                    <NavLink
-                                        href={`/orders?userId=${user?.id}`}>
-                                        orders
-                                    </NavLink>
-                                </li>
+                            <li>
+                                <NavLink href={`/orders?userId=${user?.id}`}>
+                                    orders
+                                </NavLink>
+                            </li>
                             {/* )} */}
                             {user?.role === "admin" && (
                                 <li>
-                                    <NavLink
-                                        href={`/admin`}>
-                                        Dashboard
-                                    </NavLink>
+                                    <NavLink href={`/admin`}>Dashboard</NavLink>
                                 </li>
                             )}
                         </ul>

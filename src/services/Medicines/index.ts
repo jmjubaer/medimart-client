@@ -3,6 +3,7 @@
 
 import { IMedicine, TQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 
 // Fetch all medicines with optional query parameters
 export const createMedicine = async (payload: IMedicine) => {
@@ -12,7 +13,7 @@ export const createMedicine = async (payload: IMedicine) => {
             {
                 method: "POST",
                 headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -40,7 +41,6 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         const queryString = params.toString();
         const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/medicines`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-        console.log(fullUrl);
         const res = await fetch(fullUrl, {
             next: {
                 tags: ["MEDICINES"],
@@ -62,7 +62,7 @@ export const getCartMedicine = async (payload: string[]) => {
             {
                 method: "POST",
                 headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -101,7 +101,7 @@ export const updateMedicine = async (
             {
                 method: "PUT",
                 headers: {
-                    //   Authorization: (await cookies()).get("accessToken")!.value,
+                    Authorization: (await cookies()).get("accessToken")!.value,
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
@@ -122,6 +122,9 @@ export const deleteMedicine = async (medicineId: string) => {
             `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
             {
                 method: "DELETE",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                },
             }
         );
         revalidateTag("OVERVIEW");

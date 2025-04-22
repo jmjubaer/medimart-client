@@ -18,7 +18,6 @@ const roleBasedPrivateRoutes = {
 };
 
 export const middleware = async (req: NextRequest) => {
-    console.log("hello world!");
     const { pathname } = req.nextUrl;
     const userInfo = await getCurrentUser();
     if (!userInfo) {

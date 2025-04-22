@@ -41,17 +41,17 @@ const VerifyPaymentPage = () => {
         }, 1000);
     }
     return (
-        <div className='flex items-center justify-center overflow-hidden h-[calc(100vh-70px)]'>
-            <div className='md:w-1/2'>
-                {loading ? (
-                    <Lottie animationData={pending} loop={true} />
-                ) : data && data?.success ? (
-                    <Lottie animationData={success} loop={false} />
-                ) : (
-                    <Lottie animationData={failed} loop={false} />
-                )}
+            <div className='flex items-center justify-center overflow-hidden h-[calc(100vh-70px)]'>
+                <div className='md:w-1/2'>
+                    {loading ? (
+                        <Lottie animationData={pending} loop={true} />
+                    ) : data && data?.success ? (
+                        <Lottie animationData={success} loop={false} />
+                    ) : (
+                        <Lottie animationData={failed} loop={false} />
+                    )}
+                </div>
             </div>
-        </div>
     );
 };
 

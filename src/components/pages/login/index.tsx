@@ -44,7 +44,6 @@ const LoginForm = () => {
       }
   
       const res = await loginUser(payload);
-     console.log(res.data)
       if (res?.success) {
         toast.success(res.message);
         reset();

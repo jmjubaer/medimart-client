@@ -8,7 +8,6 @@ const OrderPage = async ({
 }) => {
     const { userId } = await searchParams;
     const { data } = await getUserOrders(userId as string);
-    console.log(data);
     return (
         <div>
             <ManageOrder data={data} />
