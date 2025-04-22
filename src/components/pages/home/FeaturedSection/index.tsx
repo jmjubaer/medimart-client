@@ -2,12 +2,11 @@
 "use client";
 //eslint-skip-disable
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, ShoppingCart, Star, Tag } from "lucide-react";
+import { ArrowRight, ShoppingCart } from "lucide-react";
 import { getAllMedicines } from "@/services/Medicines";
 import { IMedicine, IMeta } from "@/types";
 import { useAppDispatch } from "@/redux/hook";
-import { Calendar, DollarSign, Package, Pill } from 'lucide-react';
+import { Calendar, DollarSign, Package } from 'lucide-react';
 import Link from "next/link";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 
@@ -17,7 +16,6 @@ type IData = {
 };
 
 const FeaturedSection = () => {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [data, setData] = useState<IData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const dispatch = useAppDispatch();
@@ -56,7 +54,7 @@ const FeaturedSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {data?.result.slice(0, 8).map((medicine, index) => (
-            <div key={medicine.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:scale-[1.01]">
+            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:scale-[1.01]">
               <div className="h-48 overflow-hidden">
                 <img
                   className="w-full h-full object-cover"
