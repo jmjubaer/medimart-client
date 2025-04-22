@@ -16,7 +16,6 @@ export const getAllUsers = async (queryParams?: TQueryParam[]) => {
         const queryString = params.toString();
         const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/user`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-        console.log(fullUrl);
         const res = await fetch(fullUrl, {
             next: {
                 tags: ["USERS"],
@@ -76,7 +75,6 @@ export const updateUser = async (userId: string, payload: Partial<IUser>) => {
 };
 export const changeUserStatus = async (userId: string, status: string) => {
     try {
-        console.log(status);
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/user/change-status/${userId}`,
             {

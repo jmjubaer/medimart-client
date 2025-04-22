@@ -41,7 +41,6 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         const queryString = params.toString();
         const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/medicines`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
-        console.log(fullUrl);
         const res = await fetch(fullUrl, {
             next: {
                 tags: ["MEDICINES"],

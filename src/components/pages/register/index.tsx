@@ -32,7 +32,6 @@ const onSubmit:SubmitHandler<FieldValues>=async(data)=>{
 const res =await registerUser(data);
 if(res?.success){
   toast.success(res?.message)
-  console.log(res?.message)
   reset();
   setUser(jwtDecode(res.data.accessToken))
   if(redirect){
@@ -42,7 +41,6 @@ if(res?.success){
   }
 }else{
   toast.error(res?.message);
-  console.log(res?.message)
 }
 
  } catch (error) {

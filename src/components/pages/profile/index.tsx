@@ -25,7 +25,6 @@ const ManageProfiles = () => {
         (async () => {
             setLoading(true);
             const data = await getSingleUser(user?.id as string);
-            console.log(data);
             if (data) {
                 setUserData(data?.data);
                 setLoading(false);

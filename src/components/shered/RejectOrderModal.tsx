@@ -47,7 +47,6 @@ const RejectOrderModal = ({ id, status, reFetch, isAdmin }: IProps) => {
             console.log(error);
         }
     };
-    console.log(status);
     return (
         <div className=''>
             {isAdmin && (

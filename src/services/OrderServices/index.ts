@@ -101,7 +101,6 @@ export const changeOrderStatus = async (
 
 export const verifiedPayment = async (order_id: string) => {
     try {
-        console.log(order_id);
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/order/verify-payment?order_id=${order_id}`,
             {

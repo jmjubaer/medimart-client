@@ -15,6 +15,7 @@ const UserContext =createContext<IUserProviderValues|undefined>(undefined);
 const UserProvider=({children}:{children:React.ReactNode})=>{
   const [user,setUser]=useState<IAuthUser|null>(null);
   const [isLoading,setIsLoading]=useState(true);
+  
   const handleUser = async()=>{
     const user = await getCurrentUser();
     setUser(user);

@@ -14,7 +14,11 @@ import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { clearCart, useCartItems, useTotalPrice } from "@/redux/features/cart/cartSlice";
+import {
+    clearCart,
+    useCartItems,
+    useTotalPrice,
+} from "@/redux/features/cart/cartSlice";
 
 const Checkout = () => {
     const totalPrice = useAppSelector(useTotalPrice);
@@ -36,7 +40,6 @@ const Checkout = () => {
             ? 20
             : 0;
     const [cartItems, setCartItems] = useState<ICartItem[] | []>([]);
-    console.log(cartItems);
     const {
         reset,
         register,
@@ -81,6 +84,7 @@ const Checkout = () => {
                 },
                 deliveryOptions,
                 paymentMethod,
+                productNames: products?.map((p) => p.name),
             };
             Swal.fire({
                 title: "Please confirm the order.",
@@ -127,13 +131,13 @@ const Checkout = () => {
                     if (result?.success) {
                         Swal.fire("Order Placed!", "", "success");
                         reset();
-                        dispatch(clearCart())
+                        dispatch(clearCart());
                         if (result?.data?.paymentUrl) {
                             window.open(result?.data?.paymentUrl, "_self");
                             setLoading(false);
                         } else {
                             setLoading(false);
-                            router.push("/orders");
+                            router.push(`/orders?userId=${user?.id}`);
                         }
                     } else if (result?.error) {
                         Swal.fire(
@@ -154,7 +158,6 @@ const Checkout = () => {
             Swal.fire(`${error.message}`, "", "error");
         }
     };
-    console.log(products);
     useEffect(() => {
         setCartItems(
             products?.map((p) => ({ medicine: p._id, quantity: p.quantity }))
