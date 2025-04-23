@@ -15,12 +15,12 @@ const BrandSection = () => {
       ref={sectionRef}
       className="py-20 lg:py-24 bg-gradient-to-b from-background to-muted/30"
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-3 sm:px-6">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
             Why Customers Choose Us
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground sm:text-lg max-w-2xl mx-auto">
             We're committed to providing the best pharmaceutical experience with premium service and uncompromising quality.
           </p>
         </div>

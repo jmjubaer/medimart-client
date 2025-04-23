@@ -39,8 +39,8 @@ const FeaturedSection = () => {
     }, []);
 
     return (
-        <section className='py-16 bg-background'>
-            <div className='container px-4 mx-auto'>
+        <section className='pb-16 bg-background'>
+            <div className='container px-2 sm:px-4 mx-auto'>
                 <div className='max-w-3xl mx-auto text-center mb-16'>
                     <h2 className='text-3xl md:text-4xl font-bold mb-4 tracking-tight'>
                         Featured Medicines

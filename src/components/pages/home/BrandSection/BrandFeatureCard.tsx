@@ -29,7 +29,7 @@ const BrandFeatureCard = ({
         ease: [0.25, 0.25, 0, 1],
       }}
       className={
-        "group relative p-8 rounded-2xl transition-all duration-300 border-gray-300" +
+        "group relative p-4 sm:p-8 rounded-2xl transition-all duration-300 border-gray-300" +
         "bg-card border border-border/40 shadow-sm hover:shadow-md border-gray-300 " +
         "hover:border-primary/20 overflow-hidden"
       }
@@ -47,7 +47,7 @@ const BrandFeatureCard = ({
       <div className="relative z-10">
         <div
           className={
-            "h-14 w-14 rounded-2xl flex items-center  mx-auto  justify-center mb-6 border-gray-300" +
+            "h-14 w-14 rounded-2xl flex items-center  mx-auto  justify-center mb-3 sm:mb-6 border-gray-300" +
             "bg-primary/10 text-primary transition-all duration-300 " +
             "group-hover:bg-primary/15 group-hover:scale-105"
           }
