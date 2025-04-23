@@ -151,8 +151,7 @@ const Cart = () => {
                     </div>
 
                     <div className='flex justify-between text-xl font-bold text-black border-t-2 py-3'>
-                        <span>Total</span>
-                        ${total + 20}
+                        <span>Total</span>${(total + 20).toFixed(2)}
                     </div>
                     <Link href={"/checkout"}>
                         <button className='w-full active:scale-95 bg-primary text-white font-semibold py-2 px-4 rounded-lg mt-5 hover:bg-sky-700'>

@@ -117,7 +117,7 @@ const Checkout = () => {
             Total
           </td>
           <td style="width: 50%; padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); font-weight: bold;">
-            $${totalPrice + deliveryCost}
+            $${(totalPrice + deliveryCost).toFixed(2)}
           </td>
         </tr>
       </tbody>
@@ -128,6 +128,7 @@ const Checkout = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const result = await createOrder(orderData);
+                    console.log(result);
                     if (result?.success) {
                         Swal.fire("Order Placed!", "", "success");
                         reset();
@@ -325,6 +326,13 @@ const Checkout = () => {
                                         Price:
                                     </span>
                                     ${product?.price}
+                                </p>{" "}
+                                <p className='my-1 text-xl font-semibold '>
+                                    <span className='font-medium text-lg mr-2'>
+                                        {" "}
+                                        Quantity:
+                                    </span>
+                                    {product?.quantity}
                                 </p>
                                 {product?.requiredPrescription && (
                                     <AddPrescriptionModal
