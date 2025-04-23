@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { getSingleMedicine, getAllMedicines } from "@/services/Medicines";
+import { getSingleMedicine, getAllMedicines, deleteMedicine } from "@/services/Medicines";
 import AddMedicineModal from "./AddMedicineModal";
 import UpdateMedicineModal from "./UpdateMedicineModal";
 type TTableDataType = Pick<
@@ -167,7 +167,7 @@ const ManageMedicines = () => {
             confirmButtonText: "Confirm",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const result = await getSingleMedicine(id);
+                const result = await deleteMedicine(id);
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Deleted!", "", "success");
@@ -175,6 +175,9 @@ const ManageMedicines = () => {
             }
         });
     };
+        useEffect(() => {
+            window.scrollTo(0, 0);
+        }, [page,searchTerm,filterText]);
     return (
         <div>
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>

@@ -108,12 +108,15 @@ const ManageCustomerOrder = () => {
         },
         {
             title: "User Name",
+            width: "10%",
             render: (item) => (
                 <p className={`capitalize `}>{item?.user?.name}</p>
             ),
         },
         {
             title: "Delivery Options",
+            width: "10%",
+
             render: (item) => (
                 <p className={` capitalize}`}>{item?.deliveryOptions}</p>
             ),
@@ -132,10 +135,14 @@ const ManageCustomerOrder = () => {
         },
         {
             title: "Order Status",
+            width: "10%",
+
             render: (item) => <p className={`capitalize}`}>{item?.status}</p>,
         },
         {
             title: "Payment Status",
+            width: "10%",
+
             render: (item) => (
                 <p className='capitalize'>{item?.paymentStatus}</p>
             ),
@@ -143,10 +150,11 @@ const ManageCustomerOrder = () => {
         {
             title: "Total Price",
             render: (item) => (
-                <p className='capitalize font-bold text-lg'>
-                    ${item?.totalPrice}
+                <p className='w-24 capitalize font-bold text-lg'>
+                    ${item?.totalPrice.toFixed(2)}
                 </p>
             ),
+            width: "1%",
         },
         {
             title: "Action",
