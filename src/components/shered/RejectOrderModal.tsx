@@ -68,12 +68,12 @@ const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
                 <form onSubmit={handleSubmit(handleRejectOrder)} className=' '>
                     <div className=''>
                         <label
-                            className='label_primary  md:text-xl text-lg mt-5'
+                            className='label_primary md:text-xl text-lg mt-5'
                             htmlFor='rejectNotes'>
                             Reject Notes:
                         </label>
                         <textarea
-                            className='input_field min-h-[150px]'
+                            className='input_field min-h-[100px] xs:min-h-[150px]'
                             placeholder='Enter reject notes ...'
                             id='rejectNotes'
                             {...register("rejectNotes", {

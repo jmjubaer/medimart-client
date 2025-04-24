@@ -52,7 +52,7 @@ const MedicineDetails = ({ medicineId }: { medicineId: string }) => {
           <nav className="mb-4 text-sm text-blue-200">
             Home / Medicines / {medicine?.name}
           </nav>
-          <h1 className="text-4xl font-bold mb-2">{medicine?.name}</h1>
+          <h1 className="sm:text-4xl text-2xl font-bold mb-2">{medicine?.name}</h1>
           <div className="flex items-center gap-4">
             {medicine?.requiredPrescription && (
               <Tag color="red" className="text-base py-1">
@@ -70,8 +70,8 @@ const MedicineDetails = ({ medicineId }: { medicineId: string }) => {
         <div className="bg-linear-to-r from-[#0000007e] to-[#0000007e] absolute inset-0"></div>
       </div>
 
-      <main className="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6">
+      <main className="xs:max-w-[90%] mx-auto px-2 xs:px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-lg shadow-md p-3 xs:p-6">
           <Row gutter={[32, 32]}>
             <Col xs={24} md={12}>
               <div className="border border-gray-50 rounded-lg overflow-hidden bg-gray-100 p-3 flex justify-center items-center">
@@ -79,7 +79,7 @@ const MedicineDetails = ({ medicineId }: { medicineId: string }) => {
                   src={medicine?.image}
                   alt={medicine?.name}
                   preview={false}
-                  className="w-full max-h-[500px] min-h-96 rounded-lg object-contain"
+                  className="w-full max-h-[500px] xs:min-h-96 rounded-lg object-contain"
                 />
               </div>
             </Col>

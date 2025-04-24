@@ -110,7 +110,7 @@ const ManageCustomerOrder = () => {
             title: "User Name",
             width: "10%",
             render: (item) => (
-                <p className={`capitalize `}>{item?.user?.name}</p>
+                <p className={`capitalize w-[100px]`}>{item?.user?.name}</p>
             ),
         },
         {
@@ -185,7 +185,7 @@ const ManageCustomerOrder = () => {
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
                 Manage Orders
             </h2>
-            <div className='flex flex-wrap-reverse gap-5 my-5'>
+            <div className='flex justify-center xs:justify-normal flex-wrap-reverse gap-5 my-5'>
                 <div className='relative'>
                     <select
                         className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
@@ -252,7 +252,7 @@ const ManageCustomerOrder = () => {
                     columns={columns}
                     dataSource={tableData}
                     pagination={false}
-                    className='border border-gray-300 min-w-[800px] rounded-lg mb-3'
+                    className='border border-gray-300 min-w-[950px] rounded-lg mb-3'
                 />
             </div>
             <Pagination

@@ -104,7 +104,7 @@ const ManageMedicines = () => {
         {
             title: "Expiry Date",
             render: (item) => (
-                <p>{moment(item.expiryDate).format("DD-MM-YYYY")}</p>
+                <p className="min-w-[100px]">{moment(item.expiryDate).format("DD-MM-YYYY")}</p>
             ),
         },
         {
@@ -184,8 +184,8 @@ const ManageMedicines = () => {
                 Manage Medicine
             </h2>
             <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
-                <div className='flex items-center gap-5'>
-                    <div className='relative w-80 h-fit '>
+                <div className='flex flex-wrap-reverse items-center gap-5'>
+                    <div className='relative w-72 xs:w-80 h-fit '>
                         <SearchIcon className='absolute top-1/2 right-2 w-5 text-gray-500 -translate-y-1/2' />
                         <input
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -217,7 +217,7 @@ const ManageMedicines = () => {
                     columns={columns}
                     dataSource={tableData}
                     pagination={false}
-                    className='border border-gray-300 min-w-[800px] rounded-lg mb-3'
+                    className='border border-gray-300 min-w-[900px] rounded-lg mb-3'
                 />
             </div>
             <Pagination

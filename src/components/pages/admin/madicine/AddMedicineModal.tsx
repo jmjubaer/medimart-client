@@ -75,7 +75,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
             </button>
             {/* Update product modal */}
             <Modal
-                className='add-medicine-modal'
+                className='add-medicine-modal text-black'
                 footer={null}
                 open={open}
                 onCancel={() => setOpen(false)}>
@@ -90,7 +90,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                             {/* Image */}
                             <div className=''>
                                 <label
-                                    className={`sm:w-4/5 mx-auto w-64
+                                    className={`md:w-4/5 mx-auto w-full min-w-64
                                      h-52 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 transition ${
                                          errors.image
                                              ? "border-red-400"
@@ -176,7 +176,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='grid grid-cols-3 gap-x-5 sm:gap-5 mt-5'>
+                        <div className='grid md:grid-cols-3 gap-3 lg:gap-5 mt-5'>
                             {/* manufacturer name */}
                             <div className=''>
                                 <label
@@ -203,16 +203,13 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 <label
                                     className='label_primary text-xl mt-2'
                                     htmlFor='manufacturerContact'>
-                                    Manufacturer Contact{" "}
-                                    <span className='text-sm'>
-                                        (email/number)
-                                    </span>
+                                    Manufacturer Contact
                                     :
                                 </label>
                                 <input
                                     className='input_field'
                                     id='manufacturerContact'
-                                    placeholder=' Manufacturer Contact...'
+                                    placeholder='Email or phone ...'
                                     {...register(
                                         "manufacturerDetails.contact",
                                         {
@@ -251,11 +248,11 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 )}
                             </div>
                         </div>
-                        <div className='grid grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
+                        <div className='grid sm:grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
                             {/* Price */}
                             <div className=''>
                                 <label
-                                    className='label_primary text-xl mt-3'
+                                    className='label_primary text-xl '
                                     htmlFor='price'>
                                     Price:
                                 </label>
@@ -276,7 +273,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                             </div>
                             <div className=''>
                                 <label
-                                    className='label_primary text-xl mt-2'
+                                    className='label_primary text-xl '
                                     htmlFor='quantity'>
                                     Quantity:
                                 </label>
@@ -296,7 +293,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 )}
                             </div>
                         </div>
-                        {/* Price */}
+                        {/* Symptoms */}
                         <div className=''>
                             <label
                                 className='label_primary text-xl mt-3'
@@ -324,7 +321,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                                 Medicine Description:
                             </label>
                             <textarea
-                                className='input_field min-h-[150px]'
+                                className='input_field xs:min-h-[150px] min-h-[100px]'
                                 placeholder='Enter Description ...'
                                 id='description'
                                 {...register("description", {
@@ -338,7 +335,7 @@ const AddMedicineModal = ({ reFetch }: { reFetch: () => void }) => {
                             )}
                         </div>
                         <div className=''>
-                            <label className='label_primary text-xl mt-2 mr-5'>
+                            <label className='label_primary text-xl mt-2 mr-3 xs:mr-5'>
                                 Prescription Required:
                             </label>
                             <Switch

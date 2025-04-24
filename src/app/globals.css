@@ -46,7 +46,7 @@ button:disabled {
     @apply mb-3 inline-block;
 }
 .input_field {
-    @apply w-full text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
+    @apply w-full text-base sm:text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
 }
 div:where(.swal2-container).swal2-top,
 div:where(.swal2-container).swal2-center,
@@ -67,11 +67,19 @@ div:where(.swal2-container).swal2-bottom {
     background: #42b3e5;
     border-radius: 0 5px 5px 0px !important;
 }
-.anticon svg {
+.ant-layout-sider-zero-width-trigger .anticon svg {
     display: inline-block;
     z-index: 1;
     color: white;
 }
-:where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider .ant-layout-sider-zero-width-trigger {
+ 
+:where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider
+    .ant-layout-sider-zero-width-trigger {
     top: 0px !important;
+}
+
+@media screen and (max-width: 440px) {
+   .ant-modal-content {
+        padding: 15px !important;
+    }
 }
