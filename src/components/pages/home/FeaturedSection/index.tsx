@@ -1,132 +1,164 @@
-
 "use client";
 //eslint-skip-disable
 import { useEffect, useState } from "react";
-import { ArrowRight, ShoppingCart } from "lucide-react";
+import { ArrowRight, ShoppingCart, Tag } from "lucide-react";
 import { getAllMedicines } from "@/services/Medicines";
 import { IMedicine, IMeta } from "@/types";
 import { useAppDispatch } from "@/redux/hook";
-import { Calendar, DollarSign, Package } from 'lucide-react';
 import Link from "next/link";
 import { addToCart } from "@/redux/features/cart/cartSlice";
+import Image from "next/image";
+import { Spin } from "antd";
 
 type IData = {
-  result: IMedicine[];
-  meta: IMeta;
+    result: IMedicine[];
+    meta: IMeta;
 };
 
 const FeaturedSection = () => {
-  const [data, setData] = useState<IData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const dispatch = useAppDispatch();
+    const [data, setData] = useState<IData | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const { data } = await getAllMedicines();
-        if (data) {
-          setData(data);
-        }
-      } catch (err) {
-        console.error("Error fetching medicines:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const { data } = await getAllMedicines();
+                if (data) {
+                    setData(data);
+                }
+            } catch (err) {
+                console.error("Error fetching medicines:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    fetchData();
-  }, []);
+        fetchData();
+    }, []);
 
-  if (loading) return <div>Loading...</div>;
-
-  return (
-    <section className="py-16 bg-background">
-      <div className="container px-4 mx-auto">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
-            Featured Medicines
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Discover our carefully selected range of premium medicines
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {data?.result.slice(0, 8).map((medicine, index) => (
-            <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:scale-[1.01]">
-              <div className="h-48 overflow-hidden">
-                <img
-                  className="w-full h-full object-cover"
-                  src={medicine.image}
-                  alt={medicine.name}
-                />
-              </div>
-              <div className="px-5 mt-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-[16px] font-semibold text-gray-800">{medicine.name}</h3>
-                  <div className="flex items-center">
-                    <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${medicine.requiredPrescription
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-green-100 text-green-800'
-                      }`}>
-                      {medicine.requiredPrescription ? 'Rx Required' : 'OTC'}
-                    </span>
-                  </div>
+    return (
+        <section className='pb-16 bg-background'>
+            <div className='container px-2 sm:px-4 mx-auto'>
+                <div className='max-w-3xl mx-auto text-center mb-16'>
+                    <h2 className='text-3xl md:text-4xl font-bold mb-4 tracking-tight'>
+                        Featured Medicines
+                    </h2>
+                    <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
+                        Discover our carefully selected range of premium
+                        medicines
+                    </p>
                 </div>
+                <Spin
+                    spinning={loading}
+                    tip='Loading...'
+                    size='large'
+                    className='w-full container'>
+                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+                        {data?.result.slice(0, 8).map((medicine, index) => (
+                            <div key={`${index}`} className='h-full'>
+                                <div className='bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow h-full flex flex-col'>
+                                    <div className='relative'>
+                                        <div className='h-48 bg-gray-100 flex items-center justify-center overflow-hidden'>
+                                            <Image
+                                                alt={medicine.name}
+                                                src={
+                                                    medicine.image ||
+                                                    "/placeholder.svg"
+                                                }
+                                                width={500}
+                                                height={500}
+                                                className='object-cover w-full h-full hover:scale-105 transition-transform duration-300'
+                                            />
+                                        </div>
 
-                <p className="text-gray-600 mb-3 w-auto ml-0">{medicine.description}</p>
+                                        {medicine.requiredPrescription && (
+                                            <div className='absolute top-3 right-3 bg-orange-500 text-white text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1'>
+                                                <Tag size={12} />
+                                                Prescription Required
+                                            </div>
+                                        )}
 
-                <div className="flex items-center text-gray-700 mb-1">
-                  <DollarSign className="h-4 w-4 mr-2 text-gray-500" />
-                  <span className="font-medium">${medicine.price.toFixed(2)}</span>
-                </div>
+                                        <div className='absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent text-white p-3'>
+                                            <div className='font-bold text-lg line-clamp-1'>
+                                                ${medicine.price.toFixed(2)}
+                                            </div>
+                                        </div>
+                                    </div>
 
-                <div className="flex items-center text-gray-700 mb-1">
-                  <Package className="h-4 w-4 mr-2 text-gray-500" />
-                  <span>
-                    <span className={medicine.quantity < 500 ? 'text-red-600 font-medium' : 'font-medium'}>
-                      {medicine.quantity}
-                    </span> units in stock
-                  </span>
-                </div>
+                                    <div className='p-4 flex-grow flex flex-col'>
+                                        <Link
+                                            href={`/medicine/${medicine._id}`}
+                                            className='font-semibold text-lg hover:text-blue-600 transition-colors line-clamp-1 mb-1'>
+                                            {medicine.name}
+                                        </Link>
 
-                <div className="flex items-center text-gray-700 mb-3">
-                  <Calendar className="h-4 w-4 mr-2 mt-0 text-gray-500" />
-                  <span>Expires: {new Date(medicine.expiryDate).toLocaleDateString()}</span>
-                </div>
-              </div>
-              <div className="px-5  mb-2">
-             <button
-                className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full transition-all font-medium text-sm mt-5 w-full cursor-pointer hover:gap-3"
-                disabled={medicine.quantity <= 0}
-                onClick={() => dispatch(addToCart({ product: medicine!, quantity: 1 }))}
+                                        <p className='text-gray-600 text-sm mb-3 line-clamp-2 flex-grow'>
+                                            {medicine.description}
+                                        </p>
 
-              >
-                <ShoppingCart size={18} />
-                Add to Cart
-              </button>
-              <Link href={`/medicine/${medicine?._id}`}>
-                <button
-                  className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full transition-all font-medium text-sm mt-5 w-full cursor-pointer hover:gap-3"
-                  disabled={medicine.quantity <= 0}
-                >
-                  View Details
-                </button>
-              </Link>
-             </div>
+                                        <div className='text-xs text-gray-500 space-y-1 mb-4'>
+                                            <div className='flex items-center justify-between'>
+                                                <span>Manufacturer:</span>
+                                                <span className='font-medium text-gray-700'>
+                                                    {
+                                                        medicine
+                                                            .manufacturerDetails
+                                                            .name
+                                                    }
+                                                </span>
+                                            </div>
+                                            <div className='flex items-center justify-between'>
+                                                <span>Stock:</span>
+                                                <span
+                                                    className={`font-medium ${
+                                                        medicine.quantity > 0
+                                                            ? "text-green-600"
+                                                            : "text-red-600"
+                                                    }`}>
+                                                    {medicine.quantity > 0
+                                                        ? `${medicine.quantity} units`
+                                                        : "Out of Stock"}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() =>
+                                                dispatch(
+                                                    addToCart({
+                                                        product: medicine,
+                                                        quantity: 1,
+                                                    })
+                                                )
+                                            }
+                                            className={`flex items-center cursor-pointer justify-center gap-2 px-4 py-2.5 rounded-lg transition-all font-medium text-sm w-full ${
+                                                medicine.quantity > 0
+                                                    ? "bg-blue-600 hover:bg-blue-700 text-white"
+                                                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                            }`}
+                                            disabled={medicine.quantity <= 0}>
+                                            <ShoppingCart size={16} />
+                                            {medicine.quantity > 0
+                                                ? "Add to Cart"
+                                                : "Out of Stock"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Spin>
             </div>
-          ))}
-        </div>
-      </div>
-      <Link href="/shop">
-        <button className="mt-8 mx-auto flex items-center justify-center gap-2 px-4 py-2 border border-primary rounded-md text-primary hover:text-primary/80 hover:border-primary/80 transition-colors">
-          View All
-          <ArrowRight className="w-4 h-4" />
-        </button>
-      </Link>
-    </section>
-  );
+            <Link href='/shop'>
+                <button className='mt-8 mx-auto flex items-center justify-center gap-2 px-4 py-2 border border-primary rounded-md text-primary hover:text-primary/80 hover:border-primary/80 transition-colors'>
+                    View All
+                    <ArrowRight className='w-4 h-4' />
+                </button>
+            </Link>
+        </section>
+    );
 };
 
 export default FeaturedSection;

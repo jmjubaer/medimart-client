@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pill, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@/context/UserContext";
@@ -14,11 +14,14 @@ import { Dropdown, MenuProps } from "antd";
 
 const Navbar = () => {
     const { user, setIsLoading, setUser } = useUser();
+    const [totalCartItem, setTotalCartItem] = useState(0);
     const [control, setControl] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
-    const totalCartItem = useAppSelector(useTotalQuantity);
-
+    const totalCart = useAppSelector(useTotalQuantity);
+    useEffect(() => {
+        setTotalCartItem(totalCart);
+    }, [totalCart]);
     const handleLogout = () => {
         logOutUser();
         setUser(null);
@@ -98,7 +101,7 @@ const Navbar = () => {
                                 className='relative mt-2 text-gray-700 hover:text-primary transition-colors'>
                                 <ShoppingCart className='w-6 h-6' />
                                 <span className='absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center'>
-                                    {totalCartItem}
+                                    {totalCartItem || 0}
                                 </span>
                             </Link>
                             {user ? (

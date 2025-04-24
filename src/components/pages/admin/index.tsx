@@ -19,7 +19,7 @@ const OverviewPage = ({ data }: IProps) => {
     const router = useRouter();
     return (
         <div>
-            <div className='grid overflow-hidden grid-cols-3 gap-5'>
+            <div className='grid overflow-hidden xs:grid-cols-2 md:grid-cols-3 gap-5'>
                 {/* Total Orders */}
                 <div
                     onClick={() => router.push("/admin/orders")}
