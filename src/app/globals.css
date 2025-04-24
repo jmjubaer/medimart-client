@@ -46,7 +46,7 @@ button:disabled {
     @apply mb-3 inline-block;
 }
 .input_field {
-    @apply w-full text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
+    @apply w-full text-base sm:text-xl text-black outline-none border rounded-md  p-2 px-3 bg-primary/40 placeholder:text-black;
 }
 div:where(.swal2-container).swal2-top,
 div:where(.swal2-container).swal2-center,
@@ -56,4 +56,30 @@ div:where(.swal2-container).swal2-bottom {
 
 .jm_nav {
     @apply flex flex-col-reverse lg:flex-row lg:items-center lg:justify-between justify-end lg:col-span-3 gap-5 absolute lg:static lg:w-auto top-0 left-0 overflow-hidden h-screen lg:h-auto duration-500 bg-[#fff] lg:bg-[transparent] lg:p-0 z-50;
+}
+:where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider
+    .ant-layout-sider-zero-width-trigger::after {
+    background: #42b3e5;
+    border-radius: 0 5px 5px 0px !important;
+}
+:where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider
+    .ant-layout-sider-zero-width-trigger:hover::after {
+    background: #42b3e5;
+    border-radius: 0 5px 5px 0px !important;
+}
+.ant-layout-sider-zero-width-trigger .anticon svg {
+    display: inline-block;
+    z-index: 1;
+    color: white;
+}
+ 
+:where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider
+    .ant-layout-sider-zero-width-trigger {
+    top: 0px !important;
+}
+
+@media screen and (max-width: 440px) {
+   .ant-modal-content {
+        padding: 15px !important;
+    }
 }

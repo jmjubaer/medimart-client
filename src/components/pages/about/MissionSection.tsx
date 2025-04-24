@@ -9,7 +9,7 @@ export default function MissionSection() {
 
       <div className="container relative z-10 mx-auto">
         
-        <header className="mb-20 text-center">
+        <header className="mb-10 text-center">
           <div className="mb-8 inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-cyan-600 shadow-lg">
             <HeartIcon className="h-10 w-10 text-white" />
           </div>
@@ -26,13 +26,13 @@ export default function MissionSection() {
           </p>
         </header>
 
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="group">
-            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+        <div className="grid gap-5 lg:gap-10 md:grid-cols-3">
+          <div className="group border border-gray-100 rounded-2xl">
+            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-5 lg:p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
               <div className="absolute right-0 top-0 h-32 w-32 -translate-y-1/2 translate-x-1/2 rounded-full bg-cyan-50 transition-colors duration-500 group-hover:bg-cyan-100" />
 
               <div className="relative">
-                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                <div className="mb-8 md:mx-auto lg:mx-0 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
                   <ShieldCheckIcon className="h-8 w-8 text-white" />
                 </div>
 
@@ -48,12 +48,12 @@ export default function MissionSection() {
             </div>
           </div>
 
-          <div className="group">
-            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+          <div className="group border border-gray-100 rounded-2xl">
+            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-5 lg:p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
               <div className="absolute right-0 top-0 h-32 w-32 -translate-y-1/2 translate-x-1/2 rounded-full bg-cyan-50 transition-colors duration-500 group-hover:bg-cyan-100" />
 
               <div className="relative">
-                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                <div className="mb-8 md:mx-auto lg:mx-0 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
                   <HeartIcon className="h-8 w-8 text-white" />
                 </div>
 
@@ -69,12 +69,12 @@ export default function MissionSection() {
             </div>
           </div>
 
-          <div className="group">
-            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
+          <div className="group border border-gray-100 rounded-2xl">
+            <div className="relative overflow-hidden h-full rounded-2xl border border-gray-100 bg-white p-5 lg:p-10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl">
               <div className="absolute right-0 top-0 h-32 w-32 -translate-y-1/2 translate-x-1/2 rounded-full bg-cyan-50 transition-colors duration-500 group-hover:bg-cyan-100" />
 
               <div className="relative">
-                <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                <div className="mb-8 md:mx-auto lg:mx-0 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-cyan-600 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
                   <TruckIcon className="h-8 w-8 text-white" />
                 </div>
 

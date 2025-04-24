@@ -5,6 +5,7 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 export const createOrder = async (payload: ICreateOrder) => {
     try {
+        console.log(payload);
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/create-order`,
             {
@@ -19,8 +20,10 @@ export const createOrder = async (payload: ICreateOrder) => {
         revalidateTag("OVERVIEW");
         revalidateTag("ORDERS");
         const data = await res.json();
+        console.log(data);
         return data;
     } catch (error: any) {
+        console.log(error);
         return Error(error.message);
     }
 };

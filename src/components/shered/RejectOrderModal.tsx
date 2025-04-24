@@ -4,9 +4,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal } from "antd";
 import { changeOrderStatus } from "@/services/OrderServices";
 import Swal from "sweetalert2";
+import { useUser } from "@/context/UserContext";
 type IProps = {
     id: string;
-    isAdmin: boolean;
     status: string;
     reFetch: () => void;
 };
@@ -15,7 +15,9 @@ type TNameForm = {
     rejectNotes: string;
 };
 
-const RejectOrderModal = ({ id, status, reFetch, isAdmin }: IProps) => {
+const RejectOrderModal = ({ id, status, reFetch }: IProps) => {
+    const { user } = useUser();
+
     const [open, setOpen] = useState(false);
     const {
         register,
@@ -49,7 +51,7 @@ const RejectOrderModal = ({ id, status, reFetch, isAdmin }: IProps) => {
     };
     return (
         <div className=''>
-            {isAdmin && (
+            {user?.role === "admin" && (
                 <button
                     disabled={status === "Reject"}
                     onClick={() => setOpen(true)}
@@ -66,12 +68,12 @@ const RejectOrderModal = ({ id, status, reFetch, isAdmin }: IProps) => {
                 <form onSubmit={handleSubmit(handleRejectOrder)} className=' '>
                     <div className=''>
                         <label
-                            className='label_primary  md:text-xl text-lg mt-5'
+                            className='label_primary md:text-xl text-lg mt-5'
                             htmlFor='rejectNotes'>
                             Reject Notes:
                         </label>
                         <textarea
-                            className='input_field min-h-[150px]'
+                            className='input_field min-h-[100px] xs:min-h-[150px]'
                             placeholder='Enter reject notes ...'
                             id='rejectNotes'
                             {...register("rejectNotes", {

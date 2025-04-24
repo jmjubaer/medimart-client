@@ -108,12 +108,15 @@ const ManageCustomerOrder = () => {
         },
         {
             title: "User Name",
+            width: "10%",
             render: (item) => (
-                <p className={`capitalize `}>{item?.user?.name}</p>
+                <p className={`capitalize w-[100px]`}>{item?.user?.name}</p>
             ),
         },
         {
             title: "Delivery Options",
+            width: "10%",
+
             render: (item) => (
                 <p className={` capitalize}`}>{item?.deliveryOptions}</p>
             ),
@@ -132,10 +135,14 @@ const ManageCustomerOrder = () => {
         },
         {
             title: "Order Status",
+            width: "10%",
+
             render: (item) => <p className={`capitalize}`}>{item?.status}</p>,
         },
         {
             title: "Payment Status",
+            width: "10%",
+
             render: (item) => (
                 <p className='capitalize'>{item?.paymentStatus}</p>
             ),
@@ -143,10 +150,11 @@ const ManageCustomerOrder = () => {
         {
             title: "Total Price",
             render: (item) => (
-                <p className='capitalize font-bold text-lg'>
-                    ${item?.totalPrice}
+                <p className='w-24 capitalize font-bold text-lg'>
+                    ${item?.totalPrice.toFixed(2)}
                 </p>
             ),
+            width: "1%",
         },
         {
             title: "Action",
@@ -160,7 +168,11 @@ const ManageCustomerOrder = () => {
                             id={item?.key}
                         />
 
-                        <ViewOrderDetails reFetch={reFetch} item={item} />
+                        <ViewOrderDetails
+                            isDashboard={true}
+                            reFetch={reFetch}
+                            item={item}
+                        />
                     </div>
                 );
             },
@@ -173,7 +185,7 @@ const ManageCustomerOrder = () => {
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
                 Manage Orders
             </h2>
-            <div className='flex flex-wrap-reverse gap-5 my-5'>
+            <div className='flex justify-center xs:justify-normal flex-wrap-reverse gap-5 my-5'>
                 <div className='relative'>
                     <select
                         className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
@@ -240,7 +252,7 @@ const ManageCustomerOrder = () => {
                     columns={columns}
                     dataSource={tableData}
                     pagination={false}
-                    className='border border-gray-300 min-w-[800px] rounded-lg mb-3'
+                    className='border border-gray-300 min-w-[950px] rounded-lg mb-3'
                 />
             </div>
             <Pagination

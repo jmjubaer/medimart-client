@@ -130,7 +130,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                             {/* Image */}
                             <div className=''>
                                 <label
-                                    className={`sm:w-4/5 mx-auto w-64
+                                    className={`sm:w-4/5 mx-auto w-full min-w-64
                                         h-52 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 transition ${
                                          errors.image
                                              ? "border-red-400"
@@ -224,7 +224,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 </div>
                             </div>
                         </div>
-                        <div className='grid grid-cols-3 gap-x-5 sm:gap-5 mt-5'>
+                        <div className='grid md:grid-cols-3 gap-3 lg:gap-5 mt-5'>
                             {/* manufacturer name */}
                             <div className=''>
                                 <label
@@ -254,10 +254,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 <label
                                     className='label_primary text-xl mt-2'
                                     htmlFor='manufacturerContact'>
-                                    Manufacturer Contact{" "}
-                                    <span className='text-sm'>
-                                        (email/number)
-                                    </span>
+                                    Manufacturer Contact
                                     :
                                 </label>
                                 <input
@@ -310,11 +307,11 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 )}
                             </div>
                         </div>
-                        <div className='grid grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
+                        <div className='grid sm:grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
                             {/* Price */}
                             <div className=''>
                                 <label
-                                    className='label_primary text-xl mt-3'
+                                    className='label_primary text-xl'
                                     htmlFor='price'>
                                     Price:
                                 </label>
@@ -336,7 +333,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                             </div>
                             <div className=''>
                                 <label
-                                    className='label_primary text-xl mt-2'
+                                    className='label_primary text-xl '
                                     htmlFor='quantity'>
                                     Quantity:
                                 </label>
@@ -386,7 +383,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 Medicine Description:
                             </label>
                             <textarea
-                                className='input_field min-h-[150px]'
+                                className='input_field min-h-[100px] xs:min-h-[150px]'
                                 placeholder='Enter Description ...'
                                 id='description'
                                 defaultValue={medicineData?.description}
@@ -401,7 +398,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                             )}
                         </div>
                         <div className=''>
-                            <label className='label_primary text-xl mt-2 mr-5'>
+                            <label className='label_primary text-xl mt-2 mr-3 xs:mr-5'>
                                 Prescription Required:
                             </label>
                             <Switch

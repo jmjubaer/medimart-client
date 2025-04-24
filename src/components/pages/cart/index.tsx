@@ -19,16 +19,16 @@ const Cart = () => {
     const total = useAppSelector(useTotalPrice);
     const cartItems = useAppSelector(useCartItems);
     return (
-        <div className='min-h-screen  mx-auto lg:gap-36 flex flex-col lg:flex-row mb-16 px-6 justify-between items-center lg:items-start mt-6'>
+        <div className='container mx-auto lg:gap-10 mb-10 justify-between items-center mt-6 grid grid-cols-1 lg:grid-cols-3'>
             {/* order overview section */}
-            <section className='lg:w-3/5 w-full '>
-                <div className='flex justify-between item-center  mb-10'>
-                    <h3 className='font-bold text-2xl lg:text-3xl'>
+            <section className='col-span-2 '>
+                <div className='flex justify-between gap-5 item-center mb-10'>
+                    <h3 className='font-bold text-xl sm:text-2xl lg:text-3xl'>
                         An overview of your order
                     </h3>
                     <button
                         onClick={() => dispatch(clearCart())}
-                        className='bg-blue-50 px-5 rounded-full border active:scale-95'>
+                        className='bg-blue-50 px-5 h-fit py-2 rounded-full whitespace-nowrap border active:scale-95'>
                         Clear All
                     </button>
                 </div>
@@ -44,77 +44,77 @@ const Cart = () => {
                                     return (
                                         <div
                                             key={idx}
-                                            className='py-10 border-b flex justify-between lg:bg-slate-50 px-8 gap-3 mb-3'>
-                                            <div className='flex gap-2'>
-                                                <div className='flex justify-center items-center gap-8'>
-                                                    <div className='flex '>
-                                                        <button
-                                                            onClick={() =>
-                                                                dispatch(
-                                                                    decreaseQuantity(
-                                                                        product?._id as string
-                                                                    )
+                                            className='py-7 border-b flex justify-between lg:bg-slate-50 px-2 sm:px-8 gap-3 mb-3'>
+                                            <div className='flex gap-2 w-full justify-between items-center flex-wrap sm:flex-nowrap'>
+                                                <div className='flex h-fit order-1'>
+                                                    <button
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                decreaseQuantity(
+                                                                    product?._id as string
                                                                 )
-                                                            }
-                                                            className='w-10 text-3xl active:scale-95 bg-gray-100'>
-                                                            -
-                                                        </button>
-                                                        <span className=' text-xl flex items-center justify-center w-10  bg-gray-100'>
-                                                            {product.quantity}
-                                                        </span>
-                                                        <button
-                                                            onClick={() =>
-                                                                dispatch(
-                                                                    addToCart({
-                                                                        product,
-                                                                    })
-                                                                )
-                                                            }
-                                                            className='w-10 text-3xl active:scale-95 bg-gray-100 flex justify-center items-center'>
-                                                            <span>+</span>
-                                                        </button>
-                                                    </div>
+                                                            )
+                                                        }
+                                                        className='w-10 text-3xl active:scale-95 bg-gray-100'>
+                                                        -
+                                                    </button>
+                                                    <span className=' text-xl flex items-center justify-center w-10  bg-gray-100'>
+                                                        {product.quantity}
+                                                    </span>
+                                                    <button
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                addToCart({
+                                                                    product,
+                                                                })
+                                                            )
+                                                        }
+                                                        className='w-10 text-3xl active:scale-95 bg-gray-100 flex justify-center items-center'>
+                                                        <span>+</span>
+                                                    </button>
+                                                </div>
+                                                <div className='flex items-center sm:order-2 order-3 w-full'>
                                                     <Image
                                                         src={product.image}
                                                         height={20}
                                                         width={20}
                                                         alt={product.name}
-                                                        className='md:w-20 md:h-20 w-10 h-10 rounded-2xl'
+                                                        className='w-20 h-20  rounded-2xl'
                                                     />
+                                                    <div className='flex flex-col justify-start item-start'>
+                                                        <p className='font-semibold '>
+                                                            {product.name}
+                                                        </p>
+                                                        <p className='text-sm'>
+                                                            <span className='font-medium'>
+                                                                expiry date:
+                                                            </span>{" "}
+                                                            {new Date(
+                                                                product.expiryDate
+                                                            ).toLocaleDateString()}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                                <div className='flex flex-col justify-start item-start'>
-                                                    <p className='font-semibold ml-8'>
-                                                        {product.name}
-                                                    </p>
-                                                    <p className='text-sm ml-8'>
-                                                        <span className='font-medium'>
-                                                            expiry date:
-                                                        </span>{" "}
-                                                        {new Date(
-                                                            product.expiryDate
-                                                        ).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className='flex flex-col justify-between items-end'>
-                                                <span
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            removeFromCart(
-                                                                product._id as string
+                                                <div className='flex order-2 sm:order-3 flex-col justify-between items-end'>
+                                                    <span
+                                                        onClick={() =>
+                                                            dispatch(
+                                                                removeFromCart(
+                                                                    product._id as string
+                                                                )
                                                             )
-                                                        )
-                                                    }
-                                                    className='hover:scale-110 text-xl active:scale-95'>
-                                                    <RxCross2 />
-                                                </span>
-                                                <span className='font-bold'>
-                                                    <span className='text-3xl font-bold'>
-                                                        $
+                                                        }
+                                                        className='hover:scale-110 text-xl active:scale-95'>
+                                                        <RxCross2 />
                                                     </span>
-                                                    {product.price *
-                                                        product.quantity}
-                                                </span>
+                                                    <span className='font-bold'>
+                                                        <span className='text-3xl font-bold'>
+                                                            $
+                                                        </span>
+                                                        {product.price *
+                                                            product.quantity}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -126,9 +126,9 @@ const Cart = () => {
             </section>
 
             {/* order details section    */}
-            <section className='w-full lg:w-2/5'>
+            <section className='w-full'>
                 <h3 className='font-bold text-2xl mb-10'>Order Details</h3>
-                <div className='max-w-[400px] border-2 rounded-2xl p-6 bg-slate-50'>
+                <div className='lg:max-w-[400px] max-w-[600px] mx-auto border-2 rounded-2xl p-6 bg-slate-50'>
                     <div className='flex justify-between text-xl text-gray-500 '>
                         <span>Subtotal</span>${total.toFixed(2)}
                     </div>
@@ -151,8 +151,7 @@ const Cart = () => {
                     </div>
 
                     <div className='flex justify-between text-xl font-bold text-black border-t-2 py-3'>
-                        <span>Total</span>
-                        ${total + 20}
+                        <span>Total</span>${(total + 20).toFixed(2)}
                     </div>
                     <Link href={"/checkout"}>
                         <button className='w-full active:scale-95 bg-primary text-white font-semibold py-2 px-4 rounded-lg mt-5 hover:bg-sky-700'>
