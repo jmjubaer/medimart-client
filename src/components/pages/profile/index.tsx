@@ -31,7 +31,7 @@ const ManageProfiles = () => {
             }
             setLoading(false);
         })();
-    }, [user,isFetch]);
+    }, [user, isFetch]);
     const handleLogout = () => {
         logOutUser();
         setUser(null);
@@ -41,8 +41,8 @@ const ManageProfiles = () => {
         }
     };
     return (
-        <div className='flex items-center justify-center '>
-            <div className='border border-gray-300 my-16 p-8 w-full md:w-1/2 max-w-[500px] rounded-2xl shadow-2xl relative '>
+        <div className='flex items-center justify-center gap-5'>
+            <div className='border border-gray-300 my-16 p-3 xs:p-5 sm:p-8 w-[95%] mx-auto md:w-[60%] max-w-[500px] rounded-2xl shadow-2xl relative '>
                 <Spin
                     spinning={loading}
                     tip='Loading...'
@@ -62,20 +62,20 @@ const ManageProfiles = () => {
                         </div>
                         <h2 className='text-3xl font-bold mt-3'>{name}</h2>
                         <div className='flex w-full text-xl my-5 justify-between items-center'>
-                            <h3 className=' text-gray-500'>Role</h3>
+                            <h3 className=' text-gray-500'>Role:</h3>
                             <p className='text-black font-medium capitalize'>
                                 {role}
                             </p>
                         </div>{" "}
                         <div className='flex w-full text-xl my-5 justify-between items-center'>
-                            <h3 className=' text-gray-500'>Phone</h3>
+                            <h3 className=' text-gray-500'>Phone:</h3>
                             <p className='text-black font-medium '>{phone}</p>
                         </div>{" "}
-                        <div className='flex w-full text-xl my-5 justify-between items-center'>
-                            <h3 className=' text-gray-500'>Email</h3>
+                        <div className='flex flex-wrap gap-3 w-full text-xl my-5 justify-between items-center'>
+                            <h3 className=' text-gray-500'>Email:</h3>
                             <p className='text-black font-medium '>{email}</p>
                         </div>
-                        <div className='border-y-2 py-4 mt-8 border-gray-300'>
+                        <div className='border-y-2 xs:py-4 py-2 sm:mt-8 mt-4 border-gray-300'>
                             <UpdateProfileModal
                                 userData={userData!}
                                 reFetch={reFetch}
@@ -83,9 +83,9 @@ const ManageProfiles = () => {
                         </div>
                         <button
                             onClick={() => handleLogout()}
-                            className='border-b-2 py-4 w-full cursor-pointer flex gap-2 items-center border-gray-300'>
-                            <FiLogOut className='text-3xl rotate-180' />
-                            <span className='text-xl font-semibold'>
+                            className='border-b-2 xs:py-4 py-2 w-full cursor-pointer flex gap-2 items-center border-gray-300'>
+                            <FiLogOut className='xs:text-3xl text-xl rotate-180' />
+                            <span className='xs:text-xl text-lg font-semibold'>
                                 Log Out
                             </span>
                         </button>

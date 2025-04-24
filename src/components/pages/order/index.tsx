@@ -20,14 +20,14 @@ const ManageOrder = ({ data }: IProps) => {
         setLoading(false);
     }, []);
     return (
-        <div className='container'>
+        <div className='container my-10'>
             <Spin
                 spinning={loading}
                 tip='Loading...'
                 size='large'
                 className='w-full container'>
                 {data?.length > 0 ? (
-                    <div className='grid grid-cols-2 gap-5'>
+                    <div className='grid md:grid-cols-2 gap-5'>
                         {data?.map((order) => (
                             <div
                                 key={order?._id}
@@ -35,7 +35,7 @@ const ManageOrder = ({ data }: IProps) => {
                                 <div
                                     className={`grid  gap-3 ${
                                         order?.products?.length > 1
-                                            ? "grid-cols-2"
+                                            ? "lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-2"
                                             : "grid-cols-1"
                                     }`}>
                                     {order?.products?.map(
@@ -100,7 +100,7 @@ const ManageOrder = ({ data }: IProps) => {
                                         <div className='grid grid-cols-2 justify-between gap-5 items-center '>
                                             <p className='text-lg'>Total: </p>
                                             <p className='text-lg font-medium'>
-                                                ${order.totalPrice}
+                                                ${order.totalPrice.toFixed(2)}
                                             </p>
                                         </div>{" "}
                                         <div className='grid grid-cols-2 my-3 justify-between gap-5 items-center '>

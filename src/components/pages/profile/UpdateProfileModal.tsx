@@ -46,8 +46,8 @@ const UpdateProfileModal = ({ reFetch, userData }: IProps) => {
             <button
                 onClick={() => setOpen(true)}
                 className='  cursor-pointer flex gap-2 items-center'>
-                <FaUserEdit className='text-3xl' />
-                <span className='text-xl font-semibold'>Edit Profile</span>
+                <FaUserEdit className='xs:text-3xl text-xl' />
+                <span className='xs:text-xl text-lg font-semibold'>Edit Profile</span>
             </button>
             {/* Update product modal */}
             <Modal

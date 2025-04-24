@@ -168,7 +168,11 @@ const ManageCustomerOrder = () => {
                             id={item?.key}
                         />
 
-                        <ViewOrderDetails reFetch={reFetch} item={item} />
+                        <ViewOrderDetails
+                            isDashboard={true}
+                            reFetch={reFetch}
+                            item={item}
+                        />
                     </div>
                 );
             },

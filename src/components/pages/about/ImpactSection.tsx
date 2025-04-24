@@ -1,6 +1,5 @@
 import { TrophyIcon, PillIcon, UsersIcon, BuildingIcon, ShieldCheckIcon, CheckCircleIcon } from "lucide-react"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function ImpactSection() {
   const goals = [
@@ -89,7 +88,7 @@ export default function ImpactSection() {
             {certifications.map((cert, index) => (
               <div
                 key={index}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 text-center border border-white/10 hover:bg-white/15 transition-all duration-300 hover:-translate-y-2 group"
+                className="bg-white/10 backdrop-blur-sm rounded-2xl lg:p-8 p-4 text-center border border-white/10 hover:bg-white/15 transition-all duration-300 hover:-translate-y-2 group"
               >
                 <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-cyan-500 to-cyan-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <ShieldCheckIcon className="w-8 h-8 text-white" />
@@ -110,12 +109,12 @@ export default function ImpactSection() {
           <p className="text-xl text-white/80 max-w-3xl mx-auto mb-10">
             Be part of our journey to revolutionize healthcare delivery from day one
           </p>
-          <Link
-            href="/contact"
+          <div
+            // href="/contact"
             className="inline-block px-10 py-5 bg-white text-cyan-600 rounded-full font-medium hover:bg-cyan-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 text-lg"
           >
             Contact Us
-          </Link>
+          </div>
         </div>
       </div>
     </section>
