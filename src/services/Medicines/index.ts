@@ -129,6 +129,7 @@ export const deleteMedicine = async (medicineId: string) => {
         );
         revalidateTag("OVERVIEW");
         revalidateTag("MEDICINE");
+        revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
     } catch (error: any) {

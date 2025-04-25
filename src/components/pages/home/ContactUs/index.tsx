@@ -35,7 +35,7 @@ const ContactUs = () => {
                     Contact Us
                 </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
-                    <div className='space-y-4 md:space-y-6 w-full'>
+                    <div className='space-y-4 md:space-y-6 w-full text-left'>
                         <div className='grid md:grid-cols-2 gap-2 md:gap-5'>
                             <div>
                                 <input
@@ -86,8 +86,8 @@ const ContactUs = () => {
                         </div>
                         <button
                             type='submit'
-                            className='w-1/2 bg-primary text-white py-1 xs:py-2 rounded-lg sm:text-xl font-medium sm:mt-4'>
-                            {isSubmitting ? "Signing..." : "Sign In"}
+                            className='w-1/2 mx-auto block bg-primary text-white py-1 xs:py-2 rounded-lg sm:text-xl font-medium sm:mt-4'>
+                            {isSubmitting ? "Submitting..." : "Submit"}
                         </button>
                     </div>
                 </form>

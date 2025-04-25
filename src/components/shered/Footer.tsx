@@ -54,7 +54,7 @@ const Footer = () => {
                                 Login
                             </Link>
                             <Link
-                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/signup`}>
+                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/register`}>
                                 Sign Up
                             </Link>
                         </ul>
@@ -65,7 +65,7 @@ const Footer = () => {
                         </h3>
                         <ul className='flex flex-col gap-5'>
                             <Link
-                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about-us`}>
+                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about`}>
                                 About Us
                             </Link>
                             <Link

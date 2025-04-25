@@ -47,7 +47,11 @@ const RegisterForm = () => {
                 setIsLoading(false);
                 setUser(user?.data);
                 if (redirect) {
-                    router.push(redirect);
+                    if (redirect === "orders") {
+                        router.push(`${redirect}?userId=${user?._id}`);
+                    } else {
+                        router.push(redirect);
+                    }
                 } else {
                     router.push("/");
                 }

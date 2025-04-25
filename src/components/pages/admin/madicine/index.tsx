@@ -36,6 +36,7 @@ const ManageMedicines = () => {
     const reFetch = () => {
         setIsFetch(!isFetch);
     };
+    console.log(isFetch);
     useEffect(() => {
         setLoading(true);
         (async () => {
