@@ -147,7 +147,7 @@ const ViewOrderDetails = ({ item, reFetch, isDashboard }: TProps) => {
                                                 Total
                                             </td>
                                             <td className='border w-1/2 font-bold border-black/10 p-2 px-3'>
-                                                ${item?.totalPrice}
+                                                ${item?.totalPrice.toFixed(2)}
                                             </td>
                                         </tr>
                                     </tbody>

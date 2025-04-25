@@ -71,7 +71,7 @@ const Checkout = () => {
                 return;
             }
             const orderData = {
-                user: user?.id as string,
+                user: user?._id as string,
                 products: cartItems as ICartItem[],
                 deliveryInfo: {
                     name: data.name,
@@ -128,7 +128,6 @@ const Checkout = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const result = await createOrder(orderData);
-                    console.log(result);
                     if (result?.success) {
                         Swal.fire("Order Placed!", "", "success");
                         reset();
@@ -138,7 +137,7 @@ const Checkout = () => {
                             setLoading(false);
                         } else {
                             setLoading(false);
-                            router.push(`/orders?userId=${user?.id}`);
+                            router.push(`/orders?userId=${user?._id}`);
                         }
                     } else if (result?.error) {
                         Swal.fire(
@@ -164,6 +163,26 @@ const Checkout = () => {
             products?.map((p) => ({ medicine: p._id, quantity: p.quantity }))
         );
     }, [products]);
+    useEffect(() => {
+        Swal.fire({
+            title: "Are you use profile address, for delivery?",
+            // text: "Not can ",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                reset({
+                    name: user?.name,
+                    phoneNumber: user?.phone,
+                    city: user?.city,
+                    district: user?.district,
+                    thana: user?.thana,
+                    postalCode: Number(user?.postalCode),
+                    localAddress: user?.localAddress,
+                });
+            }
+        });
+    }, []);
     return (
         <Spin
             spinning={loading}
@@ -299,7 +318,6 @@ const Checkout = () => {
                     </div>
                 </div>
                 {/* Product Info section */}
-
                 <div className='w-full mx-auto'>
                     <h2 className='secondary_font font-medium text-2xl text-center'>
                         Product Details

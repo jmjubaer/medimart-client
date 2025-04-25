@@ -37,7 +37,7 @@ const VerifyPayment = () => {
     // Navigate after verify payment
     if (!loading) {
         setTimeout(() => {
-            router.push(`/orders?userId=${user?.id}`);
+            router.push(`/orders?userId=${user?._id}`);
         }, 1000);
     }
     return (

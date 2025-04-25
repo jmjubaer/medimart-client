@@ -14,7 +14,7 @@ export const getAllUsers = async (queryParams?: TQueryParam[]) => {
         }
 
         const queryString = params.toString();
-        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/user`;
+        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/users`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
         const res = await fetch(fullUrl, {
             next: {
@@ -35,7 +35,7 @@ export const getAllUsers = async (queryParams?: TQueryParam[]) => {
 export const getSingleUser = async (userId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
             {
                 next: {
                     tags: ["USER"],
@@ -54,7 +54,7 @@ export const getSingleUser = async (userId: string) => {
 export const updateUser = async (userId: string, payload: Partial<IUser>) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
             {
                 method: "PUT",
                 headers: {
@@ -76,7 +76,7 @@ export const updateUser = async (userId: string, payload: Partial<IUser>) => {
 export const changeUserStatus = async (userId: string, status: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/user/change-status/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/users/change-status/${userId}`,
             {
                 method: "PUT",
                 headers: {
@@ -97,7 +97,7 @@ export const changeUserStatus = async (userId: string, status: string) => {
 export const changeUserRole = async (userId: string, role: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/user/change-role/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/users/change-role/${userId}`,
             {
                 method: "PUT",
                 headers: {
@@ -117,7 +117,7 @@ export const changeUserRole = async (userId: string, role: string) => {
 export const deleteUser = async (userId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/user/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
             {
                 method: "DELETE",
                 headers: {
