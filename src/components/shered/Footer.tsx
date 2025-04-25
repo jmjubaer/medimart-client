@@ -69,12 +69,16 @@ const Footer = () => {
                                 About Us
                             </Link>
                             <Link
-                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about-us`}>
+                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}#contact-us`}>
                                 Contact Us
                             </Link>
                             <Link
                                 href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about#mission`}>
                                 Our Mission
+                            </Link>
+                            <Link
+                                href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about#vision`}>
+                                Our Vision
                             </Link>
                             <Link
                                 href={`${process.env.NEXT_PUBLIC_CLIENT_API}/about#team`}>
@@ -83,7 +87,6 @@ const Footer = () => {
                         </ul>
                     </div>
                 </div>
-         
             </div>
             <div className='py-8 text-sm text-center border-y mt-6 border-gray-700 text-gray-500'>
                 <p>© 2024 MediMart. All rights reserved.</p>

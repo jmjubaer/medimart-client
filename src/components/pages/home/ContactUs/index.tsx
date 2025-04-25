@@ -1,0 +1,99 @@
+"use client";
+import Image from "next/image";
+import image from "@/assets/contactus.jpg";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+const ContactUs = () => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<FieldValues>();
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        console.log(data);
+        Swal.fire({
+            icon: "success",
+            title: "Success ",
+            text: "Thank you for Contact Us!",
+        });
+    };
+    return (
+        <section className='relative h-[600px] flex -mb-5' id='contact-us'>
+            <div className='absolute inset-0 z-0 w-full h-full bg-red-400 top-0 left-0'>
+                <Image
+                    src={image}
+                    alt='Medical Background'
+                    fill
+                    className='object-cover  brightness-50'
+                    priority
+                />
+            </div>
+
+            <div className='xs:w-[70%] w-[95%] my-auto mx-auto text-white z-20'>
+                <h2 className='xs:text-5xl text-4xl text-white text-center z-20 mb-5 xs:mb-16'>
+                    Contact Us
+                </h2>
+                <form onSubmit={handleSubmit(onSubmit)} className='w-full'>
+                    <div className='space-y-4 md:space-y-6 w-full'>
+                        <div className='grid md:grid-cols-2 gap-2 md:gap-5'>
+                            <div>
+                                <input
+                                    id='name'
+                                    className='w-full text-base sm:text-xl text-black outline-none border rounded-md  p-3 px-5 bg-primary placeholder:text-white mt-2 '
+                                    {...register("name", {
+                                        required: true,
+                                    })}
+                                    type='text'
+                                    placeholder='Enter your name'
+                                />
+                                {errors.name && (
+                                    <span className='text-red-500 text-base'>
+                                        This field is required
+                                    </span>
+                                )}
+                            </div>
+
+                            <div>
+                                <input
+                                    className='w-full text-base sm:text-xl text-black outline-none border rounded-md  p-3 px-5 bg-primary placeholder:text-white mt-2'
+                                    {...register("contact", {
+                                        required: true,
+                                    })}
+                                    placeholder='Email or phone'
+                                />
+                                {errors.contact && (
+                                    <span className='text-red-500 text-base'>
+                                        This field is required
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                        <div className=''>
+                            <textarea
+                                className='w-full text-base sm:text-xl text-black outline-none border rounded-md p-3 px-5 bg-primary placeholder:text-white xs:min-h-[150px] min-h-[100px]'
+                                placeholder='Enter Description ...'
+                                id='description'
+                                {...register("description", {
+                                    required: true,
+                                })}
+                            />
+                            {errors.description && (
+                                <span className='text-red-500 text-base'>
+                                    This field is required
+                                </span>
+                            )}
+                        </div>
+                        <button
+                            type='submit'
+                            className='w-1/2 bg-primary text-white py-1 xs:py-2 rounded-lg sm:text-xl font-medium sm:mt-4'>
+                            {isSubmitting ? "Signing..." : "Sign In"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    );
+};
+
+export default ContactUs;
