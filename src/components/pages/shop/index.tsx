@@ -104,7 +104,6 @@ const ShopComponent = () => {
                 // console.log("Fetching page", pageNum, "with params:", params);
 
                 const response: ApiResponse = await getAllMedicines(params);
-                console.log(response);
                 const { result, meta } = response.data;
 
                 if (isNewSearch) {

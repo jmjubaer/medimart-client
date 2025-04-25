@@ -45,9 +45,9 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
             next: {
                 tags: ["MEDICINES"],
             },
-            cache: "no-cache",
-        });
 
+            cache: "force-cache",
+        });
         const data = await res.json();
         return data;
     } catch (error: any) {

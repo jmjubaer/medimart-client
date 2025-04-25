@@ -73,7 +73,7 @@ const Cart = () => {
                                                         <span>+</span>
                                                     </button>
                                                 </div>
-                                                <div className='flex items-center sm:order-2 order-3 w-full'>
+                                                <div className='flex items-center sm:order-2 gap-5 order-3 w-full'>
                                                     <Image
                                                         src={product.image}
                                                         height={20}

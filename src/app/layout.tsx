@@ -5,7 +5,6 @@ import "./globals.css";
 import Providers from "@/lib/providers";
 import { Toaster } from "sonner";
 
-
 const poppins = Poppins({ subsets: ["latin"], weight: ["400", "600"] });
 
 const oxanium = Oxanium({
@@ -29,7 +28,7 @@ export default function RootLayout({
             <Providers>
                 <body
                     className={`${oxanium.variable} ${poppins.className} antialiased`}>
-                    <Toaster position="top-center" richColors />
+                    <Toaster position='top-center' richColors />
                     <div className='min-h-screen'>{children}</div>
                 </body>
             </Providers>

@@ -83,11 +83,14 @@ const Navbar = () => {
                                 <NavLink href='/about'>About</NavLink>
                             </li>
                             {/* {user?.role === "customer" && ( */}
-                            <li>
-                                <NavLink href={`/orders?userId=${user?.id}`}>
-                                    orders
-                                </NavLink>
-                            </li>
+                            {user && (
+                                <li>
+                                    <NavLink
+                                        href={`/orders?userId=${user?._id}`}>
+                                        orders
+                                    </NavLink>
+                                </li>
+                            )}
                             {/* )} */}
                             {user?.role === "admin" && (
                                 <li>

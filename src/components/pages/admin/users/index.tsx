@@ -117,7 +117,7 @@ const ManageUsers = () => {
 
                         <Link
                             title='Show order history'
-                            href={`/order?userId=${item?.key}`}
+                            href={`/orders?userId=${item?.key}`}
                             className=' cursor-pointer '>
                             <ClipboardList className='text-primary' />
                         </Link>

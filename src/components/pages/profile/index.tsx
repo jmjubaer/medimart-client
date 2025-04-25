@@ -24,7 +24,7 @@ const ManageProfiles = () => {
     useEffect(() => {
         (async () => {
             setLoading(true);
-            const data = await getSingleUser(user?.id as string);
+            const data = await getSingleUser(user?._id as string);
             if (data) {
                 setUserData(data?.data);
                 setLoading(false);
