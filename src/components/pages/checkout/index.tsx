@@ -128,7 +128,6 @@ const Checkout = () => {
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const result = await createOrder(orderData);
-                    console.log(result);
                     if (result?.success) {
                         Swal.fire("Order Placed!", "", "success");
                         reset();
