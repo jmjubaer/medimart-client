@@ -126,6 +126,25 @@ This project is for educational/demo purposes. All prescription-related features
 
 ---
 
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/jmjubaer/cycle-bazar.git
+   cd cycle-bazar
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file and configure the required environment variables.
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+
 ## 📫 Contact
 
 Feel free to reach out for any queries or collaboration proposals.
