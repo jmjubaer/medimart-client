@@ -130,8 +130,8 @@ This project is for educational/demo purposes. All prescription-related features
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/jmjubaer/cycle-bazar.git
-   cd cycle-bazar
+   https://github.com/jmjubaer/medimart-client.git
+   cd medimart-client
    ```
 2. Install dependencies:
    ```bash
