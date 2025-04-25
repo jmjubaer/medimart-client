@@ -1,4 +1,4 @@
-# MediMart 💊 | B4A6V4
+# MediMart 💊 
 
 **Live Site**: [https://medimart-rose.vercel.app/](https://medimart-rose.vercel.app/)
 
