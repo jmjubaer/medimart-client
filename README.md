@@ -1,6 +1,8 @@
 # MediMart 💊 
 
-**Live Site**: [https://medimart-rose.vercel.app/](https://medimart-rose.vercel.app/)
+**Live Site**: [Live Side](https://medimart-rose.vercel.app/)
+
+**Backend Repo**: [Backend Side](https://github.com/mizanurrahman70/mediTrust-server)
 
 ## 🛒 Medicine E-Commerce Shop - Project Overview
 
