@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Image from "next/image";
 import image from "@/assets/contactus.jpg";
@@ -11,7 +12,6 @@ const ContactUs = () => {
     } = useForm<FieldValues>();
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        console.log(data);
         Swal.fire({
             icon: "success",
             title: "Success ",

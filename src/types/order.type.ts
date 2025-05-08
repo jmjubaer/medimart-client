@@ -1,8 +1,8 @@
-import { IMedicine } from "./medicines.type";
+import { IProduct } from "./product.type";
 import { IUser } from "./user.type";
 
-export interface IProduct {
-    medicine: IMedicine;
+export interface IOrderProduct {
+    product: IProduct;
     quantity: number;
     prescription: string;
 }
@@ -20,7 +20,7 @@ export interface IOrder {
     key?: string;
     _id: string;
     user: IUser;
-    products: IProduct[];
+    products: IOrderProduct[];
     totalPrice: number;
     status: "Pending" | "Reject" | "Processing" | "Shipped" | "Delivered";
     rejectNotes?: string;
@@ -40,15 +40,15 @@ export interface IOrder {
     createdAt: Date;
 }
 
-export interface ICartItem {
-    medicine: string;
+export interface IOrderCartItem {
+    product: string;
     quantity: number;
     prescription?: string;
 }
 export interface ICreateOrder {
-  user: string;
-  products: ICartItem[];
-  deliveryInfo?: IDeliveryInfo;
-  deliveryOptions?: "Standard" | "Express" | "Pickup from Store";
-  paymentMethod: "COD" | "surjopay";
+    user: string;
+    products: IOrderCartItem[];
+    deliveryInfo?: IDeliveryInfo;
+    deliveryOptions?: "Standard" | "Express" | "Pickup from Store";
+    paymentMethod: "COD" | "surjopay";
 }

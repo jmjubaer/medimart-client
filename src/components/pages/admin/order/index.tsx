@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
-import ViewOrderDetails from "@/components/shered/ViewOrderDetails";
+import ViewOrderDetails from "@/components/shered/ui/ViewOrderDetails";
 import ChangeStatusModal from "./ChangeStatusModal";
 import { getAllOrders } from "@/services/OrderServices";
 type IData = {

@@ -1,4 +1,4 @@
-import { ICartItem } from "@/types/order.type";
+import { IOrderCartItem } from "@/types/order.type";
 import uploadImageIntoCloudinary from "@/utils/UploadImageIntoCloudinary";
 import { Modal, Spin } from "antd";
 import { CloudUpload } from "lucide-react";
@@ -8,8 +8,8 @@ import { FieldValues, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 type IProps = {
     medicineId: string;
-    cartItems: ICartItem[];
-    setCartItems: Dispatch<SetStateAction<ICartItem[]>>;
+    cartItems: IOrderCartItem[];
+    setCartItems: Dispatch<SetStateAction<IOrderCartItem[]>>;
 };
 const AddPrescriptionModal = ({
     medicineId,
@@ -46,7 +46,7 @@ const AddPrescriptionModal = ({
             }
             if (image?.imageUrl) {
                 const updated = cartItems.map((item) =>
-                    item.medicine === medicineId
+                    item.product === medicineId
                         ? { ...item, prescription: image?.imageUrl }
                         : item
                 );

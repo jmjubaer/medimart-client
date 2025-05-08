@@ -1,5 +1,5 @@
 "use client";
-import { ICartItem, IDeliveryInfo } from "@/types/order.type";
+import { IDeliveryInfo, IOrderCartItem } from "@/types/order.type";
 import { Spin } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -7,7 +7,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import SHP from "@/assets/shurjoPay-DP4CfkPU.png";
 import COD from "@/assets/cod-BP-tEaJX.png";
 import { FaCheckCircle } from "react-icons/fa";
-import { IMedicine } from "@/types";
 import AddPrescriptionModal from "./AddPresctiptionModal";
 import { createOrder } from "@/services/OrderServices";
 import { useUser } from "@/context/UserContext";
@@ -16,6 +15,7 @@ import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import {
     clearCart,
+    ICartItem,
     useCartItems,
     useTotalPrice,
 } from "@/redux/features/cart/cartSlice";
@@ -39,7 +39,7 @@ const Checkout = () => {
             : deliveryOptions === "Standard"
             ? 20
             : 0;
-    const [cartItems, setCartItems] = useState<ICartItem[] | []>([]);
+    const [cartItems, setCartItems] = useState<IOrderCartItem[] | []>([]);
     const {
         reset,
         register,
@@ -50,10 +50,10 @@ const Checkout = () => {
         // setLoading(true);
         try {
             const missingPrescriptions = products?.filter(
-                (product: IMedicine) => {
-                    if (product.requiredPrescription) {
+                (product: ICartItem) => {
+                    if (product?.product?.requiredPrescription) {
                         const cartItem = cartItems?.find(
-                            (item) => item.medicine === product._id
+                            (item) => item?.product === product.product?._id
                         );
                         return !cartItem?.prescription;
                     }
@@ -72,7 +72,7 @@ const Checkout = () => {
             }
             const orderData = {
                 user: user?._id as string,
-                products: cartItems as ICartItem[],
+                products: cartItems as IOrderCartItem[],
                 deliveryInfo: {
                     name: data.name,
                     phoneNumber: data.phoneNumber,
@@ -84,7 +84,7 @@ const Checkout = () => {
                 },
                 deliveryOptions,
                 paymentMethod,
-                productNames: products?.map((p) => p.name),
+                productNames: products?.map((p) => p.product?.name),
             };
             Swal.fire({
                 title: "Please confirm the order.",
@@ -160,7 +160,10 @@ const Checkout = () => {
     };
     useEffect(() => {
         setCartItems(
-            products?.map((p) => ({ medicine: p._id, quantity: p.quantity }))
+            products?.map((p) => ({
+                product: p.product?._id,
+                quantity: p.quantity,
+            }))
         );
     }, [products]);
     useEffect(() => {
@@ -323,27 +326,27 @@ const Checkout = () => {
                         Product Details
                     </h2>
                     {/* Product Info */}
-                    {products?.map((product: IMedicine) => (
+                    {products?.map((product: ICartItem) => (
                         <div
-                            key={product?._id}
+                            key={product?.product?._id}
                             className='mt-4 flex items-center gap-3 xs:gap-5'>
                             <Image
                                 width={100}
                                 height={100}
-                                src={product?.image}
+                                src={product?.product?.image}
                                 alt=''
                                 className='w-28 h-28 border border-gray-300 object-cover rounded-md'
                             />
                             <div className=''>
                                 <h3 className='text-xl font-semibold secondary_font'>
-                                    {product?.name}
+                                    {product?.product?.name}
                                 </h3>
                                 <p className='my-1 text-xl font-semibold '>
                                     <span className='font-medium text-lg mr-2'>
                                         {" "}
                                         Price:
                                     </span>
-                                    ${product?.price}
+                                    ${product?.product?.price}
                                 </p>{" "}
                                 <p className='my-1 text-xl font-semibold '>
                                     <span className='font-medium text-lg mr-2'>
@@ -352,9 +355,9 @@ const Checkout = () => {
                                     </span>
                                     {product?.quantity}
                                 </p>
-                                {product?.requiredPrescription && (
+                                {product?.product?.requiredPrescription && (
                                     <AddPrescriptionModal
-                                        medicineId={product?._id}
+                                        medicineId={product?.product?._id}
                                         cartItems={cartItems!}
                                         setCartItems={setCartItems}
                                     />

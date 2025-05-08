@@ -2,19 +2,16 @@
 //eslint-skip-disable
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { IProduct, IMeta } from "@/types";
+import { IInstrument } from "@/types";
 import Link from "next/link";
 import { Spin } from "antd";
-import ProductCard from "@/components/shered/ui/ProductCard";
+import InstrumentCard from "@/components/shered/ui/InstrumentCard";
 import { getAllProducts } from "@/services/Products";
 
-type IData = {
-    result: IProduct[];
-    meta: IMeta;
-};
 
-const FeaturedSection = () => {
-    const [data, setData] = useState<IData | null>(null);
+
+const HealthInstrumentSection = () => {
+    const [data, setData] = useState<IInstrument[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         const fetchData = async () => {
@@ -23,17 +20,17 @@ const FeaturedSection = () => {
                 const data = await getAllProducts([
                     { name: "limit", value: 8 },
                     { name: "sort", value: "-createdAt" },
-                    { name: "type", value: "medicine" },
+                    { name: "type", value: "instrument" },
                     {
                         name: "fields",
-                        value: "manufacturerDetails,image,price,quantity,name,requiredPrescription",
+                        value: "manufacturerDetails,image,price,quantity,name",
                     },
                 ]);
-                if (data) {
-                    setData(data.data);
+                if (data.success) {
+                    setData(data.data?.result);
                 }
             } catch (err) {
-                console.error("Error fetching medicines:", err);
+                console.error("Error fetching instrument:", err);
             } finally {
                 setLoading(false);
             }
@@ -47,11 +44,11 @@ const FeaturedSection = () => {
             <div className='container px-2 sm:px-4 mx-auto'>
                 <div className='max-w-3xl mx-auto text-center mb-16'>
                     <h2 className='text-3xl md:text-4xl font-bold mb-4 tracking-tight'>
-                        Featured Medicines
+                        Essential Health Instruments
                     </h2>
                     <p className='text-muted-foreground text-lg max-w-2xl mx-auto'>
-                        Discover our carefully selected range of premium
-                        medicines
+                        Explore our range of trusted health instruments designed
+                        for everyday care and safety
                     </p>
                 </div>
                 <Spin
@@ -60,8 +57,11 @@ const FeaturedSection = () => {
                     size='large'
                     className='w-full container'>
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-                        {data?.result.map((medicine, index) => (
-                            <ProductCard key={index} medicine={medicine} />
+                        {data?.map((instrument, index) => (
+                            <InstrumentCard
+                                key={index}
+                                instrument={instrument}
+                            />
                         ))}
                     </div>
                 </Spin>
@@ -76,4 +76,4 @@ const FeaturedSection = () => {
     );
 };
 
-export default FeaturedSection;
+export default HealthInstrumentSection;

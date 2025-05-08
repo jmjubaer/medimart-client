@@ -2,6 +2,7 @@ import Banner from "@/components/pages/home/BannerSection/Banner";
 import BrandSection from "@/components/pages/home/BrandSection";
 import ContactUs from "@/components/pages/home/ContactUs";
 import FeaturedSection from "@/components/pages/home/FeaturedSection";
+import HealthInstrumentSection from "@/components/pages/home/HealthInstrument";
 import ReviewSection from "@/components/pages/home/ReviewSection";
 import React from "react";
 
@@ -11,6 +12,7 @@ const Home = () => {
             <Banner />
             <BrandSection />
             <FeaturedSection />
+            <HealthInstrumentSection />
             <ReviewSection />
             <ContactUs />
         </div>

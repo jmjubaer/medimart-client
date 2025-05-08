@@ -1,5 +1,6 @@
-    export * from "./user.type";
-export * from "./medicines.type";
+export * from "./user.type";
+export * from "./product.type";
+export * from "./instrument.type";
 
 export type IMeta = {
     limit: number;
