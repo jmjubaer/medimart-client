@@ -26,7 +26,7 @@ export default function HeroSection() {
                     </span>
                 </div>
                 <h1 className='sm:text-5xl text-3xl md:text-7xl font-bold text-white sm:mb-8 mb-4 tracking-tight leading-tight'>
-                    About <span className='text-cyan-300'>MediMart</span>
+                    About <span className='text-cyan-300'>Pharma Nest</span>
                 </h1>
                 <p className='sm:text-xl text-base md:text-2xl text-white/90 mb-5 sm:mb-10 max-w-3xl mx-auto leading-relaxed'>
                     The next generation healthcare partner committed to making

@@ -1,9 +1,9 @@
 "use server";
 import { IQueryParam } from "@/types";
-import { ICreateOrder } from "@/types/order.type";
+import { ICreateReview } from "@/types/review.type";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-export const createReview = async (payload: ICreateOrder) => {
+export const createReview = async (payload: ICreateReview) => {
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_API}/create-review`,
@@ -48,6 +48,44 @@ export const getAllReviews = async (queryParams?: IQueryParam[]) => {
         const data = await res.json();
         return data;
     } catch (error: any) {
+        return Error(error.message);
+    }
+};
+export const isGiveReview = async (payload: {
+    userId: string;
+    productId: string;
+}) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/isGiveReview`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+        revalidateTag("OVERVIEW");
+        revalidateTag("REVIEWS");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log(error);
+        return Error(error.message);
+    }
+};
+export const getProductReview = async (productId: string) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/review/${productId}`
+        );
+        revalidateTag("REVIEWS");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        console.log(error);
         return Error(error.message);
     }
 };

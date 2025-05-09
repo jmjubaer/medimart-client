@@ -19,7 +19,7 @@ export default function MissionSection() {
           </h2>
 
           <p className="mx-auto max-w-3xl text-xl leading-relaxed text-gray-600">
-            At MediMart, our mission is to revolutionize healthcare delivery by
+            At Pharma Nest, our mission is to revolutionize healthcare delivery by
             providing easy access to quality medications and healthcare
             products. We believe that everyone deserves convenient, reliable,
             and affordable healthcare solutions.

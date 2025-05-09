@@ -81,7 +81,7 @@ div:where(.swal2-container).swal2-bottom {
     background-position: center;
     background-size: cover;
     width: 500px !important;
-    height: 300px !important;
+    height: 310px !important;
     overflow: hidden;
     border-radius: 12px;
 }

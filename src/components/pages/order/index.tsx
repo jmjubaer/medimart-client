@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AddReviewModal from "./AddReviewModal";
 
 type IProps = {
     data: IOrder[];
@@ -15,7 +16,7 @@ const ManageOrder = ({ data }: IProps) => {
     console.log(data);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-
+ 
     const reFetch: () => void = () => {};
     useEffect(() => {
         setLoading(false);
@@ -84,13 +85,22 @@ const ManageOrder = ({ data }: IProps) => {
                                                                 ?.price
                                                         }
                                                     </p>
-                                                    <p className='my-1 text-lg font-semibold '>
-                                                        <span className='font-medium text-lg mr-2'>
-                                                            {" "}
-                                                            Quantity:
-                                                        </span>
-                                                        {product?.quantity}
-                                                    </p>
+                                                    {order?.status ===
+                                                    "Delivered" ? (
+                                                        <AddReviewModal
+                                                            product={
+                                                                product.product
+                                                            }
+                                                        />
+                                                    ) : (
+                                                        <p className='my-1 text-lg font-semibold '>
+                                                            <span className='font-medium text-lg mr-2'>
+                                                                {" "}
+                                                                Quantity:
+                                                            </span>
+                                                            {product?.quantity}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
                                         )
@@ -145,6 +155,7 @@ const ManageOrder = ({ data }: IProps) => {
                                             reFetch={reFetch}
                                             item={order}
                                         />
+
                                         <button
                                             onClick={() => router.push("/shop")}
                                             className='w-full bg-primary hover:bg-primary  font-medium cursor-pointer py-2 px-4 rounded whitespace-nowrap'>

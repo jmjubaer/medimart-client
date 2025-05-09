@@ -7,5 +7,11 @@ export type IReview = {
     product: IProduct;
     rating: number;
     comment: string;
-    createdAt: Date
-}
+    createdAt: Date;
+};
+export type ICreateReview = {
+    reviewer: string;
+    product: string;
+    rating: number;
+    comment: string;
+};

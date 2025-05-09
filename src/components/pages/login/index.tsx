@@ -83,7 +83,28 @@ const LoginForm = () => {
                         <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl text-center'>
                             Sign in to your account
                         </h1>
-
+                        <div className='flex justify-center gap-5'>
+                            <button
+                                className='button_primary '
+                                onClick={() =>
+                                    reset({
+                                        identifier: "jmjubaer3927@gmail.com",
+                                        password: "12345678",
+                                    })
+                                }>
+                                User Credential
+                            </button>
+                            <button
+                                className='button_primary'
+                                onClick={() =>
+                                    reset({
+                                        identifier: "admin@gmail.com",
+                                        password: "@admin123",
+                                    })
+                                }>
+                                Admin Credential
+                            </button>
+                        </div>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className='space-y-4 md:space-y-6  '>
                                 <div>
