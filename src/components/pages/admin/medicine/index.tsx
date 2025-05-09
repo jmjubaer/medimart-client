@@ -11,6 +11,7 @@ import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
 import UpdateMedicineModal from "./UpdateMedicineModal";
 import { deleteProduct, getAllProducts } from "@/services/Products";
+import { CiCirclePlus } from "react-icons/ci";
 type TTableDataType = Pick<
     IProduct,
     | "image"
@@ -48,6 +49,7 @@ const ManageMedicines = () => {
                 ...(filterText === "true"
                     ? [{ name: "lowStock", value: "true" }]
                     : []),
+                { name: "type", value: "medicine" },
             ]);
             if (data) {
                 setData(data);
@@ -207,11 +209,12 @@ const ManageMedicines = () => {
                                 All Medicine
                             </option>{" "}
                             <option value='true' className=' capitalize'>
-                                Low Stock Medicine
+                                Low Stock Product
                             </option>
                         </select>
                     </div>
                 </div>
+                <Link className="border-primary border-2 text-base rounded-md px-3 py-1 flex items-center gap-2" href={"/admin/add-medicine"}><CiCirclePlus className="text-xl"/> Add Medicine</Link>
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>

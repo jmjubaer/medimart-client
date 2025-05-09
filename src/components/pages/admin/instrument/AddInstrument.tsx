@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Spin, Switch } from "antd";
+import { Spin } from "antd";
 import { CloudUpload } from "lucide-react";
-import { IProduct } from "@/types";
+import { ICreateProduct } from "@/types";
 import Image from "next/image";
 import uploadImageIntoCloudinary from "../../../../utils/UploadImageIntoCloudinary";
 import Swal from "sweetalert2";
@@ -11,16 +11,14 @@ import { createProduct } from "@/services/Products";
 const AddInstrument = () => {
     const [loading, setLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [requiredPrescription, setRequiredPrescription] =
-        useState<boolean>(false);
     const {
         reset,
         watch,
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IProduct>();
-    const handleAddMedicine: SubmitHandler<IProduct> = async (data) => {
+    } = useForm<ICreateProduct>();
+    const handleAddInstrument: SubmitHandler<ICreateProduct> = async (data) => {
         setLoading(true);
         try {
             const image = await uploadImageIntoCloudinary(data.image[0]);
@@ -34,20 +32,25 @@ const AddInstrument = () => {
                 return;
             }
             if (image?.imageUrl) {
-                const medicineData = {
+                const instrumentData = {
                     ...data,
-                    type: "medicine" as const,
-                    requiredPrescription,
+                    features: data?.features?.split(",").map((f) => f.trim()),
+                    type: "instrument" as const,
                     image: image?.imageUrl,
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
-                const result = await createProduct(medicineData);
+                const result = await createProduct(instrumentData);
                 console.log(result);
                 if (result?.success) {
                     setImagePreview(null);
                     setLoading(false);
                     reset();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: "Instrument add successfully",
+                    });
                 }
                 setLoading(false);
             }
@@ -67,11 +70,11 @@ const AddInstrument = () => {
     return (
         <div className=''>
             <h2 className='text-3xl font text-center font-semibold'>
-                Add Medicine
+                Add Instrument
             </h2>
             <Spin spinning={loading} tip='Loading' size='large'>
                 <form
-                    onSubmit={handleSubmit(handleAddMedicine)}
+                    onSubmit={handleSubmit(handleAddInstrument)}
                     className=' mt-5'>
                     <div className='grid sm:grid-cols-3 sm:gap-5 '>
                         {/* Image */}
@@ -129,7 +132,7 @@ const AddInstrument = () => {
                                 <input
                                     className='input_field'
                                     id='name'
-                                    placeholder='Medicine Name...'
+                                    placeholder='Instrument Name...'
                                     {...register("name", {
                                         required: true,
                                     })}
@@ -140,22 +143,22 @@ const AddInstrument = () => {
                                     </span>
                                 )}
                             </div>
-                            {/* Expiry date */}
+                            {/* Brand date */}
                             <div className=''>
                                 <label
                                     className='label_primary text-xl mt-3'
-                                    htmlFor='expiryDate'>
-                                    ExpiryDate:
+                                    htmlFor='brand'>
+                                    Brand:
                                 </label>
                                 <input
                                     className='input_field'
-                                    id='expiryDate'
-                                    type='date'
-                                    {...register("expiryDate", {
+                                    id='brand'
+                                    placeholder='Enter Brand'
+                                    {...register("brand", {
                                         required: true,
                                     })}
                                 />
-                                {errors.expiryDate && (
+                                {errors.brand && (
                                     <span className='text-red-500 text-base'>
                                         This field is required
                                     </span>
@@ -228,7 +231,7 @@ const AddInstrument = () => {
                             )}
                         </div>
                     </div>
-                    <div className='grid sm:grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
+                    <div className='grid md:grid-cols-3 gap-3 lg:gap-5 mt-5'>
                         {/* Price */}
                         <div className=''>
                             <label
@@ -240,12 +243,33 @@ const AddInstrument = () => {
                                 className='input_field'
                                 id='price'
                                 type='number'
-                                placeholder='Medicine Price...'
+                                placeholder='Instrument Price...'
                                 {...register("price", {
                                     required: true,
                                 })}
                             />
                             {errors.price && (
+                                <span className='text-red-500 text-base'>
+                                    This field is required
+                                </span>
+                            )}
+                        </div>
+                        {/* Warranty Period */}
+                        <div className=''>
+                            <label
+                                className='label_primary text-xl '
+                                htmlFor='warrantyPeriod'>
+                                Warranty Period:
+                            </label>
+                            <input
+                                className='input_field'
+                                id='warrantyPeriod'
+                                placeholder='Warranty Period ...'
+                                {...register("warrantyPeriod", {
+                                    required: true,
+                                })}
+                            />
+                            {errors.warrantyPeriod && (
                                 <span className='text-red-500 text-base'>
                                     This field is required
                                 </span>
@@ -261,7 +285,7 @@ const AddInstrument = () => {
                                 className='input_field'
                                 id='quantity'
                                 type='number'
-                                placeholder='Medicine quantity...'
+                                placeholder='Instrument quantity...'
                                 {...register("quantity", {
                                     required: true,
                                 })}
@@ -273,22 +297,22 @@ const AddInstrument = () => {
                             )}
                         </div>
                     </div>
-                    {/* Symptoms */}
+                    {/* features */}
                     <div className=''>
                         <label
                             className='label_primary text-xl mt-3'
-                            htmlFor='symptoms'>
-                            Symptoms:
+                            htmlFor='features'>
+                            Features: <span className='text-sm'>(separate by comma)</span>
                         </label>
                         <input
                             className='input_field'
-                            id='symptoms'
-                            placeholder='Enter Symptoms...'
-                            {...register("symptoms", {
+                            id='features'
+                            placeholder='Enter features...'
+                            {...register("features", {
                                 required: true,
                             })}
                         />
-                        {errors.symptoms && (
+                        {errors.features && (
                             <span className='text-red-500 text-base'>
                                 This field is required
                             </span>
@@ -319,7 +343,7 @@ const AddInstrument = () => {
                         <label
                             className='label_primary  md:text-xl text-lg mt-5'
                             htmlFor='description'>
-                            Medicine Description:
+                            Instrument Description:
                         </label>
                         <textarea
                             className='input_field xs:min-h-[150px] min-h-[100px]'
@@ -335,16 +359,7 @@ const AddInstrument = () => {
                             </span>
                         )}
                     </div>
-                    <div className=''>
-                        <label className='label_primary text-xl mt-2 mr-3 xs:mr-5'>
-                            Prescription Required:
-                        </label>
-                        <Switch
-                            onChange={(value) => setRequiredPrescription(value)}
-                            checkedChildren='Yes'
-                            unCheckedChildren='NO'
-                        />
-                    </div>
+
                     <input
                         type='submit'
                         className='button_primary bg-primary py-2 text-lg font-medium rounded-md w-full mt-2'

@@ -11,6 +11,7 @@ import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
 import { deleteProduct, getAllProducts } from "@/services/Products";
 import UpdateInstrumentModal from "./UpdateInstrumentModel";
+import { CiCirclePlus } from "react-icons/ci";
 type TTableDataType = Pick<
     IProduct,
     | "image"
@@ -30,7 +31,6 @@ const ManageInstrument = () => {
     const [data, setData] = useState<IData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(1);
-    const [filterText, setFilterText] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [isFetch, setIsFetch] = useState<boolean>(false);
     const reFetch = () => {
@@ -43,11 +43,8 @@ const ManageInstrument = () => {
                 { name: "page", value: page },
                 { name: "limit", value: 10 },
                 { name: "sort", value: "-_id" },
-                { name: "type", value: "medicine" },
                 { name: "searchTerm", value: searchTerm },
-                ...(filterText === "true"
-                    ? [{ name: "lowStock", value: "true" }]
-                    : []),
+                { name: "type", value: "instrument" },
             ]);
             if (data) {
                 setData(data);
@@ -55,7 +52,7 @@ const ManageInstrument = () => {
             }
             setLoading(false);
         })();
-    }, [searchTerm, page, isFetch, filterText]);
+    }, [searchTerm, page, isFetch]);
 
     const tableData = data?.result?.map(
         ({
@@ -64,18 +61,16 @@ const ManageInstrument = () => {
             name,
             price,
             quantity,
-            requiredPrescription,
-            expiryDate,
-            symptoms,
+            warrantyPeriod,
+            brand,
         }: IProduct) => ({
             key: _id,
             image,
             name,
             price,
             quantity,
-            symptoms,
-            requiredPrescription,
-            expiryDate,
+            warrantyPeriod,
+            brand,
         })
     );
     // Manage Product table data
@@ -105,33 +100,13 @@ const ManageInstrument = () => {
             },
         },
         {
-            title: "Expiry Date",
-            render: (item) => (
-                <p className='min-w-[100px]'>
-                    {moment(item.expiryDate).format("DD-MM-YYYY")}
-                </p>
-            ),
+            title: "Brand",
+            render: (item) => <p className='min-w-[100px]'>{item.brand}</p>,
         },
         {
-            title: "Prescription Required",
+            title: "Warranty Period",
             // width: "1%",
-            render: (item) => (
-                <div className=''>
-                    {item?.requiredPrescription ? (
-                        <p className='px-3 py-1 bg-green-200 text-gray-500 w-fit rounded-md font-semibold'>
-                            True
-                        </p>
-                    ) : (
-                        <p className='px-3 py-1 bg-red-200  w-fit rounded-md font-semibold'>
-                            False
-                        </p>
-                    )}
-                </div>
-            ),
-        },
-        {
-            title: "Symptoms",
-            dataIndex: "symptoms",
+            render: (item) => <div className=''>{item?.warrantyPeriod}</div>,
         },
         {
             title: "In Stock",
@@ -155,7 +130,7 @@ const ManageInstrument = () => {
                         </button>
                         <UpdateInstrumentModal
                             reFetch={reFetch}
-                            medicineId={item.key}
+                            instrumentId={item.key}
                         />
                     </div>
                 );
@@ -182,11 +157,11 @@ const ManageInstrument = () => {
     };
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [page, searchTerm, filterText]);
+    }, [page, searchTerm]);
     return (
         <div>
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
-                Manage Medicine
+                Manage Instrument
             </h2>
             <div className='flex flex-wrap-reverse gap-4 justify-between my-5'>
                 <div className='flex flex-wrap-reverse items-center gap-5'>
@@ -199,7 +174,7 @@ const ManageInstrument = () => {
                             placeholder='Search medicine . . . .'
                         />
                     </div>{" "}
-                    <div className='relative'>
+                    {/* <div className='relative'>
                         <select
                             className='outline-0 text-base bg-gray-200 w-full px-5 p-2 rounded-md'
                             onChange={(e) => setFilterText(e.target.value)}>
@@ -207,11 +182,16 @@ const ManageInstrument = () => {
                                 All Medicine
                             </option>{" "}
                             <option value='true' className=' capitalize'>
-                                Low Stock Medicine
+                                Low Stock Product
                             </option>
                         </select>
-                    </div>
+                    </div> */}
                 </div>
+                <Link
+                    className='border-primary border-2 text-base rounded-md px-3 py-1 flex items-center gap-2'
+                    href={"/admin/add-instrument"}>
+                    <CiCirclePlus className='text-xl' /> Add Instrument
+                </Link>
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>

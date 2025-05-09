@@ -1,32 +1,32 @@
 "use client";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Modal, Spin, Switch } from "antd";
+import { Modal, Spin } from "antd";
 import { CloudUpload, Edit } from "lucide-react";
-import { IProduct } from "@/types";
+import { ICreateProduct, IProduct } from "@/types";
 import Image from "next/image";
 import uploadImageIntoCloudinary from "../../../../utils/UploadImageIntoCloudinary";
 import Swal from "sweetalert2";
 import { getSingleProduct, updateProduct } from "@/services/Products";
 type IProps = {
     reFetch: () => void;
-    medicineId: string;
+    instrumentId: string;
 };
 
-const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
+const UpdateInstrumentModal = ({ reFetch, instrumentId }: IProps) => {
     const [open, setOpen] = useState(false);
-    const [medicineData, setMedicineData] = useState<IProduct | null>(null);
+    const [instrumentData, setInstrumentData] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [requiredPrescription, setRequiredPrescription] =
-        useState<boolean>(false);
     const {
         watch,
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IProduct>();
-    const handleUpdateMedicine: SubmitHandler<IProduct> = async (data) => {
+    } = useForm<ICreateProduct>();
+    const handleUpdateInstrument: SubmitHandler<ICreateProduct> = async (
+        data
+    ) => {
         setLoading(true);
 
         try {
@@ -42,17 +42,19 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                     return;
                 }
                 if (image?.imageUrl) {
-                    const updateMedicineData = {
+                    const updateInstrumentData = {
                         ...data,
-                        requiredPrescription,
+                        features: data?.features
+                            ?.split(",")
+                            .map((f) => f.trim()),
                         image: image?.imageUrl,
                         price: Number(data.price),
                         quantity: Number(data.quantity),
                     };
 
                     const result = await updateProduct(
-                        medicineId,
-                        updateMedicineData
+                        instrumentId,
+                        updateInstrumentData
                     );
                     if (result?.success) {
                         setLoading(false);
@@ -62,16 +64,16 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                     setLoading(false);
                 }
             } else {
-                const updateMedicineData = {
+                const updateInstrumentData = {
                     ...data,
-                    requiredPrescription,
-                    image: medicineData?.image,
+                    features: data?.features?.split(",").map((f) => f.trim()),
+                    image: instrumentData?.image,
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
                 const result = await updateProduct(
-                    medicineId,
-                    updateMedicineData
+                    instrumentId,
+                    updateInstrumentData
                 );
                 if (result?.success) {
                     setLoading(false);
@@ -96,16 +98,15 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
     useEffect(() => {
         setLoading(true);
         (async () => {
-            const { data } = await getSingleProduct(medicineId);
+            const { data } = await getSingleProduct(instrumentId);
             if (data) {
-                setMedicineData(data);
+                setInstrumentData(data);
                 setLoading(false);
                 setImagePreview(data?.image);
-                setRequiredPrescription(data?.requiredPrescription);
             }
             setLoading(false);
         })();
-    }, [medicineId]);
+    }, [instrumentId]);
     return (
         <div className=''>
             <button
@@ -120,11 +121,11 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                 open={open}
                 onCancel={() => setOpen(false)}>
                 <h2 className='text-3xl font text-center font-semibold'>
-                    Add Medicine
+                    Update Instrument
                 </h2>
                 <Spin spinning={loading} tip='Loading' size='large'>
                     <form
-                        onSubmit={handleSubmit(handleUpdateMedicine)}
+                        onSubmit={handleSubmit(handleUpdateInstrument)}
                         className=' mt-5'>
                         <div className='grid sm:grid-cols-3 sm:gap-5 '>
                             {/* Image */}
@@ -180,8 +181,8 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     <input
                                         className='input_field'
                                         id='name'
-                                        defaultValue={medicineData?.name}
-                                        placeholder='Medicine Name...'
+                                        defaultValue={instrumentData?.name}
+                                        placeholder='Instrument Name...'
                                         {...register("name", {
                                             required: true,
                                         })}
@@ -192,31 +193,23 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                         </span>
                                     )}
                                 </div>
-                                {/* Expiry date */}
+                                {/* Brand date */}
                                 <div className=''>
                                     <label
                                         className='label_primary text-xl mt-3'
-                                        htmlFor='expiryDate'>
-                                        ExpiryDate:
+                                        htmlFor='brand'>
+                                        Brand:
                                     </label>
                                     <input
                                         className='input_field'
-                                        id='expiryDate'
-                                        defaultValue={
-                                            medicineData?.expiryDate
-                                                ? new Date(
-                                                      medicineData.expiryDate
-                                                  )
-                                                      .toISOString()
-                                                      .split("T")[0]
-                                                : ""
-                                        }
-                                        type='date'
-                                        {...register("expiryDate", {
+                                        id='brand'
+                                        defaultValue={instrumentData?.brand}
+                                        placeholder='Enter Brand'
+                                        {...register("brand", {
                                             required: true,
                                         })}
                                     />
-                                    {errors.expiryDate && (
+                                    {errors.brand && (
                                         <span className='text-red-500 text-base'>
                                             This field is required
                                         </span>
@@ -236,7 +229,7 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     className='input_field'
                                     id='manufacturerName'
                                     defaultValue={
-                                        medicineData?.manufacturerDetails.name
+                                        instrumentData?.manufacturerDetails.name
                                     }
                                     placeholder=' Manufacturer Name...'
                                     {...register("manufacturerDetails.name", {
@@ -259,7 +252,7 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                 <input
                                     className='input_field'
                                     defaultValue={
-                                        medicineData?.manufacturerDetails
+                                        instrumentData?.manufacturerDetails
                                             .contact
                                     }
                                     id='manufacturerContact'
@@ -289,7 +282,7 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     id='manufacturerLocation'
                                     placeholder=' Manufacturer Location...'
                                     defaultValue={
-                                        medicineData?.manufacturerDetails
+                                        instrumentData?.manufacturerDetails
                                             .location
                                     }
                                     {...register(
@@ -306,7 +299,7 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                 )}
                             </div>
                         </div>
-                        <div className='grid sm:grid-cols-2 gap-x-5 sm:gap-5 mt-5'>
+                        <div className='grid md:grid-cols-3 gap-3 lg:gap-5 mt-5'>
                             {/* Price */}
                             <div className=''>
                                 <label
@@ -317,9 +310,9 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                 <input
                                     className='input_field'
                                     id='price'
-                                    defaultValue={medicineData?.price}
+                                    defaultValue={instrumentData?.price}
                                     type='number'
-                                    placeholder='Medicine Price...'
+                                    placeholder='Instrument Price...'
                                     {...register("price", {
                                         required: true,
                                     })}
@@ -330,6 +323,29 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     </span>
                                 )}
                             </div>
+                            {/* Warranty Period */}
+                            <div className=''>
+                                <label
+                                    className='label_primary text-xl '
+                                    htmlFor='warrantyPeriod'>
+                                    Warranty Period:
+                                </label>
+                                <input
+                                    className='input_field'
+                                    id='warrantyPeriod'
+                                    defaultValue={instrumentData?.warrantyPeriod}
+                                    placeholder='Warranty Period ...'
+                                    {...register("warrantyPeriod", {
+                                        required: true,
+                                    })}
+                                />
+                                {errors.warrantyPeriod && (
+                                    <span className='text-red-500 text-base'>
+                                        This field is required
+                                    </span>
+                                )}
+                            </div>
+                            {/* quantity */}
                             <div className=''>
                                 <label
                                     className='label_primary text-xl '
@@ -340,8 +356,8 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     className='input_field'
                                     id='quantity'
                                     type='number'
-                                    defaultValue={medicineData?.quantity}
-                                    placeholder='Medicine quantity...'
+                                    defaultValue={instrumentData?.quantity}
+                                    placeholder='Instrument quantity...'
                                     {...register("quantity", {
                                         required: true,
                                     })}
@@ -353,23 +369,26 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                 )}
                             </div>
                         </div>
-                        {/* Price */}
+                        {/* features */}
                         <div className=''>
                             <label
                                 className='label_primary text-xl mt-3'
-                                htmlFor='symptoms'>
-                                Symptoms:
+                                htmlFor='features'>
+                                Features:{" "}
+                                <span className='text-sm'>
+                                    (separate by comma)
+                                </span>
                             </label>
                             <input
                                 className='input_field'
-                                id='symptoms'
-                                defaultValue={medicineData?.symptoms}
-                                placeholder='Enter Symptoms...'
-                                {...register("symptoms", {
+                                defaultValue={instrumentData?.features}
+                                id='features'
+                                placeholder='Enter features...'
+                                {...register("features", {
                                     required: true,
                                 })}
                             />
-                            {errors.symptoms && (
+                            {errors.features && (
                                 <span className='text-red-500 text-base'>
                                     This field is required
                                 </span>
@@ -386,7 +405,7 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                             <input
                                 className='input_field'
                                 id='usageInstructions'
-                                defaultValue={medicineData?.usageInstructions}
+                                defaultValue={instrumentData?.usageInstructions}
                                 placeholder='Enter usage instructions...'
                                 {...register("usageInstructions")}
                             />
@@ -400,13 +419,13 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                             <label
                                 className='label_primary  md:text-xl text-lg mt-5'
                                 htmlFor='description'>
-                                Medicine Description:
+                                Instrument Description:
                             </label>
                             <textarea
                                 className='input_field min-h-[100px] xs:min-h-[150px]'
                                 placeholder='Enter Description ...'
                                 id='description'
-                                defaultValue={medicineData?.description}
+                                defaultValue={instrumentData?.description}
                                 {...register("description", {
                                     required: true,
                                 })}
@@ -416,21 +435,6 @@ const UpdateInstrumentModal = ({ reFetch, medicineId }: IProps) => {
                                     This field is required
                                 </span>
                             )}
-                        </div>
-                        <div className=''>
-                            <label className='label_primary text-xl mt-2 mr-3 xs:mr-5'>
-                                Prescription Required:
-                            </label>
-                            <Switch
-                                onChange={(value) =>
-                                    setRequiredPrescription(value)
-                                }
-                                checkedChildren='Yes'
-                                unCheckedChildren='NO'
-                                defaultValue={
-                                    medicineData?.requiredPrescription
-                                }
-                            />
                         </div>
                         <input
                             type='submit'

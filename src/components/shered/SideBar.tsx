@@ -17,6 +17,14 @@ const SideBar = () => {
             label: <Link href={`/admin/add-medicine`}>Add Medicine</Link>,
         },
         {
+            key: "/admin/instrument",
+            label: <Link href={`/admin/instrument`}>Manage Instrument</Link>,
+        },
+        {
+            key: "/admin/add-instrument",
+            label: <Link href={`/admin/add-instrument`}>Add Instrument</Link>,
+        },
+        {
             key: "/dashboard/manage-products",
             label: <Link href={`/admin/orders`}>Manage Orders</Link>,
         },

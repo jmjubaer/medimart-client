@@ -48,6 +48,11 @@ const AddMedicine = () => {
                     setImagePreview(null);
                     setLoading(false);
                     reset();
+                    Swal.fire({
+                        icon: "success",
+                        title: "Success",
+                        text: "Medicine add successfully",
+                    });
                 }
                 setLoading(false);
             }
