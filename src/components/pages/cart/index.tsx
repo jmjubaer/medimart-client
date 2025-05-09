@@ -27,6 +27,7 @@ const Cart = () => {
     useEffect(() => {
         setTotal(totalPrice);
     }, [totalPrice]);
+    console.log(cart);
     return (
         <div className='container mx-auto lg:gap-10 mb-10 justify-between items-center mt-6 grid grid-cols-1 lg:grid-cols-3'>
             {/* order overview section */}
