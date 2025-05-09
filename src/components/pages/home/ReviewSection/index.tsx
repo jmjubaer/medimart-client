@@ -14,8 +14,32 @@ import { FaCircleUser } from "react-icons/fa6";
 import { Spin } from "antd";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getAllReviews } from "@/services/reviews";
 
-const ReviewSection = ({ reviews }: { reviews: IReview[] }) => {
+const ReviewSection = () => {
+    const [reviews, setReviews] = useState<IReview[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = await getAllReviews([
+                    { name: "limit", value: 10 },
+                    { name: "sort", value: "-createdAt" },
+                ]);
+                if (data.success) {
+                    setReviews(data.data?.result);
+                }
+            } catch (err) {
+                console.error("Error fetching instrument:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
     return (
         <section className='py-16 bg-gray-50 '>
             <div className='container mx-auto px-4'>
@@ -27,7 +51,7 @@ const ReviewSection = ({ reviews }: { reviews: IReview[] }) => {
             {/* Full width marquee outside the container */}
             <Spin
                 className='min-h-[100px] block'
-                spinning={false}
+                spinning={loading}
                 tip='Loading...'
                 size='large'>
                 {/* Review cover flow swiper */}
@@ -46,77 +70,84 @@ const ReviewSection = ({ reviews }: { reviews: IReview[] }) => {
                     // pagination={true}
                     modules={[EffectCoverflow]}
                     className='review-swiper mt-5 xs:mt-9 md:mt-14'>
-                    {reviews.map((review: IReview) => (
-                        // Review Card
-                        <SwiperSlide key={review?._id} className='slide'>
-                            <div className='shadow-md cursor-move rounded-xl h-full flex flex-col justify-between mb-5 p-2 sm:p-4 border border-gray-300 text-left '>
-                                <div className=''>
-                                    <Rating
-                                        // style={{ maxWidth: 150 }}
-                                        className='xs:max-w-[150px] mx-auto max-w-[120px]'
-                                        readOnly
-                                        orientation='horizontal'
-                                        value={review?.rating}
-                                    />
-                                    {review?.comment?.length > 250 ? (
-                                        <>
-                                            <p className='sm:my-5 my-2 xs:block hidden'>
-                                                {review?.comment?.slice(0, 300)}{" "}
-                                                . . . . . . .
-                                            </p>{" "}
-                                            <p className='sm:my-5 my-2 xs:hidden block'>
-                                                {review?.comment?.slice(0, 200)}{" "}
-                                                . . . . . . .
+                    {reviews &&
+                        reviews.map((review: IReview) => (
+                            // Review Card
+                            <SwiperSlide key={review?._id} className='slide'>
+                                <div className='shadow-md cursor-move rounded-xl h-full flex flex-col justify-between mb-5 p-2 sm:p-4 border border-gray-300 text-left '>
+                                    <div className=''>
+                                        <Rating
+                                            // style={{ maxWidth: 150 }}
+                                            className='xs:max-w-[150px] mx-auto max-w-[120px]'
+                                            readOnly
+                                            orientation='horizontal'
+                                            value={review?.rating}
+                                        />
+                                        {review?.comment?.length > 250 ? (
+                                            <>
+                                                <p className='sm:my-5 my-2 xs:block hidden'>
+                                                    {review?.comment?.slice(
+                                                        0,
+                                                        300
+                                                    )}{" "}
+                                                    . . . . . . .
+                                                </p>{" "}
+                                                <p className='sm:my-5 my-2 xs:hidden block'>
+                                                    {review?.comment?.slice(
+                                                        0,
+                                                        200
+                                                    )}{" "}
+                                                    . . . . . . .
+                                                </p>
+                                            </>
+                                        ) : (
+                                            <p className='sm:my-5 my-2'>
+                                                {review?.comment}
                                             </p>
-                                        </>
-                                    ) : (
-                                        <p className='sm:my-5 my-2'>
-                                            {review?.comment}
-                                        </p>
-                                    )}
-                                </div>
+                                        )}
+                                    </div>
 
-                                <div className='grid xs:grid-cols-2 gap-1 sm:gap-3'>
-                                    <div className='flex items-center gap-3'>
-                                        <div className=''>
-                                            <FaCircleUser className='text-5xl text-gray-300' />
+                                    <div className='grid xs:grid-cols-2 gap-1 sm:gap-3'>
+                                        <div className='flex items-center gap-3'>
+                                            <div className=''>
+                                                <FaCircleUser className='text-5xl text-gray-300' />
+                                            </div>
+                                            <div className=''>
+                                                <p className='capitalize secondary_font font-medium text-xl'>
+                                                    {review.reviewer.name}
+                                                </p>
+                                                <p className='text-gray-400'>
+                                                    {moment(
+                                                        review.createdAt
+                                                    ).format("MMMM DD, YYYY")}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className=''>
-                                            <p className='capitalize secondary_font font-medium text-xl'>
-                                                {review.reviewer.name}
-                                            </p>
-                                            <p className='text-gray-400'>
-                                                {moment(
-                                                    review.createdAt
-                                                ).format("MMMM DD, YYYY")}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className='flex items-center gap-3'>
-                                        <div className=''>
-                                            <Image
-                                                src={review?.product?.image}
-                                                alt=''
-                                                width={48}
-                                                height={30}
-                                                className='w-12 h-12 border border-gray-300 rounded-full object-cover'
-                                            />
-                                        </div>
-                                        <div className=''>
-                                            <Link
-                                                href={`/medicine/${review?.product?._id}`}
-                                                className='capitalize secondary_font  hover:text-blue-700 hover:underline font-medium text-xl'>
-                                                {review.product?.name}
-                                            </Link>
-                                            <p className='text-gray-700'>
-                                                {review?.product?.type}
-                                            </p>
+                                        <div className='flex items-center gap-3'>
+                                            <div className=''>
+                                                <Image
+                                                    src={review?.product?.image}
+                                                    alt=''
+                                                    width={48}
+                                                    height={30}
+                                                    className='w-12 h-12 border border-gray-300 rounded-full object-cover'
+                                                />
+                                            </div>
+                                            <div className=''>
+                                                <Link
+                                                    href={`/medicine/${review?.product?._id}`}
+                                                    className='capitalize secondary_font  hover:text-blue-700 hover:underline font-medium text-xl'>
+                                                    {review.product?.name}
+                                                </Link>
+                                                <p className='text-gray-700'>
+                                                    {review?.product?.type}
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </SwiperSlide>
-                    ))}
+                            </SwiperSlide>
+                        ))}
                 </Swiper>
             </Spin>
         </section>
