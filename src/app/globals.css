@@ -82,4 +82,11 @@ div:where(.swal2-container).swal2-bottom {
    .ant-modal-content {
         padding: 15px !important;
     }
+    .accordion__button {
+  
+        padding: 5px 10px !important;
+    }
+    .accordion__panel {
+        padding: 7px !important;
+    }
 }
