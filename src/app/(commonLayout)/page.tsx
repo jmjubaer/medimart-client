@@ -1,6 +1,7 @@
 import Banner from "@/components/pages/home/BannerSection/Banner";
 import BrandSection from "@/components/pages/home/BrandSection";
 import ContactUs from "@/components/pages/home/ContactUs";
+import FAQSection from "@/components/pages/home/FAQ";
 import FeaturedSection from "@/components/pages/home/FeaturedSection";
 import HealthInstrumentSection from "@/components/pages/home/HealthInstrument";
 import ReviewSection from "@/components/pages/home/ReviewSection";
@@ -13,7 +14,7 @@ const Home = async() => {
             <BrandSection />
             <FeaturedSection />
             <HealthInstrumentSection />
-            {/* <FAQSection/> */}
+            <FAQSection/>
             <ReviewSection />
             <ContactUs />
         </div>

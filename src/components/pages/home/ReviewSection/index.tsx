@@ -28,8 +28,9 @@ const ReviewSection = () => {
                     { name: "limit", value: 10 },
                     { name: "sort", value: "-createdAt" },
                 ]);
+                console.log(data);
                 if (data.success) {
-                    setReviews(data.data?.result);
+                    setReviews(data.data);
                 }
             } catch (err) {
                 console.error("Error fetching instrument:", err);
