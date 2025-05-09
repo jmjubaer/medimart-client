@@ -72,14 +72,39 @@ div:where(.swal2-container).swal2-bottom {
     z-index: 1;
     color: white;
 }
- 
+
 :where(.css-dev-only-do-not-override-1v5z42l).ant-layout-sider
     .ant-layout-sider-zero-width-trigger {
     top: 0px !important;
 }
-
-@media screen and (max-width: 440px) {
-   .ant-modal-content {
-        padding: 15px !important;
+.review-swiper .slide {
+    background-position: center;
+    background-size: cover;
+    width: 500px !important;
+    height: 300px !important;
+    overflow: hidden;
+    border-radius: 12px;
+}
+@media screen and (max-width: 640px) {
+    .review-swiper .slide {
+        width: 400px !important;
+        height: 340px !important;
     }
 }
+@media screen and (max-width: 440px) {
+    .review-swiper .slide {
+        width: 95% !important;
+        height: 300px !important;
+    }
+    .ant-modal-content {
+        padding: 15px !important;
+    }
+    .accordion__button {
+        padding: 5px 10px !important;
+    }
+    .accordion__panel {
+        padding: 7px !important;
+    }
+}
+
+

@@ -7,10 +7,10 @@ const OrderPage = async ({
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
     const { userId } = await searchParams;
-    const { data } = await getUserOrders(userId as string);
+    const  data  = await getUserOrders(userId as string);
     return (
         <div>
-            <ManageOrder data={data} />
+            <ManageOrder data={data.data} />
         </div>
     );
 };

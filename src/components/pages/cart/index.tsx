@@ -13,11 +13,20 @@ import {
 } from "@/redux/features/cart/cartSlice";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const Cart = () => {
+    const [cartItems, setCartItems] = useState<ICartItem[] | null>(null);
+    const [total, setTotal] = useState<number>(0);
     const dispatch = useAppDispatch();
-    const total = useAppSelector(useTotalPrice);
-    const cartItems = useAppSelector(useCartItems);
+    const totalPrice = useAppSelector(useTotalPrice);
+    const cart = useAppSelector(useCartItems);
+    useEffect(() => {
+        setCartItems(cart);
+    }, [cart]);
+    useEffect(() => {
+        setTotal(totalPrice);
+    }, [totalPrice]);
     return (
         <div className='container mx-auto lg:gap-10 mb-10 justify-between items-center mt-6 grid grid-cols-1 lg:grid-cols-3'>
             {/* order overview section */}
@@ -33,93 +42,109 @@ const Cart = () => {
                     </button>
                 </div>
                 <div>
-                    {cartItems.length === 0 ? (
+                    {cartItems && cartItems.length === 0 ? (
                         <div className='text-center mt-36'>
                             No Cart items available yet.
                         </div>
                     ) : (
                         <div>
-                            {cartItems?.map(
-                                (product: ICartItem, idx: number) => {
-                                    return (
-                                        <div
-                                            key={idx}
-                                            className='py-7 border-b flex justify-between lg:bg-slate-50 px-2 sm:px-8 gap-3 mb-3'>
-                                            <div className='flex gap-2 w-full justify-between items-center flex-wrap sm:flex-nowrap'>
-                                                <div className='flex h-fit order-1'>
-                                                    <button
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                decreaseQuantity(
-                                                                    product?._id as string
-                                                                )
+                            {cartItems?.map((item: ICartItem, idx: number) => {
+                                return (
+                                    <div
+                                        key={idx}
+                                        className='py-7 border-b flex justify-between lg:bg-slate-50 px-2 sm:px-8 gap-3 mb-3'>
+                                        <div className='flex gap-2 w-full justify-between items-center flex-wrap sm:flex-nowrap'>
+                                            <div className='flex h-fit order-1'>
+                                                <button
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            decreaseQuantity(
+                                                                item?.product
+                                                                    ?._id as string
                                                             )
-                                                        }
-                                                        className='w-10 text-3xl active:scale-95 bg-gray-100'>
-                                                        -
-                                                    </button>
-                                                    <span className=' text-xl flex items-center justify-center w-10  bg-gray-100'>
-                                                        {product.quantity}
-                                                    </span>
-                                                    <button
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                addToCart({
-                                                                    product,
-                                                                })
-                                                            )
-                                                        }
-                                                        className='w-10 text-3xl active:scale-95 bg-gray-100 flex justify-center items-center'>
-                                                        <span>+</span>
-                                                    </button>
-                                                </div>
-                                                <div className='flex items-center sm:order-2 gap-5 order-3 w-full'>
-                                                    <Image
-                                                        src={product.image}
-                                                        height={20}
-                                                        width={20}
-                                                        alt={product.name}
-                                                        className='w-20 h-20  rounded-2xl'
-                                                    />
-                                                    <div className='flex flex-col justify-start item-start'>
-                                                        <p className='font-semibold '>
-                                                            {product.name}
-                                                        </p>
+                                                        )
+                                                    }
+                                                    className='w-10 text-3xl active:scale-95 cursor-pointer bg-gray-100'>
+                                                    -
+                                                </button>
+                                                <span className=' text-xl flex items-center justify-center w-10  bg-gray-100'>
+                                                    {item.quantity}
+                                                </span>
+                                                <button
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            addToCart({
+                                                                product:
+                                                                    item?.product,
+                                                                quantity: 1,
+                                                                type: item?.type,
+                                                            })
+                                                        )
+                                                    }
+                                                    className='w-10 text-3xl active:scale-95 bg-gray-100 flex justify-center cursor-pointer items-center'>
+                                                    <span>+</span>
+                                                </button>
+                                            </div>
+                                            <div className='flex items-center sm:order-2 gap-5 order-3 w-full'>
+                                                <Image
+                                                    src={item?.product?.image}
+                                                    height={20}
+                                                    width={20}
+                                                    alt={item.product?.name}
+                                                    className='w-20 h-20  rounded-2xl'
+                                                />
+                                                <div className='flex flex-col justify-start item-start'>
+                                                    <p className='font-semibold '>
+                                                        {item.product?.name}
+                                                    </p>
+                                                    {item?.type ===
+                                                    "medicine" ? (
                                                         <p className='text-sm'>
                                                             <span className='font-medium'>
                                                                 expiry date:
                                                             </span>{" "}
-                                                            {new Date(
-                                                                product.expiryDate
-                                                            ).toLocaleDateString()}
+                                                            {item?.product
+                                                                ?.expiryDate
+                                                                ? new Date(
+                                                                      item?.product?.expiryDate
+                                                                  ).toLocaleDateString()
+                                                                : ""}
                                                         </p>
-                                                    </div>
-                                                </div>
-                                                <div className='flex order-2 sm:order-3 flex-col justify-between items-end'>
-                                                    <span
-                                                        onClick={() =>
-                                                            dispatch(
-                                                                removeFromCart(
-                                                                    product._id as string
-                                                                )
-                                                            )
-                                                        }
-                                                        className='hover:scale-110 text-xl active:scale-95'>
-                                                        <RxCross2 />
-                                                    </span>
-                                                    <span className='font-bold'>
-                                                        <span className='text-3xl font-bold'>
-                                                            $
-                                                        </span>
-                                                        {product.price *
-                                                            product.quantity}
-                                                    </span>
+                                                    ) : (
+                                                        <p>
+                                                            {
+                                                                item?.product
+                                                                    ?.brand
+                                                            }
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
+                                            <div className='flex order-2 sm:order-3 flex-col justify-between items-end'>
+                                                <span
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            removeFromCart(
+                                                                item.product
+                                                                    ?._id as string
+                                                            )
+                                                        )
+                                                    }
+                                                    className='hover:scale-110 text-xl active:scale-95'>
+                                                    <RxCross2 />
+                                                </span>
+                                                <span className='font-bold'>
+                                                    <span className='text-3xl font-bold'>
+                                                        $
+                                                    </span>
+                                                    {item.product?.price *
+                                                        item.quantity}
+                                                </span>
+                                            </div>
                                         </div>
-                                    );
-                                }
-                            )}
+                                    </div>
+                                );
+                            })}
                         </div>
                     )}
                 </div>
@@ -130,7 +155,7 @@ const Cart = () => {
                 <h3 className='font-bold text-2xl mb-10'>Order Details</h3>
                 <div className='lg:max-w-[400px] max-w-[600px] mx-auto border-2 rounded-2xl p-6 bg-slate-50'>
                     <div className='flex justify-between text-xl text-gray-500 '>
-                        <span>Subtotal</span>${total.toFixed(2)}
+                        <span>Subtotal</span>${total?.toFixed(2)}
                     </div>
                     <div className='flex justify-between text-xl text-gray-500 mt-1'>
                         <span>Quantity </span>

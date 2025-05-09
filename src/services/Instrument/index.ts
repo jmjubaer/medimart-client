@@ -1,9 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
-import { IUser, IQueryParam } from "@/types";
+
+import { IInstrument, IProduct, IQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-export const getAllUsers = async (queryParams?: IQueryParam[]) => {
+// Fetch all medicines with optional query parameters
+export const createInstrument = async (payload: IInstrument) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/instrument`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+        revalidateTag("OVERVIEW");
+        revalidateTag("INSTRUMENTS");
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+
+export const getAllInstruments = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 
@@ -14,34 +39,49 @@ export const getAllUsers = async (queryParams?: IQueryParam[]) => {
         }
 
         const queryString = params.toString();
-        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/users`;
+        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/instruments`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
         const res = await fetch(fullUrl, {
             next: {
-                tags: ["USERS"],
+                tags: ["INSTRUMENTS"],
             },
-            cache: "no-cache",
-            headers: {
-                Authorization: (await cookies()).get("accessToken")!.value,
-            },
-        });
 
+            cache: "force-cache",
+        });
         const data = await res.json();
         return data;
     } catch (error: any) {
         return Error(error.message);
     }
 };
-export const getSingleUser = async (userId: string) => {
+
+export const getCartMedicine = async (payload: string[]) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/get-cart-medicines`,
             {
-                next: {
-                    tags: ["USER"],
-                },
+                method: "POST",
                 headers: {
                     Authorization: (await cookies()).get("accessToken")!.value,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            }
+        );
+        const data = await res.json();
+        return data;
+    } catch (error: any) {
+        return Error(error.message);
+    }
+};
+
+export const getSingleMedicine = async (medicineId: string) => {
+    try {
+        const res = await fetch(
+            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            {
+                next: {
+                    tags: ["MEDICINE"],
                 },
             }
         );
@@ -51,10 +91,13 @@ export const getSingleUser = async (userId: string) => {
         return Error(error.message);
     }
 };
-export const updateUser = async (userId: string, payload: Partial<IUser>) => {
+export const updateMedicine = async (
+    medicineId: string,
+    payload: Partial<IProduct>
+) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
             {
                 method: "PUT",
                 headers: {
@@ -64,60 +107,19 @@ export const updateUser = async (userId: string, payload: Partial<IUser>) => {
                 body: JSON.stringify(payload),
             }
         );
-        revalidateTag("USER");
-        revalidateTag("USERS");
+        revalidateTag("MEDICINE");
         revalidateTag("OVERVIEW");
+        revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
     } catch (error: any) {
         return Error(error.message);
     }
 };
-export const changeUserStatus = async (userId: string, status: string) => {
+export const deleteMedicine = async (medicineId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/users/change-status/${userId}`,
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ status }),
-            }
-        );
-        revalidateTag("USERS");
-        revalidateTag("OVERVIEW");
-        const data = await res.json();
-        return data;
-    } catch (error: any) {
-        return Error(error.message);
-    }
-};
-export const changeUserRole = async (userId: string, role: string) => {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/users/change-role/${userId}`,
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ role }),
-            }
-        );
-        revalidateTag("USER");
-        const data = await res.json();
-        return data;
-    } catch (error: any) {
-        return Error(error.message);
-    }
-};
-export const deleteUser = async (userId: string) => {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
             {
                 method: "DELETE",
                 headers: {
@@ -125,8 +127,9 @@ export const deleteUser = async (userId: string) => {
                 },
             }
         );
-        revalidateTag("USERS");
         revalidateTag("OVERVIEW");
+        revalidateTag("MEDICINE");
+        revalidateTag("MEDICINES");
         const data = await res.json();
         return data;
     } catch (error: any) {

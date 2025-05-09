@@ -8,14 +8,29 @@ const SideBar = () => {
             key: "/admin",
             label: <Link href={`/admin`}>Dashboard</Link>,
         },
-
         {
             key: "/admin/medicines",
             label: <Link href={`/admin/medicines`}>Manage Medicines</Link>,
         },
         {
+            key: "/admin/add-medicine",
+            label: <Link href={`/admin/add-medicine`}>Add Medicine</Link>,
+        },
+        {
+            key: "/admin/instrument",
+            label: <Link href={`/admin/instrument`}>Manage Instrument</Link>,
+        },
+        {
+            key: "/admin/add-instrument",
+            label: <Link href={`/admin/add-instrument`}>Add Instrument</Link>,
+        },
+        {
             key: "/dashboard/manage-products",
             label: <Link href={`/admin/orders`}>Manage Orders</Link>,
+        },
+        {
+            key: "/admin/contact",
+            label: <Link href={`/admin/contact`}>Contact Message </Link>,
         },
         {
             key: "/admin/users",

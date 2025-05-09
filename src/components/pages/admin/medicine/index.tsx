@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { IMedicine, IMeta } from "@/types";
+import { IProduct, IMeta } from "@/types";
 import { Pagination, Table, TableColumnsType } from "antd";
-import { LucideCirclePlus, SearchIcon, Trash2 } from "lucide-react";
+import { SearchIcon, Trash2 } from "lucide-react";
 import moment from "moment";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import defaultImage from "@/assets/defaoult-medicine.avif";
 import Image from "next/image";
-import { getSingleMedicine, getAllMedicines, deleteMedicine } from "@/services/Medicines";
-import AddMedicineModal from "./AddMedicineModal";
 import UpdateMedicineModal from "./UpdateMedicineModal";
+import { deleteProduct, getAllProducts } from "@/services/Products";
+import { CiCirclePlus } from "react-icons/ci";
 type TTableDataType = Pick<
-    IMedicine,
+    IProduct,
     | "image"
     | "name"
     | "price"
@@ -23,29 +23,33 @@ type TTableDataType = Pick<
     | "symptoms"
 >;
 type IData = {
-    result: IMedicine[];
+    result: IProduct[];
     meta: IMeta;
 };
+
 const ManageMedicines = () => {
     const [data, setData] = useState<IData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState(1);
-    const [filterText, setFilterText] = useState('');
+    const [filterText, setFilterText] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [isFetch, setIsFetch] = useState<boolean>(false);
     const reFetch = () => {
         setIsFetch(!isFetch);
     };
-    console.log(isFetch);
     useEffect(() => {
         setLoading(true);
         (async () => {
-            const { data } = await getAllMedicines([
+            const { data } = await getAllProducts([
                 { name: "page", value: page },
                 { name: "limit", value: 10 },
-                { name: "sort", value: "_id" },
+                { name: "sort", value: "-_id" },
+                { name: "type", value: "medicine" },
                 { name: "searchTerm", value: searchTerm },
-                ...(filterText === "true" ? [{ name: "lowStock", value: "true" }] : []),
+                ...(filterText === "true"
+                    ? [{ name: "lowStock", value: "true" }]
+                    : []),
+                { name: "type", value: "medicine" },
             ]);
             if (data) {
                 setData(data);
@@ -65,7 +69,7 @@ const ManageMedicines = () => {
             requiredPrescription,
             expiryDate,
             symptoms,
-        }: IMedicine) => ({
+        }: IProduct) => ({
             key: _id,
             image,
             name,
@@ -105,7 +109,9 @@ const ManageMedicines = () => {
         {
             title: "Expiry Date",
             render: (item) => (
-                <p className="min-w-[100px]">{moment(item.expiryDate).format("DD-MM-YYYY")}</p>
+                <p className='min-w-[100px]'>
+                    {moment(item.expiryDate).format("DD-MM-YYYY")}
+                </p>
             ),
         },
         {
@@ -168,7 +174,7 @@ const ManageMedicines = () => {
             confirmButtonText: "Confirm",
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const result = await deleteMedicine(id);
+                const result = await deleteProduct(id);
                 if (result?.success) {
                     reFetch();
                     Swal.fire("Deleted!", "", "success");
@@ -176,9 +182,9 @@ const ManageMedicines = () => {
             }
         });
     };
-        useEffect(() => {
-            window.scrollTo(0, 0);
-        }, [page,searchTerm,filterText]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [page, searchTerm, filterText]);
     return (
         <div>
             <h2 className='text-center text-3xl xs:text-4xl secondary_font my-5 font-semibold'>
@@ -202,15 +208,13 @@ const ManageMedicines = () => {
                             <option value='false' className='capitalize'>
                                 All Medicine
                             </option>{" "}
-                            <option
-                                value='true'
-                                className=' capitalize'>
-                                Low Stock Medicine
+                            <option value='true' className=' capitalize'>
+                                Low Stock Product
                             </option>
                         </select>
                     </div>
                 </div>
-                <AddMedicineModal reFetch={reFetch} />
+                <Link className="border-primary border-2 text-base rounded-md px-3 py-1 flex items-center gap-2" href={"/admin/add-medicine"}><CiCirclePlus className="text-xl"/> Add Medicine</Link>
             </div>
             <div className='overflow-auto'>
                 <Table<TTableDataType>

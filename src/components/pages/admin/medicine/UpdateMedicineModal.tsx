@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Modal, Spin, Switch } from "antd";
 import { CloudUpload, Edit } from "lucide-react";
-import { IMedicine } from "@/types";
+import { IProduct } from "@/types";
 import Image from "next/image";
 import uploadImageIntoCloudinary from "../../../../utils/UploadImageIntoCloudinary";
-import { getSingleMedicine, updateMedicine } from "@/services/Medicines";
 import Swal from "sweetalert2";
+import { getSingleProduct, updateProduct } from "@/services/Products";
 type IProps = {
     reFetch: () => void;
     medicineId: string;
@@ -15,7 +15,7 @@ type IProps = {
 
 const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
     const [open, setOpen] = useState(false);
-    const [medicineData, setMedicineData] = useState<IMedicine | null>(null);
+    const [medicineData, setMedicineData] = useState<IProduct | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [requiredPrescription, setRequiredPrescription] =
@@ -25,8 +25,8 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IMedicine>();
-    const handleUpdateMedicine: SubmitHandler<IMedicine> = async (data) => {
+    } = useForm<IProduct>();
+    const handleUpdateMedicine: SubmitHandler<IProduct> = async (data) => {
         setLoading(true);
 
         try {
@@ -50,7 +50,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                         quantity: Number(data.quantity),
                     };
 
-                    const result = await updateMedicine(
+                    const result = await updateProduct(
                         medicineId,
                         updateMedicineData
                     );
@@ -69,7 +69,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                     price: Number(data.price),
                     quantity: Number(data.quantity),
                 };
-                const result = await updateMedicine(
+                const result = await updateProduct(
                     medicineId,
                     updateMedicineData
                 );
@@ -96,7 +96,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
     useEffect(() => {
         setLoading(true);
         (async () => {
-            const { data } = await getSingleMedicine(medicineId);
+            const { data } = await getSingleProduct(medicineId);
             if (data) {
                 setMedicineData(data);
                 setLoading(false);
@@ -132,10 +132,10 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 <label
                                     className={`sm:w-4/5 mx-auto w-full min-w-64
                                         h-52 flex flex-col items-center justify-center border-2 border-dashed rounded-lg cursor-pointer hover:border-blue-500 transition ${
-                                         errors.image
-                                             ? "border-red-400"
-                                             : "border-gray-400}"
-                                     }`}>
+                                            errors.image
+                                                ? "border-red-400"
+                                                : "border-gray-400}"
+                                        }`}>
                                     <input
                                         className='hidden'
                                         id='image'
@@ -254,8 +254,7 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 <label
                                     className='label_primary text-xl mt-2'
                                     htmlFor='manufacturerContact'>
-                                    Manufacturer Contact
-                                    :
+                                    Manufacturer Contact :
                                 </label>
                                 <input
                                     className='input_field'
@@ -371,6 +370,27 @@ const UpdateMedicineModal = ({ reFetch, medicineId }: IProps) => {
                                 })}
                             />
                             {errors.symptoms && (
+                                <span className='text-red-500 text-base'>
+                                    This field is required
+                                </span>
+                            )}
+                        </div>
+                        {/* Usage Instruction */}
+                        <div className=''>
+                            <label
+                                className='label_primary text-xl mt-3'
+                                htmlFor='usageInstructions'>
+                                Usage Instruction:{" "}
+                                <span className='text-sm'>(Optional)</span>
+                            </label>
+                            <input
+                                className='input_field'
+                                id='usageInstructions'
+                                defaultValue={medicineData?.usageInstructions}
+                                placeholder='Enter usage instructions...'
+                                {...register("usageInstructions")}
+                            />
+                            {errors.usageInstructions && (
                                 <span className='text-red-500 text-base'>
                                     This field is required
                                 </span>

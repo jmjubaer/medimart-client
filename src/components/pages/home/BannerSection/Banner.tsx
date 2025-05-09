@@ -3,13 +3,13 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import { getAllMedicines } from "@/services/Medicines";
-import { IMedicine, IMeta } from "@/types";
+import { getAllMedicines } from "@/services/Products";
+import { IProduct, IMeta } from "@/types";
 import { CiSearch } from "react-icons/ci";
 import Link from "next/link";
 
 type IData = {
-    result: IMedicine[];
+    result: IProduct[];
     meta: IMeta;
 };
 const Banner = () => {
@@ -68,7 +68,7 @@ const Banner = () => {
 
                         {/* search result  */}
                         <div className='w-[93%] left-[3.5%] h-[200px] overflow-auto absolute'>
-                            {data?.result?.map((medicine: IMedicine) => (
+                            {data?.result?.map((medicine: IProduct) => (
                                 <Link
                                     href={`/medicine/:${medicine._id}`}
                                     key={medicine._id}>

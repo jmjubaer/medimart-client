@@ -1,26 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { IMedicine, TQueryParam } from "@/types";
+import { IProduct, IQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 // Fetch all medicines with optional query parameters
-export const createMedicine = async (payload: IMedicine) => {
+export const createProduct = async (payload: IProduct) => {
     try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine`,
-            {
-                method: "POST",
-                headers: {
-                    Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/product`, {
+            method: "POST",
+            headers: {
+                Authorization: (await cookies()).get("accessToken")!.value,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
         revalidateTag("OVERVIEW");
-        revalidateTag("MEDICINES");
+        revalidateTag("PRODUCTS");
         const data = await res.json();
         return data;
     } catch (error: any) {
@@ -28,7 +25,7 @@ export const createMedicine = async (payload: IMedicine) => {
     }
 };
 
-export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
+export const getAllProducts = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 
@@ -39,14 +36,14 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
         }
 
         const queryString = params.toString();
-        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/medicines`;
+        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/products`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
         const res = await fetch(fullUrl, {
             next: {
-                tags: ["MEDICINES"],
+                tags: ["PRODUCTS"],
             },
 
-            cache: "force-cache",
+            cache: "no-cache",
         });
         const data = await res.json();
         return data;
@@ -55,33 +52,13 @@ export const getAllMedicines = async (queryParams?: TQueryParam[]) => {
     }
 };
 
-export const getCartMedicine = async (payload: string[]) => {
+export const getSingleProduct = async (productId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/get-cart-medicines`,
-            {
-                method: "POST",
-                headers: {
-                    Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }
-        );
-        const data = await res.json();
-        return data;
-    } catch (error: any) {
-        return Error(error.message);
-    }
-};
-
-export const getSingleMedicine = async (medicineId: string) => {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/product/${productId}`,
             {
                 next: {
-                    tags: ["MEDICINE"],
+                    tags: ["PRODUCT"],
                 },
             }
         );
@@ -91,13 +68,13 @@ export const getSingleMedicine = async (medicineId: string) => {
         return Error(error.message);
     }
 };
-export const updateMedicine = async (
-    medicineId: string,
-    payload: Partial<IMedicine>
+export const updateProduct = async (
+    productId: string,
+    payload: Partial<IProduct>
 ) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/product/${productId}`,
             {
                 method: "PUT",
                 headers: {
@@ -107,19 +84,19 @@ export const updateMedicine = async (
                 body: JSON.stringify(payload),
             }
         );
-        revalidateTag("MEDICINE");
+        revalidateTag("PRODUCT");
         revalidateTag("OVERVIEW");
-        revalidateTag("MEDICINES");
+        revalidateTag("PRODUCTS");
         const data = await res.json();
         return data;
     } catch (error: any) {
         return Error(error.message);
     }
 };
-export const deleteMedicine = async (medicineId: string) => {
+export const deleteProduct = async (productId: string) => {
     try {
         const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicine/${medicineId}`,
+            `${process.env.NEXT_PUBLIC_BASE_API}/product/${productId}`,
             {
                 method: "DELETE",
                 headers: {
@@ -128,8 +105,8 @@ export const deleteMedicine = async (medicineId: string) => {
             }
         );
         revalidateTag("OVERVIEW");
-        revalidateTag("MEDICINE");
-        revalidateTag("MEDICINES");
+        revalidateTag("PRODUCT");
+        revalidateTag("PRODUCTS");
         const data = await res.json();
         return data;
     } catch (error: any) {

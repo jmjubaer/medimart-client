@@ -1,4 +1,4 @@
-import ManageMedicine from "@/components/pages/admin/madicine";
+import ManageMedicine from "@/components/pages/admin/medicine";
 
 const MedicinePage = async () => {
 

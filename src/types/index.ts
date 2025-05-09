@@ -1,5 +1,6 @@
-    export * from "./user.type";
-export * from "./medicines.type";
+export * from "./user.type";
+export * from "./product.type";
+export * from "./instrument.type";
 
 export type IMeta = {
     limit: number;
@@ -7,7 +8,14 @@ export type IMeta = {
     total: number;
     totalPage: number;
 };
-export type TQueryParam = {
+export type IQueryParam = {
     name: string;
     value: string | number | boolean;
+};
+export type IContact = {
+    _id: string;
+    name: string;
+    contact: string;
+    message: string;
+   
 };

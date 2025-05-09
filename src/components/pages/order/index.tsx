@@ -1,6 +1,6 @@
 "use client";
-import ViewOrderDetails from "@/components/shered/ViewOrderDetails";
-import { IOrder, IProduct } from "@/types/order.type";
+import ViewOrderDetails from "@/components/shered/ui/ViewOrderDetails";
+import { IOrder, IOrderProduct } from "@/types/order.type";
 import { Spin } from "antd";
 import moment from "moment";
 import Image from "next/image";
@@ -12,6 +12,7 @@ type IProps = {
     data: IOrder[];
 };
 const ManageOrder = ({ data }: IProps) => {
+    console.log(data);
     const router = useRouter();
     const [loading, setLoading] = useState(true);
 
@@ -39,36 +40,36 @@ const ManageOrder = ({ data }: IProps) => {
                                             : "grid-cols-1"
                                     }`}>
                                     {order?.products?.map(
-                                        (product: IProduct) => (
+                                        (product: IOrderProduct) => (
                                             <div
-                                                key={product?.medicine?._id}
+                                                key={product?.product?._id}
                                                 className='mt-4 flex items-center gap-1 xs:gap-3'>
                                                 <Image
                                                     width={100}
                                                     height={100}
                                                     src={
-                                                        product?.medicine?.image
+                                                        product?.product?.image
                                                     }
                                                     alt=''
                                                     className='w-24 h-24 border border-gray-300 object-cover rounded-md'
                                                 />
                                                 <div className=''>
                                                     <Link
-                                                        href={`/medicine/${product.medicine?._id}`}
+                                                        href={`/medicine/${product.product?._id}`}
                                                         className='text-lg font-semibold secondary_font'>
-                                                        {product?.medicine?.name
+                                                        {product?.product?.name
                                                             ?.length > 13 &&
                                                         order?.products
                                                             ?.length > 1 ? (
                                                             <>
-                                                                {product?.medicine?.name?.slice(
+                                                                {product?.product?.name?.slice(
                                                                     0,
                                                                     13
                                                                 )}
                                                                 {"...."}
                                                             </>
                                                         ) : (
-                                                            product?.medicine
+                                                            product?.product
                                                                 ?.name
                                                         )}
                                                     </Link>
@@ -79,7 +80,7 @@ const ManageOrder = ({ data }: IProps) => {
                                                         </span>
                                                         $
                                                         {
-                                                            product?.medicine
+                                                            product?.product
                                                                 ?.price
                                                         }
                                                     </p>
