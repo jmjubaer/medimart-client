@@ -97,8 +97,8 @@ const ReviewSection = ({ reviews }: { reviews: IReview[] }) => {
                                             <Image
                                                 src={review?.product?.image}
                                                 alt=''
-                                                width={50}
-                                                height={50}
+                                                width={48}
+                                                height={30}
                                                 className='w-12 h-12 border border-gray-300 rounded-full object-cover'
                                             />
                                         </div>

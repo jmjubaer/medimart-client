@@ -13,7 +13,7 @@ const Footer = () => {
                         className='flex items-center text-white space-x-2 group'>
                         <Pill className='w-7 h-7 text-primary group-hover:rotate-12 transition-transform' />
                         <span className='text-xl font-bold text-white  transition-colors'>
-                            MediMart
+                        Pharma Nest
                         </span>
                     </Link>
                     <p className='text-gray-400 mt-3'>
@@ -25,7 +25,7 @@ const Footer = () => {
                             Contact Us
                         </h3>
                         <ul className='space-y-2 text-gray-400'>
-                            <li>Email: support@medimart.com</li>
+                            <li>Email: support@pharmanest.com</li>
                             <li>Phone: (123) 456-7890</li>
                             <li>Address: 123 Health Street</li>
                         </ul>
@@ -89,7 +89,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='py-8 text-sm text-center border-y mt-6 border-gray-700 text-gray-500'>
-                <p>© 2024 MediMart. All rights reserved.</p>
+                <p>© 2024 Pharma Nest. All rights reserved.</p>
             </div>
         </footer>
     );

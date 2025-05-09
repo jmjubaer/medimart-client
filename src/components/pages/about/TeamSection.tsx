@@ -12,13 +12,13 @@ export default function TeamSection() {
     {
       name: "Michael Chen",
       role: "Chief Executive Officer",
-      bio: "Michael founded MediMart with a vision to make healthcare accessible to everyone through technology and innovation.",
+      bio: "Michael founded Pharma Nest with a vision to make healthcare accessible to everyone through technology and innovation.",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=2070&auto=format&fit=crop",
     },
     {
       name: "Emily Rodriguez",
       role: "Head of Customer Experience",
-      bio: "Emily is dedicated to creating seamless and personalized experiences for all MediMart customers.",
+      bio: "Emily is dedicated to creating seamless and personalized experiences for all Pharma Nest customers.",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2076&auto=format&fit=crop",
     },
     {
@@ -40,7 +40,7 @@ export default function TeamSection() {
         <div className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">Meet Our Team</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            The dedicated professionals behind MediMart is vision
+            The dedicated professionals behind Pharma Nest is vision
           </p>
         </div>
 

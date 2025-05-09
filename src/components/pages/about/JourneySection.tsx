@@ -14,7 +14,7 @@ export default function JourneySection() {
             year: "Phase 1",
             title: "Launch & Foundation",
             description:
-                "Establishing MediMart as a trusted online pharmacy with a focus on customer experience and quality service.",
+                "Establishing Pharma Nest as a trusted online pharmacy with a focus on customer experience and quality service.",
             image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop",
             icon: <Rocket className='w-5 h-5 text-white' />,
         },

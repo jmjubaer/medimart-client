@@ -28,7 +28,7 @@ export default function RootLayout({
             <Providers>
                 <body
                     className={`${oxanium.variable} ${poppins.className} antialiased`}>
-                    <Toaster position='top-center' richColors />
+                    <Toaster position='bottom-right' richColors />
                     <div className='min-h-screen'>{children}</div>
                 </body>
             </Providers>

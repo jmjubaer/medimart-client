@@ -42,6 +42,15 @@ const SideBar = () => {
             className='pt-5 h-[calc(100vh-68px)]'
             breakpoint='lg'
             collapsedWidth='0'>
+            <div className='lg:col-span-2 ml-5 z-20 border-b border-gray-500 pb-5 flex gap-2'>
+                <Link to={"/"}>
+                    {/* <img
+                        src={logo}
+                        alt='Logo'
+                        className='object-cover w-40 -mt-1 h-14'
+                    /> */}
+                </Link>
+            </div>
             <Menu
                 theme='dark'
                 mode='inline'

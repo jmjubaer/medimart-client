@@ -63,7 +63,7 @@ const Navbar = () => {
                             className='flex items-center space-x-2 group'>
                             <Pill className='w-7 h-7 text-primary group-hover:rotate-12 transition-transform' />
                             <span className='text-xl font-bold text-gray-900 group-hover:text-primary transition-colors'>
-                                MediMart
+                            Pharma Nest
                             </span>
                         </Link>
                     </div>
@@ -83,7 +83,7 @@ const Navbar = () => {
                                 <NavLink href='/about'>About</NavLink>
                             </li>
                             {/* {user?.role === "customer" && ( */}
-                            {user && (
+                            {user?.role === "customer" && (
                                 <li>
                                     <NavLink
                                         href={`/orders?userId=${user?._id}`}>

@@ -3,10 +3,10 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
-import { getAllMedicines } from "@/services/Products";
 import { IProduct, IMeta } from "@/types";
 import { CiSearch } from "react-icons/ci";
 import Link from "next/link";
+import { getAllProducts } from "@/services/Products";
 
 type IData = {
     result: IProduct[];
@@ -26,7 +26,7 @@ const Banner = () => {
         setLoading(true);
         (async () => {
             const params = [{ name: "searchTerm", value: searchTerm }];
-            const { data } = await getAllMedicines(params);
+            const { data } = await getAllProducts(params);
 
             if (data) {
                 setData(data);

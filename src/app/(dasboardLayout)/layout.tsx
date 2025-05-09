@@ -1,5 +1,4 @@
 // "use client"
-import Navbar from "@/components/shered/Navbar";
 import SideBar from "@/components/shered/SideBar";
 import { Layout } from "antd";
 const DashboardLayout = ({
@@ -9,7 +8,7 @@ const DashboardLayout = ({
 }>) => {
     return (
         <div className=''>
-            <Navbar/>
+            
             <Layout className='h-[calc(100vh-68px)]'>
                 {/* Dashboard Sidebar  */}
                 <SideBar />
