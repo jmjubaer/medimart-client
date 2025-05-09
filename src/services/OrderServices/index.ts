@@ -1,5 +1,5 @@
 "use server";
-import { TQueryParam } from "@/types";
+import { IQueryParam } from "@/types";
 import { ICreateOrder, IOrder } from "@/types/order.type";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
@@ -25,7 +25,7 @@ export const createOrder = async (payload: ICreateOrder) => {
         return Error(error.message);
     }
 };
-export const getAllOrders = async (queryParams?: TQueryParam[]) => {
+export const getAllOrders = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 

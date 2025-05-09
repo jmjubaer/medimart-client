@@ -1,23 +1,17 @@
 "use server";
-import { IQueryParam } from "@/types";
-import { ICreateOrder } from "@/types/order.type";
+import { IContact, IQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-export const createReview = async (payload: ICreateOrder) => {
+export const sendContactMessage = async (payload: IContact) => {
     try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/create-review`,
-            {
-                method: "POST",
-                headers: {
-                    Authorization: (await cookies()).get("accessToken")!.value,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            }
-        );
-        revalidateTag("OVERVIEW");
-        revalidateTag("REVIEWS");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/contact`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+        revalidateTag("CONTACT");
         const data = await res.json();
         return data;
     } catch (error: any) {
@@ -25,7 +19,7 @@ export const createReview = async (payload: ICreateOrder) => {
         return Error(error.message);
     }
 };
-export const getAllReviews = async (queryParams?: IQueryParam[]) => {
+export const getAllContactMessage = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 
@@ -36,11 +30,14 @@ export const getAllReviews = async (queryParams?: IQueryParam[]) => {
         }
 
         const queryString = params.toString();
-        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/reviews`;
+        const baseUrl = `${process.env.NEXT_PUBLIC_BASE_API}/contacts`;
         const fullUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
         const res = await fetch(fullUrl, {
+            headers: {
+                Authorization: (await cookies()).get("accessToken")!.value,
+            },
             next: {
-                tags: ["REVIEWS"],
+                tags: ["CONTACT"],
             },
             cache: "no-cache",
         });

@@ -1,9 +1,9 @@
 "use server";
-import { IUser, TQueryParam } from "@/types";
+import { IUser, IQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-export const getAllUsers = async (queryParams?: TQueryParam[]) => {
+export const getAllUsers = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 

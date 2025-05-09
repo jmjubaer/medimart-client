@@ -29,6 +29,10 @@ const SideBar = () => {
             label: <Link href={`/admin/orders`}>Manage Orders</Link>,
         },
         {
+            key: "/admin/contact",
+            label: <Link href={`/admin/contact`}>Contact Message </Link>,
+        },
+        {
             key: "/admin/users",
             label: <Link href={`/admin/users`}>Manage Users </Link>,
         },

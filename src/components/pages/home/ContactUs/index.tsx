@@ -4,19 +4,27 @@ import Image from "next/image";
 import image from "@/assets/contactus.jpg";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { sendContactMessage } from "@/services/ContactUs";
+import { IContact } from "@/types";
 const ContactUs = () => {
     const {
+        reset,
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<FieldValues>();
+    } = useForm<IContact>();
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        Swal.fire({
-            icon: "success",
-            title: "Success ",
-            text: "Thank you for Contact Us!",
-        });
+    const onSubmit: SubmitHandler<IContact> = async (data) => {
+        const result = await sendContactMessage(data);
+        console.log(result);
+        if (result?.success) {
+            reset();
+            Swal.fire({
+                icon: "success",
+                title: "Success ",
+                text: "Thank you for Contact Us. We will reply soon!",
+            });
+        }
     };
     return (
         <section className='relative h-[600px] flex -mb-5' id='contact-us'>
@@ -72,13 +80,13 @@ const ContactUs = () => {
                         <div className=''>
                             <textarea
                                 className='w-full text-base sm:text-xl text-black outline-none border rounded-md p-3 px-5 bg-primary placeholder:text-white xs:min-h-[150px] min-h-[100px]'
-                                placeholder='Enter Description ...'
-                                id='description'
-                                {...register("description", {
+                                placeholder='Write message ...'
+                                id='message'
+                                {...register("message", {
                                     required: true,
                                 })}
                             />
-                            {errors.description && (
+                            {errors.message && (
                                 <span className='text-red-500 text-base'>
                                     This field is required
                                 </span>

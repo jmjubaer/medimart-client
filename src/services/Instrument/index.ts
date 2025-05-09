@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { IInstrument, IProduct, TQueryParam } from "@/types";
+import { IInstrument, IProduct, IQueryParam } from "@/types";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -28,7 +28,7 @@ export const createInstrument = async (payload: IInstrument) => {
     }
 };
 
-export const getAllInstruments = async (queryParams?: TQueryParam[]) => {
+export const getAllInstruments = async (queryParams?: IQueryParam[]) => {
     try {
         const params = new URLSearchParams();
 

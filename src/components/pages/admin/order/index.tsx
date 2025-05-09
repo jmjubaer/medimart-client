@@ -1,6 +1,6 @@
 "use client";
 import { IMeta } from "@/types";
-import { IOrder, IProduct } from "@/types/order.type";
+import { IOrder, IOrderProduct } from "@/types/order.type";
 import { Pagination, Table, TableColumnsType } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -87,17 +87,18 @@ const ManageCustomerOrder = () => {
         })();
     }, [page, status, isFetch, deliveryOptions, paymentStatus]);
     // Manage Product table data
+    console.log(data);
     const columns: TableColumnsType<TTableDataType> = [
         {
             title: "Product Name",
             render: (item) => (
                 <div className={`capitalize `}>
-                    {item?.products?.map((p: IProduct) => (
+                    {item?.products?.map((p: IOrderProduct) => (
                         <Link
                             className='block text-lg'
-                            key={p?.medicine?._id}
+                            key={p?.product?._id}
                             href={`/medicine/${item?.key}`}>
-                            {p?.medicine?.name}
+                            {p?.product?.name}
                             <span className='text-gray-500 text-base ml-2'>
                                 x{p?.quantity}
                             </span>
