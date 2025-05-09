@@ -5,9 +5,12 @@ import FAQSection from "@/components/pages/home/FAQ";
 import FeaturedSection from "@/components/pages/home/FeaturedSection";
 import HealthInstrumentSection from "@/components/pages/home/HealthInstrument";
 import ReviewSection from "@/components/pages/home/ReviewSection";
+import { getAllReviews } from "@/services/reviews";
 import React from "react";
 
-const Home = () => {
+const Home = async() => {
+        const data = await getAllReviews()
+        console.log(data);
     return (
         <div className=' text-center mb-5'>
             <Banner />
@@ -15,7 +18,7 @@ const Home = () => {
             <FeaturedSection />
             <HealthInstrumentSection />
             <FAQSection/>
-            <ReviewSection />
+            <ReviewSection reviews={data.data}/>
             <ContactUs />
         </div>
     );
