@@ -5,18 +5,18 @@ import React from "react";
 export async function generateStaticParams() {
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_BASE_API}/medicines`
+            `${process.env.NEXT_PUBLIC_BASE_API}/products`
         ).then((res) => res.json());
 
         if (!response.success) {
             throw new Error(`Failed to fetch medicines: ${response.message}`);
         }
 
-        const medicines = response?.data?.result;
+        const products = response?.data?.result;
 
         return (
-            medicines?.map((medicine: IProduct) => ({
-                id: medicine._id,
+            products?.map((product: IProduct) => ({
+                id: product._id,
             })) || []
         );
     } catch (error) {

@@ -49,41 +49,41 @@ const ViewOrderDetails = ({ item, reFetch, isDashboard }: TProps) => {
                     <div className='w-full grid lg:grid-cols-2 gap-5 '>
                         <div className=''>
                             <div className=''>
-                                {item?.products?.map((medicine) => {
+                                {item?.products?.map((product) => {
                                     return (
                                         <div
-                                            key={medicine?.medicine?._id}
+                                            key={product?.product?._id}
                                             className='mt-4 flex flex-wrap items-center gap-5'>
                                             <Image
                                                 width={100}
                                                 height={100}
-                                                src={medicine?.medicine?.image}
+                                                src={product?.product?.image}
                                                 alt=''
                                                 className='xs:w-32 xs:h-32 border border-gray-300 object-cover rounded-md'
                                             />
                                             <div className=''>
                                                 <h3 className='text-xl font-medium secondary_font'>
-                                                    {medicine?.medicine?.name}
+                                                    {product?.product?.name}
                                                 </h3>
                                                 <p className=' text-xl font-semibold '>
                                                     <span className='font-medium text-lg mr-2'>
                                                         {" "}
                                                         Price:
                                                     </span>
-                                                    ${medicine?.medicine?.price}
+                                                    ${product?.product?.price}
                                                 </p>
                                                 <p className=' text-xl font-semibold '>
                                                     <span className='font-medium text-lg mr-2'>
                                                         {" "}
                                                         Quantity:
                                                     </span>
-                                                    {medicine?.quantity}
+                                                    {product?.quantity}
                                                     pcs
                                                 </p>
-                                                {medicine?.prescription && (
+                                                {product?.prescription && (
                                                     <ShowPrescriptionModal
                                                         prescription={
-                                                            medicine?.prescription
+                                                            product?.prescription
                                                         }
                                                     />
                                                 )}

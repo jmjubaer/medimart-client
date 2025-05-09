@@ -1,5 +1,6 @@
 "use client";
 import { Layout, Menu } from "antd";
+import { Pill } from "lucide-react";
 import Link from "next/link";
 const { Sider } = Layout;
 const SideBar = () => {
@@ -39,16 +40,15 @@ const SideBar = () => {
     ];
     return (
         <Sider
-            className='pt-5 h-[calc(100vh-68px)]'
+            className='pt-5 h-screen'
             breakpoint='lg'
             collapsedWidth='0'>
             <div className='lg:col-span-2 ml-5 z-20 border-b border-gray-500 pb-5 flex gap-2'>
-                <Link to={"/"}>
-                    {/* <img
-                        src={logo}
-                        alt='Logo'
-                        className='object-cover w-40 -mt-1 h-14'
-                    /> */}
+                <Link href='/' className='flex items-center space-x-2 group'>
+                    <Pill className='w-7 h-7 text-primary group-hover:rotate-12 transition-transform' />
+                    <span className='text-xl font-bold text-primary transition-colors'>
+                        Pharma Nest
+                    </span>
                 </Link>
             </div>
             <Menu
