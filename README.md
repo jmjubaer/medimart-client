@@ -1,4 +1,4 @@
-# MediMart 💊 
+# Pharma Nest 💊 
 
 **Live Site**: [Live Side](https://medimart-rose.vercel.app/)
 
@@ -6,7 +6,7 @@
 
 ## 🛒 Medicine E-Commerce Shop - Project Overview
 
-MediMart is an online platform dedicated to selling medicines. It provides users with a seamless shopping experience, secure authentication, and order tracking. The platform ensures prescription compliance for medicine purchases and supports full admin control over operations.
+Pharma Nest is an online platform dedicated to selling medicines. It provides users with a seamless shopping experience, secure authentication, and order tracking. The platform ensures prescription compliance for medicine purchases and supports full admin control over operations.
 
 ---
 
